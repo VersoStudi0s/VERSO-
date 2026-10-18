@@ -122,7 +122,6 @@ onBeforeUnmount(() => {
         ><span>[{{ item.number }}]</span> {{ item.label }}</RouterLink
       >
     </nav>
-    <span class="header-note micro">Design + código<br />com propósito.</span>
     <button
       ref="menuButton"
       class="menu-toggle"
@@ -143,7 +142,7 @@ onBeforeUnmount(() => {
         id="mobile-menu"
         ref="menu"
         class="mobile-menu"
-        aria-label="Navegação mobile"
+        aria-label="Menu de navegação"
       >
         <span class="eyebrow">Explore o universo VERSO*</span>
         <RouterLink
@@ -212,7 +211,7 @@ onBeforeUnmount(() => {
   margin: auto;
 }
 .desktop-nav a {
-  font: 11px var(--mono);
+  font: 13px var(--mono);
   text-transform: uppercase;
   white-space: nowrap;
   position: relative;
@@ -221,7 +220,7 @@ onBeforeUnmount(() => {
   transition: color 0.2s;
 }
 .desktop-nav a span {
-  font-size: 9px;
+  font-size: 10px;
 }
 .desktop-nav a::after {
   content: "";
@@ -241,19 +240,16 @@ onBeforeUnmount(() => {
 .desktop-nav a:hover::after {
   width: 100%;
 }
-.header-note {
-  font-size: 8px;
-  line-height: 1.6;
-}
 .menu-toggle {
   border: 0;
-  display: none;
+  display: block;
   padding: 10px;
   margin-right: -10px;
 }
 .mobile-menu {
   position: fixed;
-  inset: 79px 10px 10px;
+  inset: 95px 23px 23px auto;
+  width: min(450px, calc(100vw - 46px));
   background: var(--black);
   border: 1px solid var(--line);
   border-radius: 0 0 12px 12px;
@@ -303,12 +299,12 @@ onBeforeUnmount(() => {
   }
 }
 @media (max-width: 1150px) {
-  .header-note {
-    display: none;
-  }
   .desktop-nav {
-    gap: 20px;
+    gap: 16px;
     margin-right: 0;
+  }
+  .desktop-nav a {
+    font-size: 11px;
   }
   .site-header {
     gap: 25px;
@@ -322,10 +318,6 @@ onBeforeUnmount(() => {
     display: block;
     margin-left: auto;
   }
-  .header-note {
-    display: block;
-    margin-left: auto;
-  }
   .site-header {
     height: 78px;
   }
@@ -334,8 +326,9 @@ onBeforeUnmount(() => {
     background: var(--black);
     top: 0;
   }
-  .site-header.is-open .header-note {
-    display: none;
+  .mobile-menu {
+    inset: 79px 10px 10px;
+    width: auto;
   }
 }
 @media (max-width: 767px) {
@@ -354,9 +347,6 @@ onBeforeUnmount(() => {
   }
   .wordmark span {
     font-size: 35px;
-  }
-  .header-note {
-    font-size: 7px;
   }
   .mobile-menu {
     top: 68px;

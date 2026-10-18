@@ -2,58 +2,58 @@
   "results": [
     {
       "width": 320,
-      "heroBottom": 870,
-      "ctaBottom": 764.78125,
-      "titleRight": 287.609375,
+      "heroBottom": 940,
+      "ctaBottom": 817.78125,
+      "titleRight": 289.203125,
       "overflow": false
     },
     {
       "width": 360,
-      "heroBottom": 900,
-      "ctaBottom": 797.78125,
+      "heroBottom": 980,
+      "ctaBottom": 849.78125,
       "titleRight": 324.203125,
       "overflow": false
     },
     {
       "width": 390,
-      "heroBottom": 900,
-      "ctaBottom": 797.78125,
-      "titleRight": 350.296875,
+      "heroBottom": 980,
+      "ctaBottom": 849.78125,
+      "titleRight": 354.203125,
       "overflow": false
     },
     {
       "width": 768,
       "heroBottom": 788,
-      "ctaBottom": 661.21875,
-      "titleRight": 628.8035278320312,
+      "ctaBottom": 664.609375,
+      "titleRight": 623.6770133972168,
       "overflow": false
     },
     {
       "width": 1024,
       "heroBottom": 788,
-      "ctaBottom": 679.921875,
-      "titleRight": 638.2636032104492,
+      "ctaBottom": 683.578125,
+      "titleRight": 639.5837898254395,
       "overflow": false
     },
     {
       "width": 1280,
       "heroBottom": 850,
-      "ctaBottom": 773.453125,
-      "titleRight": 773.0799026489258,
+      "ctaBottom": 785.484375,
+      "titleRight": 751.3860702514648,
       "overflow": false
     },
     {
       "width": 1440,
       "heroBottom": 954,
-      "ctaBottom": 828.359375,
-      "titleRight": 867.8844451904297,
+      "ctaBottom": 840.5,
+      "titleRight": 848.1900482177734,
       "overflow": false
     },
     {
       "width": 1920,
       "heroBottom": 1006,
-      "ctaBottom": 918.15625,
-      "titleRight": 958.9546051025391,
+      "ctaBottom": 934.4375,
+      "titleRight": 953.46826171875,
       "overflow": false
     }
   ]

@@ -12,27 +12,27 @@ import AssetImage from "../components/AssetImage.vue";
       ><span class="section-number">[ESTUDO DE CASO]</span>
     </div>
     <div class="feature-copy">
-      <span class="micro">01 / 04 <span class="red">— CONCEITO</span></span>
+      <span class="micro">01 / 04 <span class="red">— CONCLUÍDO</span></span>
       <h2 id="featured-title">VERSARY</h2>
       <p class="feature-subtitle">Sistema de gestão industrial.</p>
       <div class="feature-tags">
         <span class="tag">UI/UX</span><span class="tag">Dashboard</span>
       </div>
       <div class="feature-problem">
-        <h3 class="micro">O ponto de partida</h3>
+        <h3 class="micro">Desafios de Ideias</h3>
         <p>
-          Organizar dados de operação e ocorrências de máquinas de forma simples
-          e visual.
+          Um projeto de gestão industrial desenvolvido para o Desafios de Ideias,
+          já finalizado.
         </p>
       </div>
       <RouterLink to="/projetos/versary" class="text-link"
-        >Explorar o conceito <PhArrowUpRight
+        >Conhecer o projeto <PhArrowUpRight
       /></RouterLink>
     </div>
     <AssetImage
       class="feature-image"
       name="projeto-versary"
-      alt="Mockup conceitual do VERSARY: notebook com painel de dados em vermelho e preto."
+      alt="Imagem ilustrativa de apresentação: notebook com painel de dados em vermelho e preto."
     />
     <PhPlus
       class="feature-plus red"
@@ -41,7 +41,7 @@ import AssetImage from "../components/AssetImage.vue";
       aria-hidden="true"
     />
     <p class="feature-note micro">
-      Mockup ilustrativo.<br />Um conceito em construção.
+      Projeto concluído.<br />Imagem ilustrativa de apresentação.
     </p>
   </section>
 </template>

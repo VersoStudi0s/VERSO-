@@ -15,6 +15,10 @@
     "activeIndicatorPassed": true
   },
   {
+    "width": 1440,
+    "menuFocusLoopPassed": true
+  },
+  {
     "width": 390,
     "target": "lab",
     "activeIndicatorPassed": true

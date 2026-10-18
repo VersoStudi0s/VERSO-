@@ -32,7 +32,7 @@ Sem segredos no frontend ou no repositório. `.env*` ignorados, com exemplo sem 
 
 O adaptador de contato valida origem, método, tipo/tamanho do corpo e campos; usa conteúdo de e-mail em texto simples; honeypot, timeout, guarda por IP do contexto confiável e mensagens genéricas de erro. O serviço só confirma envio após ID aceito pelo provedor. Proteção distribuída contra abuso e configuração de DNS do remetente são necessárias antes da ativação pública.
 
-`netlify.toml` prepara CSP, Permissions-Policy, Referrer-Policy e X-Content-Type-Options. Esses cabeçalhos pertencem à configuração de hospedagem; não alegamos sua aplicação no servidor dev do Vite. O projeto não foi publicado.
+`netlify.toml` prepara CSP, Permissions-Policy, Referrer-Policy e X-Content-Type-Options. Esses cabeçalhos pertencem à configuração de hospedagem; não alegamos sua aplicação no servidor dev do Vite. A prévia privada foi publicada no Sites em 18/10/2026; o adaptador e os cabeçalhos específicos do Netlify não estão ativos nessa hospedagem estática.
 
 `npm audit` e `npm audit --omit=dev`: nenhuma vulnerabilidade reportada na verificação executada. Isso reflete o banco de advisories consultado na data, sem garantia futura.
 
@@ -42,10 +42,16 @@ WhatsApp: condicional a número autorizado, com mensagem contextual. Google Maps
 
 ## SEO e entrega de conteúdo
 
-Títulos, descrições e Open Graph por rota, imagem de compartilhamento, favicon e idioma pt-BR. Home, quatro estudos e privacidade recebem HTML estático com Vue SSR e hidratação no cliente. Os projetos são legíveis sem JavaScript. Canonical, sitemap e URLs OG absolutas dependem de `VITE_SITE_URL`, evitando inventar domínio. `robots.txt` disponível. Rotas estáticas e fallback preparados sem publicação.
+Títulos, descrições e Open Graph por rota, imagem de compartilhamento, favicon e idioma pt-BR. Home, quatro estudos e privacidade recebem HTML estático com Vue SSR e hidratação no cliente. Os projetos são legíveis sem JavaScript. Canonical, sitemap e URLs OG absolutas dependem de `VITE_SITE_URL`, evitando inventar domínio. `robots.txt` disponível. Rotas estáticas e fallback preparados; o build da prévia privada recebe a URL real do Sites.
 
 ## Performance
 
 Imagens WebP responsivas, prioridade alta no hero, dimensões explícitas, lazy loading abaixo da dobra, fontes locais com preload seletivo, importações de ícones selecionados, rotas secundárias em chunks. Nenhum GSAP, Pinia, Three.js, rastreador ou serviço de smooth scrolling foi necessário. Intersection Observers, media queries, listeners e requestAnimationFrame são removidos ao desmontar os componentes.
 
 Lighthouse foi executado no preview de produção com emulação mobile e throttling padrão. Os valores finais e o histórico estão em `ENTREGA.md` e nos relatórios JSON/HTML. Resultados de laboratório variam por execução e não equivalem a métricas de usuários reais.
+
+## Revalidação do hero — 18/10/2026
+
+Lighthouse mobile, produção local, uma nova execução após o refinamento: **84 performance / 100 acessibilidade / 100 boas práticas / 100 SEO**. FCP 2,7 s, LCP 3,7 s, TBT 150 ms, CLS 0,001. Evidência: `lighthouse-refinement-mobile.report.json` e `.html`. Esses valores substituem a pontuação anterior como medição desta versão; não medem o servidor privado remoto. LCP continua sendo uma oportunidade de otimização.
+
+Regressão funcional: 35 verificações, oito larguras, cinco auditorias axe com zero violações; menus desktop/mobile com Escape e ciclo de foco; seis rotas com conteúdo estático e hidratação sem erros. O teste de imagens considera recursos efetivamente exibidos: a imagem decorativa lazy do cromo permanece sem download quando oculta no mobile.

@@ -74,7 +74,7 @@ const configured = Boolean(import.meta.env.VITE_CONTACT_ENDPOINT);
     <h2>Imagens, fontes e créditos</h2>
     <p>
       As artes editoriais e os mockups foram fornecidos no kit VERSO*. A pessoa
-      retratada nas composições não está identificada como sendo Renata. As
+      retratada nas composições é uma referência visual e não é Renata. As
       imagens de projetos são ilustrativas e não comprovam produtos, clientes ou
       resultados. A origem e os direitos de publicação desses materiais ainda
       precisam ser confirmados pela responsável.

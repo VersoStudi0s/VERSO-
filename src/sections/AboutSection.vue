@@ -18,7 +18,7 @@ const expanded = ref(false);
       <figure class="about-portrait">
         <AssetImage
           name="retrato-editorial"
-          alt="Composição artística de perfil em luz vermelha; não é um retrato identificado de Renata."
+          alt="Composição artística de perfil em luz vermelha, usada como referência visual."
           :width="1229"
           :height="1536"
         />
@@ -26,7 +26,7 @@ const expanded = ref(false);
           mais<br />que<br />design_
         </div>
         <figcaption class="micro">
-          Arte editorial do estúdio.<br />Retrato pessoal em breve.
+          Referência visual editorial.<br />Não é um retrato de Renata.
         </figcaption>
       </figure>
       <div class="about-copy">

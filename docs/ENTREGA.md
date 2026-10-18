@@ -2,6 +2,9 @@
 
 Implementação em `/workspace/verso`. **Nenhuma publicação ou deploy foi realizado.** O servidor de desenvolvimento permanece na porta 4173 e o preview da produção na 4180.
 
+
+> Atualização de 18/10/2026: a prévia privada solicitada foi publicada. O hero foi refinado novamente conforme a prioridade de Renata, e os estados dos projetos foram corrigidos. Veja [relatório da iteração](ITERACAO-2026-10-18.md) e [comparação atual](screenshots/hero-refinement-comparison-final.jpg). A medição Lighthouse desta versão é 84/100/100/100; os valores abaixo descrevem a primeira entrega.
+
 ## 1. Diagnóstico inicial
 
 O workspace estava vazio: não havia aplicação anterior, repositório Git, dependências, componentes ou backend para preservar. O ZIP fornecia oito imagens, variantes WebP, manifesto e um mapeamento opcional de assets. A referência aprovada estava no JPG anexado, não em `references/verso-aprovado.png`; ela foi convertida e preservada nesse caminho.
@@ -83,7 +86,7 @@ Não foram testados dispositivos físicos ou leitores de tela dedicados. Acessib
 ## 8. Pendências reais
 
 1. Fornecer retrato pessoal autorizado, canais profissionais e confirmar licenças de publicação das artes.
-2. Confirmar autoria, nome e estado dos projetos; substituir mockups por telas reais e completar participação/processo/resultados verificáveis. Confirmar especialmente a associação Syntax Studio ↔ streetwear e a classificação das habilidades.
+2. Substituir mockups por telas reais e completar participação, tecnologias, processo e aprendizados dos projetos. Em 18/10, Renata confirmou: VERSARY concluído para o Desafios de Ideias; Café Aurora fictício do ChatGPT; Syntax em desenvolvimento com um colega. A arte de streetwear segue ilustrativa. Confirmar a classificação das habilidades.
 3. Configurar endpoint e credenciais exclusivamente no servidor, domínio do remetente, destinatário e proteção distribuída contra abuso; testar envio real com destinatário autorizado.
 4. Definir responsável, canal de direitos, operadores e retenção e atualizar a política antes de ativar coleta pública.
 5. Escolher domínio/hospedagem, preencher `VITE_SITE_URL`, preparar HTTPS/DNS e avaliar custos do plano escolhido. Publicação exige autorização posterior.

@@ -12,11 +12,14 @@ export interface Project {
   alt: string;
   status: string;
   context: string;
-  problem: string;
-  objectives: string[];
-  participation: string;
-  process: string[];
-  solution: string;
+  imageCaption: string;
+  technologies?: string;
+  documentationNote?: string;
+  problem?: string;
+  objectives?: string[];
+  participation?: string;
+  process?: string[];
+  solution?: string;
   results: string;
-  learning: string;
+  learning?: string;
 }

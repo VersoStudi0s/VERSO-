@@ -3,12 +3,19 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { PhArrowLeft, PhArrowUpRight, PhPlus } from "@phosphor-icons/vue";
 import { projects } from "../data/projects";
+import type { Project } from "../types/project";
 import AssetImage from "../components/AssetImage.vue";
 import NotFoundPage from "./NotFoundPage.vue";
 const route = useRoute();
 const project = computed(() =>
   projects.find((item) => item.slug === route.params.slug),
 );
+const sectionOrder: (keyof Project)[] = ["context", "problem", "objectives", "participation", "process", "solution", "results", "learning"];
+const visibleSections = computed(() => sectionOrder.filter((key) => {
+  const content = project.value?.[key];
+  return Array.isArray(content) ? content.length > 0 : Boolean(content);
+}));
+const sectionNumber = (key: keyof Project) => String(visibleSections.value.indexOf(key) + 1).padStart(2, "0");
 const nextProject = computed(
   () =>
     projects[
@@ -43,11 +50,7 @@ const nextProject = computed(
     <figure class="case-cover">
       <AssetImage :name="project.image" :alt="project.alt" :eager="true" />
       <figcaption class="micro">
-        {{
-          project.slug === "lab-movimento"
-            ? "Arte do experimento interativo disponível neste portfólio."
-            : "Mockup ilustrativo fornecido para o portfólio. Não comprova produto implementado ou cliente real."
-        }}
+        {{ project.imageCaption }}
       </figcaption>
     </figure>
     <div class="case-layout">
@@ -56,52 +59,49 @@ const nextProject = computed(
         <p>{{ project.description }}</p>
         <span class="micro">ESTADO DO PROJETO</span>
         <p>{{ project.status }}</p>
-        <span class="micro">TECNOLOGIAS</span>
-        <p>
-          {{
-            project.slug === "lab-movimento"
-              ? "Vue 3, TypeScript, CSS, Intersection Observer."
-              : "Stack do produto a confirmar. O mockup não permite identificar tecnologias utilizadas."
-          }}
-        </p>
+        <template v-if="project.technologies">
+          <span class="micro">TECNOLOGIAS</span>
+          <p>{{ project.technologies }}</p>
+        </template>
+        <p v-if="project.documentationNote">{{ project.documentationNote }}</p>
       </aside>
       <div class="case-body prose">
         <section>
-          <span class="micro red">01 / CONTEXTO</span>
+          <span class="micro red">{{ sectionNumber('context') }} / CONTEXTO</span>
           <h2>O ponto de partida</h2>
           <p>{{ project.context }}</p>
         </section>
-        <section>
-          <span class="micro red">02 / PROBLEMA</span>
+        <section v-if="project.problem">
+          <span class="micro red">{{ sectionNumber('problem') }} / PROBLEMA</span>
           <h2>Uma pergunta para explorar</h2>
           <p>{{ project.problem }}</p>
         </section>
-        <section>
-          <span class="micro red">03 / OBJETIVOS</span>
+        <section v-if="project.objectives?.length">
+          <span class="micro red">{{ sectionNumber('objectives') }} / OBJETIVOS</span>
           <h2>O que buscamos construir</h2>
           <ul>
             <li v-for="goal in project.objectives" :key="goal">{{ goal }}</li>
           </ul>
         </section>
-        <section>
-          <span class="micro red">04 / PARTICIPAÇÃO</span>
+        <section v-if="project.participation">
+          <span class="micro red">{{ sectionNumber('participation') }} / PARTICIPAÇÃO</span>
           <h2>Meu papel</h2>
           <p>{{ project.participation }}</p>
         </section>
-        <section>
-          <span class="micro red">05 / PROCESSO</span>
-          <h2>Do conceito à direção</h2>
+        <section v-if="project.process?.length">
+          <span class="micro red">{{ sectionNumber('process') }} / PROCESSO</span>
+          <h2>Processo de desenvolvimento</h2>
           <ol>
             <li v-for="step in project.process" :key="step">{{ step }}</li>
           </ol>
         </section>
-        <section>
-          <span class="micro red">06 / SOLUÇÃO</span>
-          <h2>A proposta visual</h2>
+        <section v-if="project.solution">
+          <span class="micro red">{{ sectionNumber('solution') }} / SOLUÇÃO</span>
+          <h2>A solução</h2>
           <p>{{ project.solution }}</p>
         </section>
         <section>
-          <span class="micro red">07 / RESULTADOS</span>
+          <span class="micro red">{{ sectionNumber('results') }} / RESULTADOS</span>
           <h2>O que está documentado</h2>
           <p>{{ project.results }}</p>
           <RouterLink
@@ -111,8 +111,8 @@ const nextProject = computed(
             >Experimentar no LAB <PhArrowUpRight
           /></RouterLink>
         </section>
-        <section>
-          <span class="micro red">08 / APRENDIZADOS</span>
+        <section v-if="project.learning">
+          <span class="micro red">{{ sectionNumber('learning') }} / APRENDIZADOS</span>
           <h2>O próximo movimento</h2>
           <p>{{ project.learning }}</p>
         </section>

@@ -18,7 +18,7 @@ try {
       if (width === 390) await page.keyboard.press('Escape')
       checks.push({ width, target: id, activeIndicatorPassed: true })
     }
-    if (width === 390) {
+    {
       await page.getByRole('button', { name: 'Abrir menu' }).click()
       await page.keyboard.press('Shift+Tab')
       assert.ok(await page.locator('.menu-toggle').evaluate(el => el === document.activeElement))
@@ -27,10 +27,14 @@ try {
       await page.keyboard.press('Tab'); await page.keyboard.press('Tab')
       assert.ok(await page.locator('#mobile-menu a').first().evaluate(el => el === document.activeElement))
       checks.push({ width, menuFocusLoopPassed: true })
+      await page.keyboard.press('Escape')
+      await page.locator('#mobile-menu').waitFor({ state: 'detached' })
+      assert.equal(await page.locator('#mobile-menu').count(), 0)
+      assert.ok(await page.locator('.menu-toggle').evaluate(el => el === document.activeElement))
     }
     await page.close()
   }
-  console.log('Six active-section checks and the mobile focus loop passed.')
+  console.log('Six active-section checks and desktop/mobile menu focus loops passed.')
 } finally {
   await writeFile('docs/navigation-results.json', JSON.stringify(checks, null, 2))
   await browser.close()

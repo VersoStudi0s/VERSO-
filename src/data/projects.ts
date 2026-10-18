@@ -13,102 +13,48 @@ export const projects: Project[] = [
     number: "01",
     name: "VERSARY",
     subtitle: "Sistema de gestão industrial",
-    description:
-      "Uma investigação sobre clareza, dados e interfaces para a indústria.",
+    description: "Projeto finalizado para o Desafios de Ideias.",
     categories: ["Websites", "UI/UX"],
-    tags: ["UI/UX", "Dashboard", "Desenvolvimento"],
+    tags: ["Gestão industrial", "Desenvolvimento"],
     image: "projeto-versary",
-    alt: "Mockup ilustrativo de um notebook com dashboard vermelho e preto.",
-    status: "Estudo conceitual",
-    context:
-      "O VERSARY é apresentado aqui como um conceito de sistema de gestão industrial. A proposta explora como organizar informações operacionais em uma interface compreensível.",
-    problem:
-      "Como tornar dados de operação e ocorrências de máquinas mais fáceis de consultar, sem sobrecarregar a interface?",
-    objectives: [
-      "Definir uma hierarquia clara para indicadores e ocorrências.",
-      "Explorar fluxos de consulta e organização dos dados.",
-      "Construir uma direção de interface acessível e responsiva.",
-    ],
-    participation:
-      "Proposta de direção de interface e organização do estudo. As etapas executadas, o código do produto e a participação detalhada ainda precisam ser documentados pela autora.",
-    process: [
-      "Contexto e necessidades: hipótese de uso industrial, a validar com pessoas da área.",
-      "Arquitetura: proposta de agrupamento de indicadores, máquinas e ocorrências.",
-      "Interface: exploração visual por meio do mockup fornecido.",
-    ],
-    solution:
-      "A direção proposta reúne indicadores e visualizações em um painel central. A imagem é um mockup de apresentação, não uma captura de um sistema funcional.",
-    results:
-      "Não há métricas, testes com usuários ou resultados de implantação documentados. O material disponível é uma exploração visual.",
-    learning:
-      "O próximo passo é transformar as hipóteses em fluxos testáveis e documentar decisões, implementação e aprendizados reais.",
+    alt: "Imagem ilustrativa de um notebook com dashboard vermelho e preto.",
+    imageCaption: "Imagem ilustrativa de apresentação; não é uma captura da interface final do VERSARY.",
+    status: "Projeto concluído",
+    context: "O VERSARY é um projeto de sistema de gestão industrial desenvolvido para o Desafios de Ideias. O projeto já está finalizado.",
+    results: "Projeto concluído para o Desafios de Ideias.",
+    documentationNote: "O estudo de caso está sendo atualizado com detalhes do desenvolvimento e telas do projeto.",
   },
   {
     slug: "cafe-aurora",
     number: "02",
     name: "Café Aurora",
-    subtitle: "Identidade visual",
-    description:
-      "Texturas, contraste e uma atmosfera que desperta os sentidos.",
+    subtitle: "Identidade visual fictícia",
+    description: "Um projeto fictício criado em conversa com o ChatGPT.",
     categories: ["Identidade"],
-    tags: ["Branding", "Direção de arte"],
+    tags: ["Conceito", "Identidade"],
     image: "projeto-cafe-aurora",
-    alt: "Mockup conceitual de café com xícaras, grãos e embalagem em preto e vermelho.",
-    status: "Estudo conceitual",
-    context:
-      "Uma exploração conceitual de identidade para uma marca de café. Não representa um cliente contratado nem uma marca comercial confirmada.",
-    problem:
-      "Como traduzir a experiência sensorial do café em uma linguagem visual coerente?",
-    objectives: [
-      "Investigar a relação entre textura, cor e percepção.",
-      "Explorar aplicações de identidade em materiais físicos e digitais.",
-    ],
-    participation:
-      "Curadoria do conceito apresentado no portfólio. Autoria dos materiais finais e processo detalhado pendentes de confirmação.",
-    process: [
-      "Referências: universo sensorial do café.",
-      "Direção visual: superfícies escuras, contraste e luz vermelha.",
-      "Aplicação: mockup ilustrativo de embalagem e composição de produto.",
-    ],
-    solution:
-      "Uma linguagem de contraste e texturas aplicada à apresentação conceitual de produtos.",
-    results:
-      "Mockup visual disponível. Não existem resultados comerciais ou validações documentadas.",
-    learning:
-      "Validar legibilidade, reprodução de cores e consistência da identidade em aplicações reais.",
+    alt: "Mockup ilustrativo de café com xícaras, grãos e embalagem em preto e vermelho.",
+    imageCaption: "Mockup ilustrativo do projeto fictício Café Aurora.",
+    status: "Projeto fictício",
+    context: "O Café Aurora é um projeto fictício criado em conversa com o ChatGPT. A marca faz parte de uma exploração visual e não representa um cliente real.",
+    results: "Conceito fictício apresentado no portfólio, sem resultados comerciais atribuídos.",
   },
   {
     slug: "syntax-studio",
     number: "03",
     name: "Syntax Studio",
-    subtitle: "Conceito de e-commerce",
-    description:
-      "Uma direção digital para explorar moda, imagem e experiência de compra.",
+    subtitle: "Loja virtual",
+    description: "Uma loja em desenvolvimento por mim e um colega.",
     categories: ["Websites", "UI/UX"],
-    tags: ["E-commerce", "Interface"],
+    tags: ["E-commerce", "Colaboração"],
     image: "projeto-streetwear",
-    alt: "Mockup ilustrativo de uma loja de streetwear em um monitor, com roupas escuras.",
-    status: "Conceito · nome a confirmar",
-    context:
-      "Estudo de e-commerce baseado no mockup de streetwear fornecido. A associação do nome Syntax Studio a essa arte ainda precisa ser confirmada.",
-    problem:
-      "Como conciliar uma direção de arte expressiva com uma navegação de catálogo clara?",
-    objectives: [
-      "Explorar apresentação de produto e navegação.",
-      "Investigar hierarquia e adaptação da interface para dispositivos móveis.",
-    ],
-    participation:
-      "Organização do conceito para apresentação. Tecnologias e etapas de um produto implementado não foram fornecidas.",
-    process: [
-      "Referência: mockup de moda fornecido.",
-      "Exploração: contraste entre fotografia e elementos de interface.",
-      "Próxima etapa: desenhar e validar o fluxo de catálogo.",
-    ],
-    solution:
-      "Direção visual de uma vitrine digital. Não há checkout, catálogo operacional ou produto publicado documentado.",
-    results: "Exploração visual, sem métricas ou vendas atribuídas.",
-    learning:
-      "Transformar a composição em um protótipo navegável e validar a experiência de descoberta de produtos.",
+    alt: "Imagem ilustrativa de loja de streetwear em um monitor.",
+    imageCaption: "Referência visual de e-commerce; não é uma captura da loja Syntax.",
+    status: "Em desenvolvimento · em dupla",
+    context: "A Syntax é uma loja virtual que estou desenvolvendo em parceria com um colega. O projeto está em andamento.",
+    participation: "Desenvolvimento da loja em parceria com um colega.",
+    results: "Desenvolvimento em andamento. A loja ainda não é apresentada aqui como um projeto finalizado.",
+    documentationNote: "As etapas do trabalho em dupla e as telas da loja serão adicionadas ao estudo de caso.",
   },
   {
     slug: "lab-movimento",
@@ -121,6 +67,8 @@ export const projects: Project[] = [
     image: "olho-editorial",
     alt: "Composição editorial de um olho em preto e branco com fragmentos vermelhos.",
     status: "Experimento interativo",
+    imageCaption: "Arte do experimento interativo disponível neste portfólio.",
+    technologies: "Vue 3, TypeScript, CSS, Intersection Observer.",
     context:
       "Experimento desenvolvido como parte deste portfólio. O laboratório combina tipografia cinética, um objeto cromado em camada 2D e controles de movimento.",
     problem:

@@ -40,6 +40,6 @@ Os testes de navegador usam Chromium em `/usr/bin/chromium`; configure `CHROMIUM
 - Referência e originais: `references/` e `assets/originais/`.
 - Guia original do kit: `assets/README-kit.md`.
 
-O envio real permanece desativado até a configuração do endpoint e do provedor. Nenhum contato, cliente, resultado comercial ou experiência profissional foi inventado. Os projetos sem evidências estão identificados como conceitos; a arte de retrato não é apresentada como foto de Renata.
+O envio real permanece desativado até a configuração do endpoint e do provedor. Nenhum contato, cliente, resultado comercial ou experiência profissional foi inventado. Informações confirmadas por Renata: VERSARY concluído para o Desafios de Ideias; Café Aurora fictício, criado em conversa com o ChatGPT; Syntax em desenvolvimento em dupla. As imagens de apresentação são ilustrativas; o retrato do kit é apenas referência visual.
 
 Consulte [configuração](docs/SETUP.md), [recursos e licenças](docs/ASSETS.md), [auditoria](docs/AUDIT.md), [revisão visual](design-qa.md) e [relatório de entrega](docs/ENTREGA.md).

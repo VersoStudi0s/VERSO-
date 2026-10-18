@@ -5,9 +5,9 @@
       "scrollWidth": 320,
       "brokenImages": [],
       "title": {
-        "width": 263.609375,
-        "scrollWidth": 264,
-        "right": 287.609375
+        "width": 265.203125,
+        "scrollWidth": 270,
+        "right": 289.203125
       }
     },
     {
@@ -16,7 +16,7 @@
       "brokenImages": [],
       "title": {
         "width": 295.203125,
-        "scrollWidth": 297,
+        "scrollWidth": 304,
         "right": 324.203125
       }
     },
@@ -25,9 +25,9 @@
       "scrollWidth": 390,
       "brokenImages": [],
       "title": {
-        "width": 321.296875,
-        "scrollWidth": 321,
-        "right": 350.296875
+        "width": 325.203125,
+        "scrollWidth": 329,
+        "right": 354.203125
       }
     },
     {
@@ -35,9 +35,9 @@
       "scrollWidth": 768,
       "brokenImages": [],
       "title": {
-        "width": 585.2152709960938,
-        "scrollWidth": 579,
-        "right": 628.8035278320312
+        "width": 599.3526611328125,
+        "scrollWidth": 593,
+        "right": 623.6770133972168
       }
     },
     {
@@ -45,9 +45,9 @@
       "scrollWidth": 1024,
       "brokenImages": [],
       "title": {
-        "width": 585.2152709960938,
-        "scrollWidth": 579,
-        "right": 638.2636032104492
+        "width": 599.3526000976562,
+        "scrollWidth": 593,
+        "right": 639.5837898254395
       }
     },
     {
@@ -55,9 +55,9 @@
       "scrollWidth": 1280,
       "brokenImages": [],
       "title": {
-        "width": 711.0516357421875,
-        "scrollWidth": 798,
-        "right": 773.0799026489258
+        "width": 696.1074829101562,
+        "scrollWidth": 859,
+        "right": 751.3860702514648
       }
     },
     {
@@ -65,9 +65,9 @@
       "scrollWidth": 1440,
       "brokenImages": [],
       "title": {
-        "width": 799.979248046875,
-        "scrollWidth": 898,
-        "right": 867.8844451904297
+        "width": 783.1019287109375,
+        "scrollWidth": 966,
+        "right": 848.1900482177734
       }
     },
     {
@@ -75,9 +75,9 @@
       "scrollWidth": 1920,
       "brokenImages": [],
       "title": {
-        "width": 865.0863647460938,
-        "scrollWidth": 971,
-        "right": 958.9546051025391
+        "width": 850.9118041992188,
+        "scrollWidth": 1050,
+        "right": 953.46826171875
       }
     }
   ],

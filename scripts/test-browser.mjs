@@ -69,7 +69,7 @@ try {
       width: innerWidth,
       scrollWidth: document.documentElement.scrollWidth,
       brokenImages: [...document.images]
-        .filter((img) => !img.complete || !img.naturalWidth)
+        .filter((img) => img.getClientRects().length > 0 && (!img.complete || !img.naturalWidth))
         .map((img) => img.src),
       title: (() => {
         const el = document.querySelector(".reality-mask em");

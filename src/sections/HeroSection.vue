@@ -42,6 +42,15 @@ onBeforeUnmount(() => {
       </div>
     </div>
     <div class="hero-shade" aria-hidden="true"></div>
+    <img
+      class="hero-chrome"
+      src="/images/escultura-cromada-480.webp"
+      alt=""
+      width="480"
+      height="480"
+      loading="lazy"
+      decoding="async"
+    />
     <div class="hero-content">
       <div class="hero-kicker">
         <p class="eyebrow">Creative<br />Digital<br />Studio</p>
@@ -52,7 +61,7 @@ onBeforeUnmount(() => {
       <h1 id="hero-title" aria-label="Ideias que ganham realidade.">
         <span class="title-mask" aria-hidden="true"
           ><span class="ideas">IDEIAS</span></span
-        ><span class="title-mask" aria-hidden="true"
+        ><span class="title-mask become-mask" aria-hidden="true"
           ><span class="become">QUE GANHAM</span></span
         ><span class="title-mask reality-mask" aria-hidden="true"
           ><em>REALIDADE.</em></span
@@ -108,12 +117,11 @@ onBeforeUnmount(() => {
 }
 .hero-art-entry {
   position: absolute;
-  right: -1.5%;
-  top: 4%;
-  width: 70%;
-  height: 104%;
+  right: -5.5%;
+  top: 1%;
+  width: 82%;
+  height: 113%;
   z-index: -3;
-  mask-image: linear-gradient(90deg, transparent, #000 14%);
   animation: art-reveal 1.3s var(--ease) both;
 }
 .hero-art {
@@ -121,12 +129,19 @@ onBeforeUnmount(() => {
   height: 100%;
   transition: transform 0.8s ease-out;
 }
-.hero-art :deep(picture),
-.hero-art :deep(img) {
+.hero-art :deep(picture) {
+  display: flex;
+  justify-content: center;
   width: 100%;
   height: 100%;
+}
+.hero-art :deep(img) {
+  width: auto;
+  max-width: none;
+  height: 100%;
   object-fit: contain;
-  object-position: 55% 43%;
+  mask-image: linear-gradient(90deg, transparent, #000 24%);
+  filter: brightness(0.83) saturate(1.05);
 }
 .hero-shade {
   position: absolute;
@@ -136,9 +151,9 @@ onBeforeUnmount(() => {
     linear-gradient(
       90deg,
       #09090b 0%,
-      #09090bf5 10%,
-      #09090ba6 34%,
-      #09090b00 63%
+      #09090be6 12%,
+      #09090b70 32%,
+      #09090b00 58%
     ),
     linear-gradient(
       0deg,
@@ -147,6 +162,18 @@ onBeforeUnmount(() => {
       #09090b00 83%,
       #09090b 100%
     );
+}
+.hero-chrome {
+  position: absolute;
+  left: -32%;
+  bottom: -29%;
+  width: 40%;
+  height: auto;
+  z-index: -1;
+  pointer-events: none;
+  transform: rotate(-28deg);
+  filter: brightness(0.35);
+  animation: fade-in 1s 0.4s both;
 }
 .hero-content {
   position: relative;
@@ -175,6 +202,7 @@ onBeforeUnmount(() => {
   letter-spacing: -0.035em;
   transform: rotate(-4deg);
   transform-origin: 20% 50%;
+  margin-left: 2.7%;
 }
 .title-mask {
   display: block;
@@ -189,20 +217,25 @@ onBeforeUnmount(() => {
   animation: title-reveal 0.95s var(--ease) both;
 }
 .ideas {
-  font: 700 clamp(110px, 10.7vw, 176px)/0.84 var(--display);
+  font: 700 clamp(100px, 9.7vw, 160px)/0.9 var(--display);
   animation-delay: 0.2s !important;
 }
 .become {
-  font: 300 clamp(75px, 9.15vw, 148px)/1 var(--display);
+  font: 300 clamp(65px, 8.2vw, 133px)/1 var(--display);
   letter-spacing: -0.014em;
   animation-delay: 0.32s !important;
+  scale: 1.16 1;
+  transform-origin: left center;
+}
+.become-mask {
+  width: 100%;
 }
 .reality-mask {
-  margin-left: -8px;
+  margin-left: -45px;
   overflow: visible;
 }
 .reality-mask em {
-  font: 500 italic clamp(130px, 12.2vw, 205px)/0.81 var(--editorial);
+  font: 700 italic clamp(130px, 12.2vw, 205px)/0.81 var(--editorial);
   letter-spacing: -0.065em;
   color: var(--red);
   animation-delay: 0.44s !important;
@@ -210,11 +243,11 @@ onBeforeUnmount(() => {
   transform-origin: left center;
 }
 .hero-description {
-  margin: 32px 0 0 11.2%;
+  margin: 32px 0 0 14.4%;
   animation: fade-in 1s 0.8s both;
 }
 .hero-description > p {
-  font: 400 clamp(11px, 1vw, 15px)/1.6 var(--mono);
+  font: 400 clamp(12px, 1.15vw, 18px)/1.6 var(--mono);
   letter-spacing: 0.075em;
 }
 .hero-actions {
@@ -224,11 +257,12 @@ onBeforeUnmount(() => {
   margin-top: 24px;
 }
 .hero-actions .btn {
-  min-width: 250px;
-  font-size: 12px;
+  min-width: 270px;
+  min-height: 62px;
+  font-size: 14px;
 }
 .hero-actions .text-link {
-  font-size: 11px;
+  font-size: 12px;
 }
 .hero-bottom {
   position: absolute;
@@ -289,8 +323,8 @@ onBeforeUnmount(() => {
 }
 .art-annotation {
   position: absolute;
-  top: 26%;
-  right: 28%;
+  top: 28%;
+  right: 41%;
   padding: 16px;
   border: 1px solid #b1a9aa70;
   border-radius: 3px;
@@ -300,7 +334,7 @@ onBeforeUnmount(() => {
   animation: fade-in 1s 1s both;
 }
 .art-annotation > span:last-child {
-  font: 10px/1.6 var(--mono);
+  font: 12px/1.6 var(--mono);
   display: block;
   margin-top: 10px;
   color: var(--pink);
@@ -310,10 +344,10 @@ onBeforeUnmount(() => {
 }
 .hero-lab-link {
   position: absolute;
-  bottom: 10%;
-  right: 22%;
-  width: 170px;
-  height: 131px;
+  bottom: 5%;
+  right: 25%;
+  width: clamp(180px, 19vw, 295px);
+  height: clamp(135px, 12vw, 186px);
   border: 1px solid #9f6970;
   border-radius: 3px;
   overflow: hidden;
@@ -332,7 +366,7 @@ onBeforeUnmount(() => {
   height: 100%;
   width: 100%;
   object-fit: cover;
-  filter: brightness(0.65);
+  filter: brightness(0.55);
   transition:
     filter 0.3s,
     transform 0.5s;
@@ -346,24 +380,24 @@ onBeforeUnmount(() => {
   top: 12px;
   left: 12px;
   color: var(--white);
-  font-size: 7px;
+  font-size: 9px;
 }
 .hero-lab-arrow {
   background: var(--white);
   color: var(--black);
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: 50px;
+  height: 50px;
   display: grid;
   place-items: center;
   margin-left: auto;
 }
 .hero-art-label {
   position: absolute;
-  right: 4%;
-  bottom: 17%;
+  right: 3%;
+  bottom: 9%;
   color: #d2cac7;
-  font-size: 8px;
+  font-size: 11px;
   line-height: 1.65;
   animation: fade-in 1s 1.2s both;
 }
@@ -397,11 +431,11 @@ onBeforeUnmount(() => {
 }
 @media (min-width: 1100px) {
   .reality-mask {
-    transform: scaleX(0.88);
+    transform: scaleX(0.8);
     transform-origin: left center;
   }
   .reality-mask em {
-    font-size: clamp(150px, 14vw, 218px);
+    font-size: clamp(150px, 14.7vw, 230px);
   }
 }
 @media (min-width: 1700px) {
@@ -498,6 +532,7 @@ onBeforeUnmount(() => {
   .hero h1 {
     width: 100%;
     transform: none;
+    margin-left: 0;
   }
   .ideas {
     font-size: clamp(87px, 25vw, 170px);
@@ -506,6 +541,7 @@ onBeforeUnmount(() => {
   .become {
     font-size: clamp(57px, 16.55vw, 112px);
     line-height: 1.12;
+    scale: 1;
   }
   .reality-mask {
     margin-left: -3px;
@@ -521,9 +557,16 @@ onBeforeUnmount(() => {
     width: 99%;
     height: 475px;
   }
+  .hero-chrome {
+    display: none;
+  }
   .hero-art :deep(img) {
+    width: 100%;
+    max-width: 100%;
     object-fit: contain;
     object-position: center;
+    mask-image: none;
+    filter: none;
   }
   .hero-shade {
     background: linear-gradient(
@@ -558,13 +601,14 @@ onBeforeUnmount(() => {
     justify-content: space-between;
   }
   .hero-actions .btn {
-    font-size: 8px;
+    font-size: 11px;
     min-width: 0;
+    min-height: 48px;
     padding: 15px 13px;
     gap: 10px;
   }
   .hero-actions .text-link {
-    font-size: 7px;
+    font-size: 10px;
     gap: 6px;
   }
   .hero-actions .text-link svg {
@@ -642,9 +686,27 @@ onBeforeUnmount(() => {
     bottom: 22%;
   }
 }
+@media (max-width: 479px) {
+  .hero {
+    height: 970px;
+  }
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .hero-actions .text-link {
+    min-height: 44px;
+    justify-content: center;
+  }
+  .hero-lab-link {
+    top: 590px;
+    bottom: auto;
+  }
+}
 @media (max-width: 359px) {
   .hero {
-    height: 860px;
+    height: 930px;
   }
   .hero-content {
     padding-left: 16px;
@@ -669,10 +731,10 @@ onBeforeUnmount(() => {
     gap: 9px;
   }
   .hero-actions .text-link {
-    font-size: 6px;
+    font-size: 10px;
   }
   .hero-actions .btn {
-    font-size: 7px;
+    font-size: 11px;
     padding: 14px 10px;
   }
   .hero-bottom {
@@ -680,7 +742,8 @@ onBeforeUnmount(() => {
     right: 16px;
   }
   .hero-lab-link {
-    bottom: 25%;
+    top: 560px;
+    bottom: auto;
   }
 }
 </style>
