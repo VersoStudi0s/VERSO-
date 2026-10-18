@@ -1,0 +1,98 @@
+[
+  {
+    "id": "hero-editorial",
+    "original": "assets/originais/hero-editorial.png",
+    "webp": "public/images/hero-editorial.webp",
+    "mobile": "public/images/hero-editorial-mobile.webp",
+    "width": 1229,
+    "height": 1536,
+    "hasAlpha": false,
+    "section": "Hero principal",
+    "notes": "Colagem com retrato frontal, luz vermelha, painéis translúcidos e objeto cromado. Usar como arte de composição, preferencialmente na lateral direita do hero.",
+    "alt": "Arte editorial composta com retrato e elementos vermelhos."
+  },
+  {
+    "id": "escultura-cromada",
+    "original": "assets/originais/escultura-cromada.png",
+    "webp": "public/images/escultura-cromada.webp",
+    "mobile": "public/images/escultura-cromada-mobile.webp",
+    "width": 1254,
+    "height": 1254,
+    "hasAlpha": true,
+    "section": "Hero / Lab / detalhes",
+    "notes": "Elemento 3D cromado vermelho com transparência. Ótimo para camadas flutuantes, rotações e parallax moderado.",
+    "alt": ""
+  },
+  {
+    "id": "retrato-editorial",
+    "original": "assets/originais/retrato-editorial.png",
+    "webp": "public/images/retrato-editorial.webp",
+    "mobile": "public/images/retrato-editorial-mobile.webp",
+    "width": 1229,
+    "height": 1536,
+    "hasAlpha": false,
+    "section": "Sobre / Hero alternativo",
+    "notes": "Retrato lateral em colagem editorial, útil para seção visual sobre o estúdio. NÃO afirmar que é foto da autora sem validação.",
+    "alt": "Retrato editorial de perfil em tons pretos e vermelhos."
+  },
+  {
+    "id": "projeto-cafe-aurora",
+    "original": "assets/originais/projeto-cafe-aurora.png",
+    "webp": "public/images/projeto-cafe-aurora.webp",
+    "mobile": "public/images/projeto-cafe-aurora-mobile.webp",
+    "width": 1536,
+    "height": 1152,
+    "hasAlpha": false,
+    "section": "Projeto de identidade visual",
+    "notes": "Mockup conceitual de café: xícaras, grãos e embalagem de tons vermelhos e escuros. Use somente como trabalho real se isso for confirmado.",
+    "alt": "Composição de café com embalagem e elementos de identidade visual."
+  },
+  {
+    "id": "projeto-versary",
+    "original": "assets/originais/projeto-versary.png",
+    "webp": "public/images/projeto-versary.webp",
+    "mobile": "public/images/projeto-versary-mobile.webp",
+    "width": 1536,
+    "height": 1152,
+    "hasAlpha": false,
+    "section": "Galeria / estudo de caso VERSARY",
+    "notes": "Notebook com dashboard analítico vermelho sobre composição experimental. Não apresentar como screenshot fiel do produto sem confirmação.",
+    "alt": "Notebook exibindo interface de dados analíticos em um cenário vermelho e preto."
+  },
+  {
+    "id": "olho-editorial",
+    "original": "assets/originais/olho-editorial.png",
+    "webp": "public/images/olho-editorial.webp",
+    "mobile": "public/images/olho-editorial-mobile.webp",
+    "width": 1536,
+    "height": 1536,
+    "hasAlpha": false,
+    "section": "Detalhes / Lab",
+    "notes": "Recorte monocromático de olho com sobreposições vermelhas. Usar como detalhe editorial, evitando sobrepor textos importantes.",
+    "alt": "Close de olho em preto e branco com camadas gráficas vermelhas."
+  },
+  {
+    "id": "textura-editorial",
+    "original": "assets/originais/textura-editorial.png",
+    "webp": "public/images/textura-editorial.webp",
+    "mobile": "public/images/textura-editorial-mobile.webp",
+    "width": 1536,
+    "height": 1536,
+    "hasAlpha": false,
+    "section": "Fundos / seções",
+    "notes": "Textura abstrata vermelha e preta com painéis transparentes. Usar em blocos visuais, fundos locais e transições, não em todos os elementos.",
+    "alt": ""
+  },
+  {
+    "id": "projeto-streetwear",
+    "original": "assets/originais/projeto-streetwear.png",
+    "webp": "public/images/projeto-streetwear.webp",
+    "mobile": "public/images/projeto-streetwear-mobile.webp",
+    "width": 1536,
+    "height": 1152,
+    "hasAlpha": false,
+    "section": "Galeria / projeto de e-commerce",
+    "notes": "Mockup de moda streetwear com interface em monitor e looks escuros. Verificar se pertence a Syntax Studio ou outra marca.",
+    "alt": "Apresentação de loja streetwear com roupas pretas e painel digital."
+  }
+]

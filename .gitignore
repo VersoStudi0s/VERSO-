@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.prerender/
+.env
+.env.*
+!.env.example
+.netlify/
+test-results/
+*.log
+*.tsbuildinfo
+.openai/deployment-status.json

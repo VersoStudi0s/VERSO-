@@ -1,0 +1,36 @@
+[
+  {
+    "width": 1440,
+    "target": "lab",
+    "activeIndicatorPassed": true
+  },
+  {
+    "width": 1440,
+    "target": "sobre",
+    "activeIndicatorPassed": true
+  },
+  {
+    "width": 1440,
+    "target": "contato",
+    "activeIndicatorPassed": true
+  },
+  {
+    "width": 390,
+    "target": "lab",
+    "activeIndicatorPassed": true
+  },
+  {
+    "width": 390,
+    "target": "sobre",
+    "activeIndicatorPassed": true
+  },
+  {
+    "width": 390,
+    "target": "contato",
+    "activeIndicatorPassed": true
+  },
+  {
+    "width": 390,
+    "menuFocusLoopPassed": true
+  }
+]

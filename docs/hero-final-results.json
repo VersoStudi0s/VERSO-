@@ -1,0 +1,60 @@
+{
+  "results": [
+    {
+      "width": 320,
+      "heroBottom": 870,
+      "ctaBottom": 764.78125,
+      "titleRight": 287.609375,
+      "overflow": false
+    },
+    {
+      "width": 360,
+      "heroBottom": 900,
+      "ctaBottom": 797.78125,
+      "titleRight": 324.203125,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "heroBottom": 900,
+      "ctaBottom": 797.78125,
+      "titleRight": 350.296875,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "heroBottom": 788,
+      "ctaBottom": 661.21875,
+      "titleRight": 628.8035278320312,
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "heroBottom": 788,
+      "ctaBottom": 679.921875,
+      "titleRight": 638.2636032104492,
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "heroBottom": 850,
+      "ctaBottom": 773.453125,
+      "titleRight": 773.0799026489258,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "heroBottom": 954,
+      "ctaBottom": 828.359375,
+      "titleRight": 867.8844451904297,
+      "overflow": false
+    },
+    {
+      "width": 1920,
+      "heroBottom": 1006,
+      "ctaBottom": 918.15625,
+      "titleRight": 958.9546051025391,
+      "overflow": false
+    }
+  ]
+}

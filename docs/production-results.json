@@ -1,0 +1,36 @@
+{
+  "base": "http://127.0.0.1:4180",
+  "routes": [
+    {
+      "path": "/",
+      "staticContentWithoutJavaScript": true,
+      "hydrated": true
+    },
+    {
+      "path": "/projetos/versary",
+      "staticContentWithoutJavaScript": true,
+      "hydrated": true
+    },
+    {
+      "path": "/projetos/cafe-aurora",
+      "staticContentWithoutJavaScript": true,
+      "hydrated": true
+    },
+    {
+      "path": "/projetos/syntax-studio",
+      "staticContentWithoutJavaScript": true,
+      "hydrated": true
+    },
+    {
+      "path": "/projetos/lab-movimento",
+      "staticContentWithoutJavaScript": true,
+      "hydrated": true
+    },
+    {
+      "path": "/privacidade",
+      "staticContentWithoutJavaScript": true,
+      "hydrated": true
+    }
+  ],
+  "errors": []
+}

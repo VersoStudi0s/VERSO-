@@ -1,0 +1,53 @@
+{
+  "realEmailsSent": 0,
+  "checks": [
+    {
+      "name": "Missing configuration returns 503",
+      "passed": true
+    },
+    {
+      "name": "Only POST accepted",
+      "passed": true
+    },
+    {
+      "name": "Unexpected origin rejected",
+      "passed": true
+    },
+    {
+      "name": "Invalid email rejected",
+      "passed": true
+    },
+    {
+      "name": "Honeypot rejected without fake success",
+      "passed": true
+    },
+    {
+      "name": "Short message rejected",
+      "passed": true
+    },
+    {
+      "name": "Oversized body rejected",
+      "passed": true
+    },
+    {
+      "name": "Explicit provider ID required for success",
+      "passed": true
+    },
+    {
+      "name": "Unconfirmed provider response rejected",
+      "passed": true
+    },
+    {
+      "name": "Provider failure returns 502",
+      "passed": true
+    },
+    {
+      "name": "Network failure returns 502",
+      "passed": true
+    },
+    {
+      "name": "Per-instance rate guard returns 429 on sixth request",
+      "passed": true
+    }
+  ]
+}
