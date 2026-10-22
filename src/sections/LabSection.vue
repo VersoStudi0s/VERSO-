@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, watch, onMounted, onBeforeUnmount } from "vue";
 import {
   PhAsterisk,
   PhPause,
@@ -7,10 +7,17 @@ import {
   PhArrowUpRight,
 } from "@phosphor-icons/vue";
 import AssetImage from "../components/AssetImage.vue";
+import { usePointerDepth } from "../composables/usePointerDepth";
+const { surface, move, reset } = usePointerDepth();
+const props = withDefaults(
+  defineProps<{ anchor?: string; enabled?: boolean }>(),
+  { anchor: "lab", enabled: true },
+);
 const mode = ref("Forma"),
-  playing = ref(true),
+  playing = ref(props.enabled),
   reduced = ref(false),
-  started = ref(false);
+  finished = ref(false),
+  iteration = ref(0);
 let preference: MediaQueryList;
 const modes = ["Forma", "Tipo", "Composição"];
 const descriptions: Record<string, string> = {
@@ -24,11 +31,31 @@ function updateMotion() {
   reduced.value = preference.matches;
   if (reduced.value) playing.value = false;
 }
+watch(
+  () => props.enabled,
+  (enabled) => {
+    playing.value = enabled && !reduced.value;
+    if (playing.value) {
+      finished.value = false;
+      iteration.value++;
+    }
+  },
+);
 function toggle() {
   if (!reduced.value) {
-    started.value = !playing.value;
+    if (!playing.value && finished.value) {
+      iteration.value++;
+      finished.value = false;
+    }
     playing.value = !playing.value;
   }
+}
+watch(mode, () => {
+  finished.value = false;
+});
+function finishAnimation() {
+  playing.value = false;
+  finished.value = true;
 }
 onMounted(() => {
   preference = matchMedia("(prefers-reduced-motion: reduce)");
@@ -39,16 +66,20 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
 </script>
 <template>
   <section
-    id="lab"
+    :id="props.anchor"
     class="lab frame section-pad reveal"
+    ref="surface"
+    @pointermove="move"
+    @pointerleave="reset"
     :class="{ paused: !playing, reduced }"
     aria-labelledby="lab-title"
   >
     <div class="section-topline">
-      <span class="eyebrow">Laboratório criativo</span
-      ><span class="section-number">[04]</span>
+      <span class="eyebrow">Laboratório criativo / movimento em estudo</span
+      ><span class="section-number">[06]</span>
     </div>
-    <div class="lab-copy">
+    <div class="lab-texture" aria-hidden="true"></div>
+    <div class="lab-copy" data-reveal>
       <h2 id="lab-title">LAB<PhAsterisk weight="thin" aria-hidden="true" /></h2>
       <p>
         Um espaço para testar ideias,<br />explorar efeitos e registrar<br />processos
@@ -57,9 +88,9 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
     </div>
     <div
       class="lab-stage"
-      :class="{ 'motion-started': started }"
+      :key="iteration"
       aria-hidden="true"
-      @animationend="playing = false"
+      @animationend="finishAnimation"
     >
       <AssetImage
         v-if="mode === 'Forma'"
@@ -77,6 +108,12 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
         :height="1536"
       />
     </div>
+    <span class="lab-coordinate coordinate-top micro" aria-hidden="true"
+      >X / Y / Z<br />ESTUDO DE PROFUNDIDADE</span
+    >
+    <span class="lab-coordinate coordinate-bottom micro" aria-hidden="true"
+      >FORMA. MOVIMENTO.<br />OUTRAS POSSIBILIDADES.</span
+    >
     <div class="lab-controls">
       <div class="lab-modes" role="group" aria-label="Selecionar experimento">
         <button
@@ -105,7 +142,7 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
           v-else
           :size="16"
         /><span>{{
-          reduced ? "Movimento reduzido" : playing ? "Pausar" : "Animar"
+          reduced ? "Movimento reduzido" : playing ? "Pausar" : "Ativar"
         }}</span>
       </button>
     </div>
@@ -119,121 +156,164 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
 .lab {
   overflow: hidden;
   isolation: isolate;
-  min-height: 410px;
+  min-height: 720px;
+}
+.lab-texture {
+  position: absolute;
+  inset: 0;
+  background: url("/images/textura-editorial-960.webp") center/cover;
+  opacity: 0.12;
+  z-index: -2;
 }
 .lab-copy {
   position: relative;
   z-index: 2;
   pointer-events: none;
+  padding-top: 32px;
 }
 .lab-copy h2 {
-  font: 500 italic 76px/0.8 var(--editorial);
+  font: 500 italic clamp(150px, 20vw, 340px) / 0.8 var(--editorial);
   display: flex;
-  gap: 10px;
-  align-items: center;
-  letter-spacing: -4px;
+  gap: 14px;
+  align-items: start;
+  letter-spacing: -0.075em;
 }
 .lab-copy h2 svg {
-  font-size: 52px;
+  width: 80px;
+  height: 80px;
   color: var(--red);
-  transform: rotate(10deg);
+  transform: rotate(15deg);
+  margin-top: 15px;
 }
 .lab-copy > p {
-  font-size: 11px;
+  font-size: 16px;
   line-height: 1.7;
-  margin-top: 23px;
+  margin-top: 35px;
+  max-width: 32ch;
 }
 .lab-stage {
   position: absolute;
-  right: -18px;
-  top: 55px;
-  width: 57%;
-  height: 235px;
+  right: -3%;
+  top: 20px;
+  width: 63%;
+  height: 95%;
   z-index: -1;
   display: grid;
   place-items: center;
+  transform: perspective(1100px)
+    translate3d(var(--depth-x, 0px), var(--depth-y, 0px), 0)
+    rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform 0.7s ease-out;
 }
 .lab-object {
-  width: 100%;
+  width: 93%;
   animation: float-object 4.8s var(--ease) 1 both;
-}
-.motion-started .lab-object {
-  animation: float-object-started 4.8s var(--ease) 1 both;
 }
 .lab-object :deep(img) {
   width: 100%;
   height: auto;
-  filter: drop-shadow(0 15px 25px #a9213e20);
+  filter: drop-shadow(0 25px 45px #ae183630);
 }
 .lab-controls {
   display: flex;
-  gap: 20px;
+  flex-wrap: wrap;
   align-items: center;
-  margin-top: 30px;
+  gap: 15px;
+  max-width: 47%;
+  margin-top: 38px;
   position: relative;
   z-index: 2;
 }
 .lab-modes {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 .lab-modes button {
-  font: 7px var(--mono);
+  font: 10px var(--mono);
   text-transform: uppercase;
   border: 1px solid var(--control-line);
-  border-radius: 4px;
-  min-height: 36px;
-  padding: 8px 10px;
-  background: #0c0c0ecc;
+  border-radius: 2px;
+  min-height: 44px;
+  padding: 10px 13px;
+  background: #0d0b0ee8;
   transition:
     color 0.2s,
+    background 0.2s,
     border-color 0.2s;
 }
 .lab-modes button.active {
+  background: var(--red);
   border-color: var(--red);
-  color: var(--red-light);
+  color: var(--black);
 }
 .motion-toggle {
-  margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   border: 0;
-  min-height: 36px;
-  font: 7px var(--mono);
-  color: var(--muted);
+  min-height: 44px;
+  font: 10px var(--mono);
+  color: var(--white);
+  background: #0d0b0ee8;
 }
 .motion-toggle:disabled {
   cursor: default;
+  color: var(--muted);
 }
 .lab-description {
-  font-size: 9px;
+  position: relative;
+  z-index: 2;
+  font-size: 12px;
   color: var(--muted);
-  margin-top: 16px;
-  max-width: 90%;
-  min-height: 32px;
+  margin-top: 19px;
+  max-width: 38ch;
+  min-height: 40px;
 }
 .lab > .text-link {
-  font-size: 8px;
+  position: relative;
+  z-index: 2;
+  font-size: 10px;
   color: var(--red-light);
-  margin-top: 12px;
+  min-height: 44px;
+  margin-top: 16px;
+}
+.lab-coordinate {
+  position: absolute;
+  z-index: 1;
+  font-size: 8px;
+  border: 1px solid #a5979c88;
+  background: #0d0b0ebf;
+  padding: 16px;
+  color: var(--pink);
+  pointer-events: none;
+}
+.coordinate-top {
+  top: 19%;
+  right: 9%;
+  transform: rotate(7deg);
+}
+.coordinate-bottom {
+  bottom: 10%;
+  right: 4%;
+  transform: rotate(-4deg);
 }
 .kinetic-word {
-  font: 700 52px/0.8 var(--display);
+  font: 700 clamp(90px, 10vw, 160px) / 0.8 var(--display);
   animation: kinetic 4s ease-in-out 1 both;
-  transform: rotate(-8deg);
   color: var(--red);
   text-align: center;
+  transform: rotate(-8deg);
 }
 .kinetic-word em {
-  font: 500 italic 48px/0.8 var(--editorial);
+  font: 500 italic 0.9em/0.8 var(--editorial);
   color: var(--white);
 }
 .lab-collage {
-  width: 80%;
+  width: 70%;
   transform: rotate(7deg);
   animation: collage 4s ease-in-out 1 both;
+  border: 1px solid var(--control-line);
 }
 .lab-collage :deep(img) {
   width: 100%;
@@ -247,32 +327,25 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
   animation: none !important;
 }
 @keyframes float-object {
-  0%,
+  0% {
+    transform: translateY(30px) rotate(-15deg) scale(0.9);
+  }
+  45% {
+    transform: translateY(-20px) rotate(10deg) scale(1);
+  }
   100% {
-    transform: translateY(0) rotate(-8deg);
-  }
-  50% {
-    transform: translateY(-16px) rotate(7deg);
-  }
-}
-@keyframes float-object-started {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-8deg);
-  }
-  50% {
-    transform: translateY(-16px) rotate(7deg);
+    transform: translateY(0) rotate(-5deg) scale(1);
   }
 }
 @keyframes kinetic {
   0%,
   100% {
     transform: rotate(-8deg) translateY(0);
-    letter-spacing: -2px;
+    letter-spacing: -3px;
   }
   50% {
-    transform: rotate(-4deg) translateY(-10px);
-    letter-spacing: 2px;
+    transform: rotate(-3deg) translateY(-20px);
+    letter-spacing: 6px;
   }
 }
 @keyframes collage {
@@ -284,64 +357,104 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
     transform: rotate(-4deg) scale(1.03);
   }
 }
-@media (max-width: 1100px) {
-  .lab-controls {
-    gap: 6px;
-  }
-  .lab-modes button {
-    padding: 7px;
-    font-size: 6px;
-  }
-  .motion-toggle {
-    font-size: 6px;
-    gap: 4px;
-  }
-  .lab-copy h2 {
-    font-size: 68px;
+@media (max-width: 1023px) {
+  .lab {
+    min-height: 650px;
   }
   .lab-copy > p {
-    font-size: 10px;
+    font-size: 14px;
   }
   .lab-stage {
-    width: 59%;
-    top: 60px;
+    width: 62%;
+    right: -7%;
+  }
+  .lab-controls {
+    max-width: 49%;
+  }
+  .lab-description {
+    max-width: 32ch;
+  }
+  .coordinate-top {
+    top: 15%;
+    right: 3%;
   }
 }
 @media (max-width: 767px) {
+  .lab-texture {
+    background-image: url("/images/textura-editorial-480.webp");
+  }
   .lab {
-    min-height: 450px;
+    min-height: 0;
+  }
+  .lab > .section-topline {
+    gap: 16px;
+  }
+  .lab > .section-topline .eyebrow {
+    max-width: 25ch;
+  }
+  .lab-copy {
+    padding-top: 10px;
   }
   .lab-copy h2 {
-    font-size: 78px;
+    font-size: 150px;
+  }
+  .lab-copy h2 svg {
+    width: 55px;
+    height: 55px;
   }
   .lab-copy > p {
-    font-size: 11px;
+    font-size: 13px;
+    margin-top: 26px;
   }
   .lab-stage {
-    width: 63%;
-    right: -14px;
-    top: 55px;
-    height: 250px;
+    position: relative;
+    right: auto;
+    top: auto;
+    width: 100%;
+    height: 320px;
+    margin-top: -10px;
+  }
+  .lab-object {
+    width: 100%;
+    max-width: 390px;
   }
   .lab-controls {
-    margin-top: 45px;
-    gap: 9px;
+    max-width: 100%;
+    margin-top: 15px;
+    gap: 8px;
+  }
+  .lab-modes {
+    gap: 6px;
   }
   .lab-modes button {
-    min-height: 40px;
-    font-size: 7px;
-    padding: 9px;
+    padding: 10px;
   }
   .motion-toggle {
-    min-height: 40px;
-    font-size: 7px;
+    margin-top: 6px;
   }
   .lab-description {
-    font-size: 10px;
-    min-height: 45px;
+    max-width: none;
+    font-size: 12px;
   }
-  .lab > .text-link {
-    font-size: 9px;
+  .coordinate-top {
+    top: 43%;
+    right: 6%;
+    font-size: 6px;
+    padding: 10px;
+  }
+  .coordinate-bottom {
+    display: none;
+  }
+  .kinetic-word {
+    font-size: 83px;
+  }
+  .lab-collage {
+    width: 85%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lab-stage {
+    transform: none;
   }
 }
 </style>

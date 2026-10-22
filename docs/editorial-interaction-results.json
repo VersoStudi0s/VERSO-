@@ -1,0 +1,27 @@
+{
+  "checks": [
+    {
+      "surface": "inicio",
+      "boundedPointerDepthAndReset": true
+    },
+    {
+      "surface": "lab",
+      "boundedPointerDepthAndReset": true
+    },
+    {
+      "servicesRemainVisibleAfterHoverAndKeyboardFocus": true
+    },
+    {
+      "filteredAndReinsertedCardsRevealWithMotionEnabled": true
+    },
+    {
+      "caseEntranceAndHomeRevealAfterRouteReturn": true
+    },
+    {
+      "reducedMotionDisablesPointerDepth": true
+    },
+    {
+      "touchDoesNotActivatePointerDepth": true
+    }
+  ]
+}

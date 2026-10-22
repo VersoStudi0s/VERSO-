@@ -67,7 +67,9 @@ function observeSections() {
       const preferred = route.hash.slice(1);
       if (visibleSections.has(preferred)) active.value = preferred;
       else if (!visibleSections.has(active.value)) {
-        const candidate = navigation.find((item) => visibleSections.has(item.id));
+        const candidate = navigation.find((item) =>
+          visibleSections.has(item.id),
+        );
         if (candidate) active.value = candidate.id;
       }
     },
@@ -86,7 +88,7 @@ watch(
   },
 );
 function resize() {
-  if (innerWidth >= 1000) open.value = false;
+  if (innerWidth >= 1200) open.value = false;
 }
 onMounted(() => {
   scroll();
@@ -107,10 +109,14 @@ onBeforeUnmount(() => {
 </script>
 <template>
   <header class="site-header" :class="{ scrolled, 'is-open': open }">
-    <RouterLink to="/#inicio" class="wordmark" aria-label="VERSO, início"
+    <RouterLink
+      to="/#inicio"
+      class="wordmark"
+      aria-label="VERSO, início"
+      :inert="open"
       >VERSO<span>*</span></RouterLink
     >
-    <nav class="desktop-nav" aria-label="Navegação principal">
+    <nav :inert="open" class="desktop-nav" aria-label="Navegação principal">
       <RouterLink
         v-for="item in navigation"
         :key="item.id"
@@ -122,6 +128,9 @@ onBeforeUnmount(() => {
         ><span>[{{ item.number }}]</span> {{ item.label }}</RouterLink
       >
     </nav>
+    <RouterLink to="/#contato" class="header-budget text-link" :inert="open"
+      >Pedir orçamento <PhArrowUpRight aria-hidden="true"
+    /></RouterLink>
     <button
       ref="menuButton"
       class="menu-toggle"
@@ -130,7 +139,10 @@ onBeforeUnmount(() => {
       :aria-label="open ? 'Fechar menu' : 'Abrir menu'"
       @click="open = !open"
     >
-      <PhX v-if="open" :size="27" weight="light" /><PhList
+      <span class="menu-label" aria-hidden="true">{{
+        open ? "Fechar" : "Menu"
+      }}</span
+      ><PhX v-if="open" :size="27" weight="light" /><PhList
         v-else
         :size="27"
         weight="light"
@@ -170,67 +182,62 @@ onBeforeUnmount(() => {
   left: 23px;
   right: 23px;
   max-width: 1874px;
-  height: 90px;
-  z-index: 30;
+  margin: auto;
+  height: 100px;
+  padding: 0 var(--gutter);
   display: flex;
   align-items: center;
-  gap: 35px;
-  padding: 0 var(--gutter);
-  margin: 0 auto;
-  border-bottom: 1px solid transparent;
+  gap: 30px;
+  z-index: 30;
   transition:
-    height 0.25s,
-    background 0.25s,
-    border-color 0.25s;
-}
-.site-header.scrolled {
-  position: fixed;
-  top: 0;
-  background: #0d0d10f5;
-  backdrop-filter: blur(14px);
-  height: 72px;
-  border: 1px solid var(--line);
-  border-top: 0;
-  border-radius: 0 0 12px 12px;
+    background 0.3s,
+    height 0.3s,
+    border-color 0.3s;
+  border-bottom: 1px solid transparent;
 }
 .wordmark {
-  font: 500 39px/0.8 var(--editorial);
-  letter-spacing: -2.5px;
+  font: 500 48px/0.8 var(--editorial);
+  letter-spacing: -3px;
   white-space: nowrap;
 }
-.wordmark span {
+.wordmark > span {
   color: var(--red);
-  font-size: 40px;
+  font-size: 51px;
   position: relative;
-  top: 3px;
+  top: 4px;
 }
 .desktop-nav {
   display: flex;
-  align-items: center;
-  gap: clamp(16px, 2.1vw, 36px);
+  gap: clamp(15px, 1.4vw, 27px);
   margin: auto;
 }
 .desktop-nav a {
-  font: 13px var(--mono);
-  text-transform: uppercase;
-  white-space: nowrap;
   position: relative;
-  padding: 15px 0;
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  font: 10px var(--mono);
   color: var(--muted);
-  transition: color 0.2s;
+  text-transform: uppercase;
+  padding: 18px 0;
+  white-space: nowrap;
+  transition: color 0.25s;
 }
-.desktop-nav a span {
-  font-size: 10px;
+.desktop-nav a > span {
+  font-size: 8px;
+  color: var(--subtle);
 }
 .desktop-nav a::after {
   content: "";
   position: absolute;
-  bottom: 5px;
-  left: 0;
-  width: 0;
   height: 1px;
+  bottom: 7px;
+  left: 0;
+  right: 0;
   background: var(--red);
-  transition: width 0.2s;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s var(--ease);
 }
 .desktop-nav a.active,
 .desktop-nav a:hover {
@@ -238,58 +245,111 @@ onBeforeUnmount(() => {
 }
 .desktop-nav a.active::after,
 .desktop-nav a:hover::after {
-  width: 100%;
+  transform: scaleX(1);
+}
+.header-budget {
+  font-size: 9px;
+  min-height: 44px;
+  gap: 9px;
+  white-space: nowrap;
+  color: var(--pink);
 }
 .menu-toggle {
   border: 0;
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 10px;
+  min-width: 44px;
+  min-height: 44px;
   margin-right: -10px;
+}
+.menu-label {
+  font: 8px var(--mono);
+  text-transform: uppercase;
+}
+.site-header.scrolled,
+.site-header.is-open {
+  position: fixed;
+  top: 0;
+  background: #0b090cf5;
+  backdrop-filter: blur(16px);
+  height: 76px;
+  border: 1px solid var(--line);
+  border-top: 0;
+}
+.site-header.scrolled .wordmark {
+  font-size: 40px;
+}
+.site-header.is-open {
+  /* A filtered ancestor would constrain the fixed menu to the header height. */
+  backdrop-filter: none;
 }
 .mobile-menu {
   position: fixed;
-  inset: 95px 23px 23px auto;
-  width: min(450px, calc(100vw - 46px));
-  background: var(--black);
-  border: 1px solid var(--line);
-  border-radius: 0 0 12px 12px;
-  padding: 30px;
+  inset: 95px 23px 23px;
+  padding: 45px max(35px, 8vw);
   overflow: auto;
-  display: flex;
-  flex-direction: column;
+  background:
+    linear-gradient(90deg, #0b090cf5, #0b090cda),
+    url("/images/textura-editorial-960.webp") right center/cover;
+  border: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 75px;
+  align-content: start;
   z-index: 40;
+}
+.mobile-menu > .eyebrow {
+  grid-column: 1/-1;
+  margin-bottom: 25px;
+  color: var(--pink);
 }
 .mobile-menu > a {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 13px 0;
-  font: 600 clamp(31px, 7vh, 56px) var(--display);
+  gap: 25px;
+  border-bottom: 1px solid var(--line);
+  min-height: 75px;
+  padding: 15px 0;
+  font: 600 clamp(35px, 4.2vw, 70px) / 1.1 var(--display);
   text-transform: uppercase;
-  border-bottom: 1px solid var(--line-soft);
+  transition:
+    color 0.3s,
+    padding-left 0.3s;
+}
+.mobile-menu > a:hover,
+.mobile-menu > a[aria-current] {
+  color: var(--red-light);
+  padding-left: 10px;
 }
 .mobile-menu > a svg {
   margin-left: auto;
-  font-size: 26px;
+  font-size: 28px;
   color: var(--red);
 }
-.mobile-menu > p {
-  margin-top: auto;
-  padding-top: 30px;
+.mobile-menu > a > .micro {
+  font-size: 10px;
 }
-.mobile-menu > .eyebrow {
-  margin-bottom: 20px;
+.mobile-menu > p {
+  grid-column: 1/-1;
+  margin-top: 35px;
 }
 .menu-enter-active,
 .menu-leave-active {
   transition:
-    opacity 0.25s,
-    transform 0.25s;
+    clip-path 0.4s var(--ease),
+    opacity 0.3s;
 }
 .menu-enter-from,
 .menu-leave-to {
+  clip-path: inset(0 0 100%);
   opacity: 0;
-  transform: translateY(-15px);
+}
+.menu-enter-to,
+.menu-leave-from {
+  clip-path: inset(0);
+  opacity: 1;
 }
 @media (min-width: 1600px) {
   .site-header {
@@ -298,37 +358,18 @@ onBeforeUnmount(() => {
     right: 33px;
   }
 }
-@media (max-width: 1150px) {
-  .desktop-nav {
-    gap: 16px;
-    margin-right: 0;
-  }
-  .desktop-nav a {
-    font-size: 11px;
-  }
-  .site-header {
-    gap: 25px;
-  }
-}
-@media (max-width: 999px) {
+@media (max-width: 1199px) {
   .desktop-nav {
     display: none;
   }
-  .menu-toggle {
-    display: block;
+  .header-budget {
     margin-left: auto;
   }
   .site-header {
-    height: 78px;
-  }
-  .site-header.is-open {
-    position: fixed;
-    background: var(--black);
-    top: 0;
+    height: 90px;
   }
   .mobile-menu {
-    inset: 79px 10px 10px;
-    width: auto;
+    inset: 90px 23px 23px;
   }
 }
 @media (max-width: 767px) {
@@ -336,20 +377,57 @@ onBeforeUnmount(() => {
     top: 11px;
     left: 11px;
     right: 11px;
-    padding: 0 21px;
-    height: 72px;
-  }
-  .site-header.scrolled {
-    height: 68px;
+    padding: 0 19px;
+    height: 75px;
+    gap: 18px;
   }
   .wordmark {
-    font-size: 32px;
+    font-size: 35px;
+    letter-spacing: -2px;
   }
-  .wordmark span {
+  .wordmark > span {
+    font-size: 36px;
+  }
+  .header-budget {
+    font-size: 8px;
+    gap: 6px;
+  }
+  .header-budget svg {
+    display: none;
+  }
+  .menu-toggle {
+    padding: 9px;
+    margin-right: -9px;
+  }
+  .menu-label {
+    display: none;
+  }
+  .site-header.scrolled,
+  .site-header.is-open {
+    height: 68px;
+  }
+  .site-header.scrolled .wordmark {
     font-size: 35px;
   }
   .mobile-menu {
-    top: 68px;
+    inset: 68px 10px 10px;
+    padding: 25px 24px;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .mobile-menu > a {
+    font-size: 43px;
+    min-height: 63px;
+    padding: 11px 0;
+    gap: 22px;
+  }
+  .mobile-menu > .eyebrow {
+    margin-bottom: 14px;
+    font-size: 8px;
+  }
+  .mobile-menu > p {
+    margin-top: 22px;
+    font-size: 8px;
   }
 }
 </style>

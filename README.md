@@ -2,6 +2,8 @@
 
 Portfólio de Renata em Vue 3, TypeScript e Vite, reconstruído a partir de `references/verso-aprovado.png` e do kit de imagens fornecido. A publicação de uma prévia privada foi solicitada em 18/10/2026; os dados de hospedagem ficam em `.openai/hosting.json`.
 
+A reconstrução visual editorial de 22/10/2026 está somente na cópia local, na branch `local/comercial-fase1`. Não foi publicada. Veja o [relatório atual](docs/REFORMULACAO-VISUAL.md), as [capturas antes/depois](docs/screenshots/editorial/) e a [revisão visual e testes](design-qa.md). A [etapa comercial anterior](docs/REFORMULACAO-COMERCIAL.md) foi preservada como histórico.
+
 ## Executar
 
 Testado com Node 24.19 e npm 11.9.
@@ -25,6 +27,12 @@ Com o servidor local aberto:
 ```bash
 npm run test:e2e
 npm run test:contact
+npm run test:production
+node scripts/test-navigation.mjs
+node scripts/test-commercial-mobile.mjs
+node scripts/test-lab-motion.mjs
+node scripts/test-editorial-motion.mjs
+node scripts/capture-editorial.mjs
 npm audit
 ```
 
@@ -32,6 +40,7 @@ Os testes de navegador usam Chromium em `/usr/bin/chromium`; configure `CHROMIUM
 
 ## Conteúdo e configuração
 
+- Serviços, entregáveis e relação com exemplos: `src/data/services.ts`.
 - Projetos e estudos: `src/data/projects.ts`.
 - Canais profissionais: variáveis opcionais em `.env.example`, validadas em `src/data/site.ts`.
 - Habilidades: `src/sections/SkillsSection.vue`; classificação inicial conservadora, a confirmar pela autora.
@@ -40,6 +49,6 @@ Os testes de navegador usam Chromium em `/usr/bin/chromium`; configure `CHROMIUM
 - Referência e originais: `references/` e `assets/originais/`.
 - Guia original do kit: `assets/README-kit.md`.
 
-O envio real permanece desativado até a configuração do endpoint e do provedor. Nenhum contato, cliente, resultado comercial ou experiência profissional foi inventado. Informações confirmadas por Renata: VERSARY concluído para o Desafios de Ideias; Café Aurora fictício, criado em conversa com o ChatGPT; Syntax em desenvolvimento em dupla. As imagens de apresentação são ilustrativas; o retrato do kit é apenas referência visual.
+Sem endpoint, o contato gera uma mensagem de orçamento para copiar, com feedback explícito de que nada foi enviado. O envio real permanece desativado até a configuração do endpoint e do provedor. Nenhum contato, cliente, resultado comercial ou experiência profissional foi inventado. Informações confirmadas por Renata: VERSARY concluído para o Desafios de Ideias; Café Aurora fictício, criado em conversa com o ChatGPT; Syntax em desenvolvimento em dupla. As imagens de apresentação são ilustrativas; o retrato do kit é apenas referência visual.
 
 Consulte [configuração](docs/SETUP.md), [recursos e licenças](docs/ASSETS.md), [auditoria](docs/AUDIT.md), [revisão visual](design-qa.md) e [relatório de entrega](docs/ENTREGA.md).

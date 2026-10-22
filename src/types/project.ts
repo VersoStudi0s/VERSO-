@@ -1,5 +1,9 @@
 export type Category =
-  "Todos" | "Websites" | "UI/UX" | "Identidade" | "Experimentos";
+  | "Todos"
+  | "Websites"
+  | "UI/UX"
+  | "Identidade"
+  | "Experimentos";
 export interface Project {
   slug: string;
   number: string;
@@ -11,6 +15,7 @@ export interface Project {
   image: string;
   alt: string;
   status: string;
+  summaryRole?: string;
   context: string;
   imageCaption: string;
   technologies?: string;

@@ -120,7 +120,7 @@ main {
   font-style: italic;
 }
 .section-heading {
-  font: 600 clamp(43px, 5.2vw, 78px)/0.96 var(--display);
+  font: 600 clamp(43px, 5.2vw, 78px) / 0.96 var(--display);
   text-transform: uppercase;
   letter-spacing: -0.025em;
 }
@@ -147,7 +147,7 @@ main {
   gap: 26px;
   padding: 16px 25px;
   border: 1px solid var(--line);
-  border-radius: 9px;
+  border-radius: 3px;
   font: 500 10px/1.4 var(--mono);
   text-transform: uppercase;
   letter-spacing: 0.01em;
@@ -228,7 +228,7 @@ main {
     opacity var(--slow) var(--ease),
     transform var(--slow) var(--ease);
 }
-.motion-ready .reveal:not(.is-visible) {
+.motion-ready .reveal:not([data-visible]) {
   opacity: 0;
   transform: translateY(25px);
 }
@@ -303,6 +303,54 @@ main {
     padding: 25px 20px;
   }
 }
+
+/* Editorial reveals: progressive masks and local media movement, never scroll-jacking. */
+[data-reveal] {
+  transition:
+    opacity 0.85s var(--ease),
+    transform 0.85s var(--ease);
+}
+.motion-ready [data-reveal]:not([data-visible]) {
+  opacity: 0;
+  transform: translateY(38px);
+}
+.media-reveal {
+  transition: clip-path 1.05s var(--ease);
+}
+.motion-ready [data-reveal]:not([data-visible]) .media-reveal {
+  clip-path: inset(0 0 100% 0);
+}
+.motion-ready .lab:not([data-visible]) .lab-stage > * {
+  animation-play-state: paused !important;
+}
+.project-page .case-heading {
+  animation: case-heading-entry 0.75s var(--ease) both;
+}
+.project-page .case-cover {
+  animation: case-media-entry 1s var(--ease) both;
+}
+.btn:active {
+  transform: translateY(2px);
+}
+@keyframes case-heading-entry {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes case-media-entry {
+  from {
+    clip-path: inset(0 0 95% 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -313,8 +361,12 @@ main {
     transition-delay: 0s !important;
     scroll-behavior: auto !important;
   }
-  .motion-ready .reveal:not(.is-visible) {
+  .motion-ready [data-reveal]:not([data-visible]),
+  .motion-ready .reveal:not([data-visible]) {
     opacity: 1;
     transform: none;
+  }
+  .motion-ready .media-reveal {
+    clip-path: none !important;
   }
 }

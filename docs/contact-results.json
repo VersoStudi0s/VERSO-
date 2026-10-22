@@ -34,6 +34,30 @@
       "passed": true
     },
     {
+      "name": "New and legacy service accepted: social",
+      "passed": true
+    },
+    {
+      "name": "New and legacy service accepted: uiux",
+      "passed": true
+    },
+    {
+      "name": "New and legacy service accepted: materiais",
+      "passed": true
+    },
+    {
+      "name": "New and legacy service accepted: identidade",
+      "passed": true
+    },
+    {
+      "name": "New and legacy service accepted: grafico",
+      "passed": true
+    },
+    {
+      "name": "Unknown service rejected",
+      "passed": true
+    },
+    {
       "name": "Unconfirmed provider response rejected",
       "passed": true
     },

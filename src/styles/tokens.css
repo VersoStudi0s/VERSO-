@@ -19,10 +19,10 @@
   --body: Arial, Helvetica, sans-serif;
   --gutter: clamp(18px, 3.4vw, 64px);
   --gap: clamp(16px, 2vw, 30px);
-  --radius: 14px;
+  --radius: 9px;
   --ease: cubic-bezier(0.2, 0.75, 0.25, 1);
   --fast: 180ms;
-  --slow: 700ms;
+  --slow: 900ms;
   --section-space: clamp(52px, 7vw, 108px);
   color-scheme: dark;
 }

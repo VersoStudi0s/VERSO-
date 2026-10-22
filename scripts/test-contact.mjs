@@ -74,6 +74,22 @@ try {
     "Explicit provider ID required for success",
     (await (await send()).json()).sent === true,
   );
+  for (const projectType of [
+    "social",
+    "uiux",
+    "materiais",
+    "identidade",
+    "grafico",
+  ]) {
+    check(
+      `New and legacy service accepted: ${projectType}`,
+      (await send({ ...valid, projectType })).status === 200,
+    );
+  }
+  check(
+    "Unknown service rejected",
+    (await send({ ...valid, projectType: "unknown" })).status === 400,
+  );
   globalThis.fetch = async () =>
     new Response(JSON.stringify({}), { status: 200 });
   check(

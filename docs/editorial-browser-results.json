@@ -1,0 +1,363 @@
+{
+  "breakpoints": [
+    {
+      "width": 320,
+      "scrollWidth": 320,
+      "brokenImages": [],
+      "title": {
+        "width": 250.7438507080078,
+        "scrollWidth": 249,
+        "right": 280.15866470336914,
+        "left": 28.41470718383789,
+        "frame": 310
+      }
+    },
+    {
+      "width": 360,
+      "scrollWidth": 360,
+      "brokenImages": [],
+      "title": {
+        "width": 288.60064697265625,
+        "scrollWidth": 286,
+        "right": 322.0727310180664,
+        "left": 32.32556915283203,
+        "frame": 350
+      }
+    },
+    {
+      "width": 390,
+      "scrollWidth": 390,
+      "brokenImages": [],
+      "title": {
+        "width": 312.5897216796875,
+        "scrollWidth": 310,
+        "right": 346.15991973876953,
+        "left": 32.297767639160156,
+        "frame": 380
+      }
+    },
+    {
+      "width": 768,
+      "scrollWidth": 768,
+      "brokenImages": [],
+      "title": {
+        "width": 619.2225341796875,
+        "scrollWidth": 655,
+        "right": 714.0934066772461,
+        "left": 48.723533630371094,
+        "frame": 746
+      }
+    },
+    {
+      "width": 1024,
+      "scrollWidth": 1024,
+      "brokenImages": [],
+      "title": {
+        "width": 661.79052734375,
+        "scrollWidth": 655,
+        "right": 722.7965316772461,
+        "left": 57.426658630371094,
+        "frame": 1002
+      }
+    },
+    {
+      "width": 1280,
+      "scrollWidth": 1280,
+      "brokenImages": [],
+      "title": {
+        "width": 730.2445678710938,
+        "scrollWidth": 722,
+        "right": 801.5569763183594,
+        "left": 67.37777709960938,
+        "frame": 1258
+      }
+    },
+    {
+      "width": 1440,
+      "scrollWidth": 1440,
+      "brokenImages": [],
+      "title": {
+        "width": 821.521484375,
+        "scrollWidth": 813,
+        "right": 898.8894424438477,
+        "left": 72.95914459228516,
+        "frame": 1418
+      }
+    },
+    {
+      "width": 1920,
+      "scrollWidth": 1920,
+      "brokenImages": [],
+      "title": {
+        "width": 1095.3668212890625,
+        "scrollWidth": 1084,
+        "right": 1199.508186340332,
+        "left": 98.23926544189453,
+        "frame": 1888
+      }
+    }
+  ],
+  "interactions": [
+    {
+      "name": "Mobile menu opens and traps focus",
+      "passed": true
+    },
+    {
+      "name": "Every mobile menu link is inside the visible overlay",
+      "passed": true
+    },
+    {
+      "name": "Escape closes menu and returns focus",
+      "passed": true
+    },
+    {
+      "name": "Menu navigation closes overlay",
+      "passed": true
+    },
+    {
+      "name": "Resizing closes mobile menu",
+      "passed": true
+    },
+    {
+      "name": "Filter Websites: 2 cards",
+      "passed": true
+    },
+    {
+      "name": "Filter UI/UX: 2 cards",
+      "passed": true
+    },
+    {
+      "name": "Filter Identidade: 1 cards",
+      "passed": true
+    },
+    {
+      "name": "Filter Experimentos: 1 cards",
+      "passed": true
+    },
+    {
+      "name": "Filter Todos: 4 cards",
+      "passed": true
+    },
+    {
+      "name": "VERSARY case route opens",
+      "passed": true
+    },
+    {
+      "name": "Next project navigation 1",
+      "passed": true
+    },
+    {
+      "name": "Next project navigation 2",
+      "passed": true
+    },
+    {
+      "name": "Next project navigation 3",
+      "passed": true
+    },
+    {
+      "name": "Next project navigation 4",
+      "passed": true
+    },
+    {
+      "name": "Case returns to gallery",
+      "passed": true
+    },
+    {
+      "name": "Service examples website: 2 honest matches",
+      "passed": true
+    },
+    {
+      "name": "Category overrides service filter website",
+      "passed": true
+    },
+    {
+      "name": "Service website preselects budget",
+      "passed": true
+    },
+    {
+      "name": "Service examples social: 0 honest matches",
+      "passed": true
+    },
+    {
+      "name": "Service social has an honest empty state",
+      "passed": true
+    },
+    {
+      "name": "Category overrides service filter social",
+      "passed": true
+    },
+    {
+      "name": "Service social preselects budget",
+      "passed": true
+    },
+    {
+      "name": "Service examples uiux: 2 honest matches",
+      "passed": true
+    },
+    {
+      "name": "Category overrides service filter uiux",
+      "passed": true
+    },
+    {
+      "name": "Service uiux preselects budget",
+      "passed": true
+    },
+    {
+      "name": "Service examples materiais: 0 honest matches",
+      "passed": true
+    },
+    {
+      "name": "Service materiais has an honest empty state",
+      "passed": true
+    },
+    {
+      "name": "Category overrides service filter materiais",
+      "passed": true
+    },
+    {
+      "name": "Service materiais preselects budget",
+      "passed": true
+    },
+    {
+      "name": "Empty state returns to all four current projects",
+      "passed": true
+    },
+    {
+      "name": "Required errors are accessible and focus name",
+      "passed": true
+    },
+    {
+      "name": "Local draft includes the selected service and entered message",
+      "passed": true
+    },
+    {
+      "name": "Local generator never claims a send",
+      "passed": true
+    },
+    {
+      "name": "Draft receives focus and preserves input",
+      "passed": true
+    },
+    {
+      "name": "Copy uses the actual clipboard",
+      "passed": true
+    },
+    {
+      "name": "Generating and copying make no POST requests",
+      "passed": true
+    },
+    {
+      "name": "Clipboard denial offers manual selection",
+      "passed": true
+    },
+    {
+      "name": "Editing invalidates the previous draft",
+      "passed": true
+    },
+    {
+      "name": "Trajectory expands",
+      "passed": true
+    },
+    {
+      "name": "Skills groups change",
+      "passed": true
+    },
+    {
+      "name": "Lab mode Tipo",
+      "passed": true
+    },
+    {
+      "name": "Lab mode Composição",
+      "passed": true
+    },
+    {
+      "name": "Lab mode Forma",
+      "passed": true
+    },
+    {
+      "name": "Reduced motion disables animation control",
+      "passed": true
+    },
+    {
+      "name": "Expanded lab loads its lazy image",
+      "passed": true
+    },
+    {
+      "name": "Privacy route opens",
+      "passed": true
+    },
+    {
+      "name": "404 route is usable",
+      "passed": true
+    },
+    {
+      "name": "Skip link is first keyboard target",
+      "passed": true
+    },
+    {
+      "name": "No cookies or storage created",
+      "passed": true
+    },
+    {
+      "name": "Animated hero reveals its CTA",
+      "passed": true
+    },
+    {
+      "name": "Lab motion can be paused",
+      "passed": true
+    },
+    {
+      "name": "Lab motion can restart",
+      "passed": true
+    },
+    {
+      "name": "System reduced motion stops the visible lab",
+      "passed": true
+    },
+    {
+      "name": "Real request loading disables submit",
+      "passed": true
+    },
+    {
+      "name": "Success requires explicit adapter confirmation (intercepted test)",
+      "passed": true
+    },
+    {
+      "name": "Unconfirmed response never shows success",
+      "passed": true
+    }
+  ],
+  "accessibility": [
+    {
+      "width": 390,
+      "violations": []
+    },
+    {
+      "width": 768,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "route": "/projetos/versary",
+      "violations": []
+    },
+    {
+      "state": "budget-draft",
+      "violations": []
+    },
+    {
+      "state": "lab-expanded",
+      "violations": []
+    },
+    {
+      "route": "/privacidade",
+      "violations": []
+    }
+  ],
+  "errors": [],
+  "requestsFailed": [],
+  "motion": {}
+}

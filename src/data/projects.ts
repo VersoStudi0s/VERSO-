@@ -18,11 +18,14 @@ export const projects: Project[] = [
     tags: ["Gestão industrial", "Desenvolvimento"],
     image: "projeto-versary",
     alt: "Imagem ilustrativa de um notebook com dashboard vermelho e preto.",
-    imageCaption: "Imagem ilustrativa de apresentação; não é uma captura da interface final do VERSARY.",
+    imageCaption:
+      "Imagem ilustrativa de apresentação; não é uma captura da interface final do VERSARY.",
     status: "Projeto concluído",
-    context: "O VERSARY é um projeto de sistema de gestão industrial desenvolvido para o Desafios de Ideias. O projeto já está finalizado.",
+    context:
+      "O VERSARY é um projeto de sistema de gestão industrial desenvolvido para o Desafios de Ideias. O projeto já está finalizado.",
     results: "Projeto concluído para o Desafios de Ideias.",
-    documentationNote: "O estudo de caso está sendo atualizado com detalhes do desenvolvimento e telas do projeto.",
+    documentationNote:
+      "O estudo de caso está sendo atualizado com detalhes do desenvolvimento e telas do projeto.",
   },
   {
     slug: "cafe-aurora",
@@ -36,8 +39,10 @@ export const projects: Project[] = [
     alt: "Mockup ilustrativo de café com xícaras, grãos e embalagem em preto e vermelho.",
     imageCaption: "Mockup ilustrativo do projeto fictício Café Aurora.",
     status: "Projeto fictício",
-    context: "O Café Aurora é um projeto fictício criado em conversa com o ChatGPT. A marca faz parte de uma exploração visual e não representa um cliente real.",
-    results: "Conceito fictício apresentado no portfólio, sem resultados comerciais atribuídos.",
+    context:
+      "O Café Aurora é um projeto fictício criado em conversa com o ChatGPT. A marca faz parte de uma exploração visual e não representa um cliente real.",
+    results:
+      "Conceito fictício apresentado no portfólio, sem resultados comerciais atribuídos.",
   },
   {
     slug: "syntax-studio",
@@ -49,12 +54,17 @@ export const projects: Project[] = [
     tags: ["E-commerce", "Colaboração"],
     image: "projeto-streetwear",
     alt: "Imagem ilustrativa de loja de streetwear em um monitor.",
-    imageCaption: "Referência visual de e-commerce; não é uma captura da loja Syntax.",
+    imageCaption:
+      "Referência visual de e-commerce; não é uma captura da loja Syntax.",
     status: "Em desenvolvimento · em dupla",
-    context: "A Syntax é uma loja virtual que estou desenvolvendo em parceria com um colega. O projeto está em andamento.",
+    summaryRole: "Desenvolvimento em dupla",
+    context:
+      "A Syntax é uma loja virtual que estou desenvolvendo em parceria com um colega. O projeto está em andamento.",
     participation: "Desenvolvimento da loja em parceria com um colega.",
-    results: "Desenvolvimento em andamento. A loja ainda não é apresentada aqui como um projeto finalizado.",
-    documentationNote: "As etapas do trabalho em dupla e as telas da loja serão adicionadas ao estudo de caso.",
+    results:
+      "Desenvolvimento em andamento. A loja ainda não é apresentada aqui como um projeto finalizado.",
+    documentationNote:
+      "As etapas do trabalho em dupla e as telas da loja serão adicionadas ao estudo de caso.",
   },
   {
     slug: "lab-movimento",
@@ -67,6 +77,7 @@ export const projects: Project[] = [
     image: "olho-editorial",
     alt: "Composição editorial de um olho em preto e branco com fragmentos vermelhos.",
     status: "Experimento interativo",
+    summaryRole: "Interação e implementação no portfólio",
     imageCaption: "Arte do experimento interativo disponível neste portfólio.",
     technologies: "Vue 3, TypeScript, CSS, Intersection Observer.",
     context:

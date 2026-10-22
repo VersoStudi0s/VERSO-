@@ -1,12 +1,27 @@
 [
   {
     "width": 1440,
-    "target": "lab",
+    "target": "servicos",
+    "activeIndicatorPassed": true
+  },
+  {
+    "width": 1440,
+    "target": "projetos",
+    "activeIndicatorPassed": true
+  },
+  {
+    "width": 1440,
+    "target": "processo",
     "activeIndicatorPassed": true
   },
   {
     "width": 1440,
     "target": "sobre",
+    "activeIndicatorPassed": true
+  },
+  {
+    "width": 1440,
+    "target": "lab",
     "activeIndicatorPassed": true
   },
   {
@@ -20,12 +35,27 @@
   },
   {
     "width": 390,
-    "target": "lab",
+    "target": "servicos",
+    "activeIndicatorPassed": true
+  },
+  {
+    "width": 390,
+    "target": "projetos",
+    "activeIndicatorPassed": true
+  },
+  {
+    "width": 390,
+    "target": "processo",
     "activeIndicatorPassed": true
   },
   {
     "width": 390,
     "target": "sobre",
+    "activeIndicatorPassed": true
+  },
+  {
+    "width": 390,
+    "target": "lab",
     "activeIndicatorPassed": true
   },
   {

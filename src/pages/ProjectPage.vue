@@ -10,12 +10,24 @@ const route = useRoute();
 const project = computed(() =>
   projects.find((item) => item.slug === route.params.slug),
 );
-const sectionOrder: (keyof Project)[] = ["context", "problem", "objectives", "participation", "process", "solution", "results", "learning"];
-const visibleSections = computed(() => sectionOrder.filter((key) => {
-  const content = project.value?.[key];
-  return Array.isArray(content) ? content.length > 0 : Boolean(content);
-}));
-const sectionNumber = (key: keyof Project) => String(visibleSections.value.indexOf(key) + 1).padStart(2, "0");
+const sectionOrder: (keyof Project)[] = [
+  "context",
+  "problem",
+  "objectives",
+  "participation",
+  "process",
+  "solution",
+  "results",
+  "learning",
+];
+const visibleSections = computed(() =>
+  sectionOrder.filter((key) => {
+    const content = project.value?.[key];
+    return Array.isArray(content) ? content.length > 0 : Boolean(content);
+  }),
+);
+const sectionNumber = (key: keyof Project) =>
+  String(visibleSections.value.indexOf(key) + 1).padStart(2, "0");
 const nextProject = computed(
   () =>
     projects[
@@ -25,7 +37,11 @@ const nextProject = computed(
 );
 </script>
 <template>
-  <article v-if="project" class="project-page route-page frame section-pad">
+  <article
+    v-if="project"
+    :key="project.slug"
+    class="project-page route-page frame section-pad"
+  >
     <div class="section-topline">
       <RouterLink to="/#projetos" class="text-link"
         ><PhArrowLeft /> Voltar aos projetos</RouterLink
@@ -67,41 +83,55 @@ const nextProject = computed(
       </aside>
       <div class="case-body prose">
         <section>
-          <span class="micro red">{{ sectionNumber('context') }} / CONTEXTO</span>
+          <span class="micro red"
+            >{{ sectionNumber("context") }} / CONTEXTO</span
+          >
           <h2>O ponto de partida</h2>
           <p>{{ project.context }}</p>
         </section>
         <section v-if="project.problem">
-          <span class="micro red">{{ sectionNumber('problem') }} / PROBLEMA</span>
+          <span class="micro red"
+            >{{ sectionNumber("problem") }} / PROBLEMA</span
+          >
           <h2>Uma pergunta para explorar</h2>
           <p>{{ project.problem }}</p>
         </section>
         <section v-if="project.objectives?.length">
-          <span class="micro red">{{ sectionNumber('objectives') }} / OBJETIVOS</span>
+          <span class="micro red"
+            >{{ sectionNumber("objectives") }} / OBJETIVOS</span
+          >
           <h2>O que buscamos construir</h2>
           <ul>
             <li v-for="goal in project.objectives" :key="goal">{{ goal }}</li>
           </ul>
         </section>
         <section v-if="project.participation">
-          <span class="micro red">{{ sectionNumber('participation') }} / PARTICIPAÇÃO</span>
+          <span class="micro red"
+            >{{ sectionNumber("participation") }} / PARTICIPAÇÃO</span
+          >
           <h2>Meu papel</h2>
           <p>{{ project.participation }}</p>
         </section>
         <section v-if="project.process?.length">
-          <span class="micro red">{{ sectionNumber('process') }} / PROCESSO</span>
+          <span class="micro red"
+            >{{ sectionNumber("process") }} / PROCESSO</span
+          >
           <h2>Processo de desenvolvimento</h2>
           <ol>
             <li v-for="step in project.process" :key="step">{{ step }}</li>
           </ol>
         </section>
         <section v-if="project.solution">
-          <span class="micro red">{{ sectionNumber('solution') }} / SOLUÇÃO</span>
+          <span class="micro red"
+            >{{ sectionNumber("solution") }} / SOLUÇÃO</span
+          >
           <h2>A solução</h2>
           <p>{{ project.solution }}</p>
         </section>
         <section>
-          <span class="micro red">{{ sectionNumber('results') }} / RESULTADOS</span>
+          <span class="micro red"
+            >{{ sectionNumber("results") }} / RESULTADOS</span
+          >
           <h2>O que está documentado</h2>
           <p>{{ project.results }}</p>
           <RouterLink
@@ -112,7 +142,9 @@ const nextProject = computed(
           /></RouterLink>
         </section>
         <section v-if="project.learning">
-          <span class="micro red">{{ sectionNumber('learning') }} / APRENDIZADOS</span>
+          <span class="micro red"
+            >{{ sectionNumber("learning") }} / APRENDIZADOS</span
+          >
           <h2>O próximo movimento</h2>
           <p>{{ project.learning }}</p>
         </section>
@@ -140,7 +172,7 @@ const nextProject = computed(
   color: var(--red-light);
 }
 .case-heading h1 {
-  font: 700 clamp(65px, 12vw, 180px)/0.92 var(--display);
+  font: 700 clamp(65px, 12vw, 180px) / 0.92 var(--display);
   letter-spacing: -0.025em;
   margin: 20px 0;
 }

@@ -1,85 +1,85 @@
-# Design QA — VERSO*
+# Revisão visual VERSO* — 22/10/2026
 
 **final result: passed**
 
-Aprovação técnica da aproximação visual implementada com os recursos fornecidos. Não equivale a reprodução pixel a pixel, confirmação dos direitos das artes, ativação do contato ou aprovação da publicação.
+Resultado da revisão desta reconstrução com os recursos fornecidos, após correções e nova inspeção. Não representa identidade pixel a pixel, aprovação da autora, certificação WCAG ou autorização de publicação. O registro da entrega anterior foi preservado em [docs/design-qa-historico.md](docs/design-qa-historico.md).
 
-## Refinamento solicitado em 18/10/2026
+## Fonte, estado e método
 
-**final result: passed** — nova comparação do hero, após Renata priorizar fidelidade à referência.
+- Referência principal: `references/verso-aprovado.png`, 1215 × 1280 px. Painel de múltiplas composições; não é uma única página nem há viewport CSS informado.
+- Hero de referência: recorte `(13,13)–(841,566)`, 828 × 553 px.
+- Hero atual: captura da seção em Chromium, viewport 1440 × 1000, DPR 1; quadro 1396 × 950 px. Reduzido proporcionalmente para 828 × 563 px na comparação. Há aproximadamente 10 px de diferença de altura normalizada; não houve distorção para forçar coincidência.
+- Capturas adicionais: 768 × 1000 e 390 × 844. No mobile, quadro do hero 370 × 802 px. Não há mockup mobile fornecido; adaptação avaliada por legibilidade, composição e comportamento.
+- Estado estático: início, filtro Todos, primeiro serviço destacado, LAB Forma, trajetória recolhida, contato sem endpoint, movimento reduzido. Scroll prévio carrega imagens lazy. As seções são capturadas sem deslocar o cabeçalho fixo para dentro do recorte.
+- Testes de movimento realizados separadamente com preferência normal, mouse, touch emulado e alternância da preferência do sistema.
+- Ferramentas: Chromium real com Playwright local; Pillow somente para montar comparações a partir das capturas. Nenhuma captura foi usada como interface da aplicação.
 
-- Evidência atual: `docs/screenshots/hero-refinement-comparison-final.jpg`, referência e hero de produção lado a lado, com a mesma normalização descrita abaixo. As capturas `1440-hero.png`, `390-hero.png`, `768-hero.png` e páginas completas foram renovadas.
-- REALIDADE recebeu Cormorant Garamond 700 itálico, escala e proporção mais próximas do alvo; QUE GANHAM foi compactado em altura mantendo a largura editorial.
-- Arte principal reposicionada e escurecida; a máscara atua sobre a imagem proporcional para evitar uma borda vertical abrupta. Cromo lateral usa a variante existente de 480 px (64 KB), fica discreto no desktop e oculto no mobile.
-- Cartão do LAB ampliado e reposicionado; anotação deslocada; CTAs e descrição ampliados. O menu numerado ganhou botão funcional também no desktop, conforme a referência.
-- Mobile: CTAs empilhados abaixo de 480 px, fontes de 11/10 px e áreas de toque de pelo menos 48/44 px, sem diminuir os controles para fazê-los caber lado a lado.
-- Três diferenças P2 encontradas na iteração foram resolvidas e verificadas em revisão visual independente: altura de QUE GANHAM, peso do cromo lateral e tamanho do CTA. Nenhum P1/P2 adicional identificado nas capturas finais.
-- Conteúdo confirmado: VERSARY concluído para o Desafios de Ideias; Café Aurora fictício do ChatGPT; Syntax Studio em desenvolvimento em dupla. Detalhes de processo não confirmados deixaram de ser renderizados; numeração das seções acompanha o conteúdo real. Retrato identificado como referência visual, sem atribuição a Renata.
-- Validação desta iteração: build de produção; 35 verificações de interação, 8 larguras, 5 auditorias axe sem violações; 6 rotas com HTML sem JavaScript e hidratação; indicadores ativos e foco dos menus desktop/mobile; ausência de erros no console ou carregamento dos recursos visíveis. A geometria do hero mantém título dentro da tela e mais de 60 px entre fim dos CTAs e borda inferior em todas as 8 larguras.
-- A fonte exata e os arquivos que compõem o painel aprovado não foram fornecidos; a implementação usa as variações do kit. A comparação aprova esta aproximação, sem alegar identidade pixel a pixel.
+## Evidências abertas e comparadas
 
-## Registro da primeira entrega e método de comparação
+- [Hero: referência e implementação](docs/screenshots/editorial/reference-hero-comparison.jpg).
+- Antes/depois: [desktop](docs/screenshots/editorial/1440-before-after.jpg) e [mobile](docs/screenshots/editorial/390-before-after.jpg).
+- Referência/implementação por área: [Sobre](docs/screenshots/editorial/reference-sobre-comparison.jpg), [LAB](docs/screenshots/editorial/reference-lab-comparison.jpg), [serviços](docs/screenshots/editorial/reference-servicos-comparison.jpg), [contato](docs/screenshots/editorial/reference-contato-comparison.jpg).
+- [Galeria antes/depois](docs/screenshots/editorial/comparison-projetos.jpg), [menu mobile corrigido](docs/screenshots/editorial/390-menu.png) e capturas isoladas de todas as seções em `docs/screenshots/editorial/`.
+- Páginas completas: [desktop](docs/screenshots/editorial/1440-after-full.png), [tablet](docs/screenshots/editorial/768-after-full.png), [mobile](docs/screenshots/editorial/390-after-full.png).
 
-## Fonte, estado e normalização
+`node scripts/capture-editorial.mjs` renova as capturas atuais; `python scripts/compare-editorial.py` monta as comparações (Pillow e DejaVu Sans necessários somente para esse script de documentação). Os arquivos `*-before-*` foram capturados antes desta reconstrução; não devem ser sobrescritos para simular um histórico diferente.
 
-- Fonte: `references/verso-aprovado.png`, **1215 × 1280 px**, proveniente do JPG anexado. O painel contém várias composições do mesmo universo, não uma única página para reproduzir como imagem.
-- Hero da fonte: recorte `(13, 13)–(841, 566)`, **828 × 553 px**. A densidade/CSS viewport original não foi informada.
-- Implementação: Chromium/Playwright, produção local, viewport **1440 × 1000 CSS px**, deviceScaleFactor **1**, hero de **1396 × 936 px** em `(22,18)`. Normalizado proporcionalmente para largura **828 px**, altura aproximada **555 px**. Diferença residual de proporção do quadro: cerca de dois pixels normalizados.
-- Estado: início, galeria Todos, LAB Forma, habilidades Em prática, contato sem integração, movimento reduzido para capturas estáticas. O comportamento com movimento habilitado foi testado separadamente.
-- Hero: `docs/screenshots/1440-hero.png`; página: `docs/screenshots/1440-full.png` (**1440 × 3580 px**).
-- Mobile: `docs/screenshots/390-hero.png`, viewport **390 × 844**, DPR 1; página completa **390 × 7329 px**.
-- Tablet: `docs/screenshots/768-full.png`, viewport **768 × 1000**, DPR 1; página completa **768 × 4333 px**.
+## Cinco superfícies verificadas
 
-## Evidências comparadas juntas
-
-1. `docs/screenshots/comparison-final.jpg`: referência e captura do hero na mesma imagem, com escala normalizada.
-2. `docs/screenshots/comparison-details.jpg`: mesma região normalizada do título, arte e CTAs. Necessária para avaliar fontes, recortes, alinhamento e tamanho dos controles.
-3. `docs/screenshots/comparison-sections.jpg`: galeria e serviços, fonte e implementação em colunas, preservando as proporções de cada painel. As larguras do painel conceitual não são viewports reais conhecidos; a comparação avalia composição e linguagem, sem alegar equivalência pixel a pixel.
-4. Capturas desktop, tablet, mobile, menu e estudos listadas em `docs/ENTREGA.md`. Foram abertas e inspecionadas após o carregamento das imagens fora da dobra.
-
-## Superfícies obrigatórias
-
-| Superfície | Verificação e resultado |
+| Superfície | Resultado e limites |
 | --- | --- |
-| Fontes e tipografia | Barlow Condensed para impacto; Cormorant Garamond para serifada/itálico e marca; IBM Plex Mono para informação. Escala, inclinação, quebra e largura do título ajustadas. REALIDADE cabe em 320/360/390 px. Navegação e CTAs desktop ampliados para legibilidade. Fontes originais da referência não foram fornecidas: correspondência óptica, sem alegação de identidade tipográfica. |
-| Espaçamento e layout | Hero assimétrico, título à esquerda, colagem à direita, CTAs deslocados e linhas de construção. Proporção do quadro refinada para a referência. Galeria com cabeçalho compacto e cards; destaque/serviços e Sobre/LAB/contato em painéis. Mobile reorganiza a arte e empilha as seções. Controles, rótulos e informações obrigatórias acrescentam altura a alguns painéis. |
-| Cores e tokens | Preto profundo, branco quente, vermelho principal #E54858 e rosa do kit. Vermelho reservado a destaques, CTAs e estados. Contraste textual e de controles medido; bordas de inputs/LAB reforçadas. Bordas decorativas preservadas discretas. |
-| Imagens e fidelidade | Oito recursos fornecidos usados; originais preservados, alfa da escultura mantido e variantes proporcionais. Distorção corrigida. As artes do kit são variações das presentes no painel: notebook VERSARY vermelho, café e streetwear não são os mesmos mockups brancos/bege do conceito. Diferença conhecida dos recursos, declarada no site e na entrega. Nenhum print integral substitui a interface. |
-| Texto e conteúdo | Frases principais e serviços preservados. Projetos identificados conforme a confirmação de Renata; sem métricas, clientes ou currículo inventados. Foto artística não atribuída a Renata. Aviso de envio indisponível visível antes do formulário. Menus, botões e textos são HTML real. |
+| Tipografia | IDEIAS condensada pesada, QUE GANHAM leve, REALIDADE serifada vermelha e inclinada. Título dimensionado e verificado pelos limites do texto real, não apenas do bloco. Fontes locais Barlow Condensed, Cormorant Garamond e IBM Plex Mono; as fontes exatas da imagem não foram fornecidas. |
+| Layout/espaçamento | Retrato à direita e texto à esquerda no hero, sobreposição controlada, descrição/CTAs deslocados, molduras e linhas. Galeria assimétrica e serviços em faixas atendem à instrução mais recente, expandindo os pequenos painéis do mockup. Sobre em duas colunas; LAB aberto. Mobile reorganizado em coluna. |
+| Cores/tokens | Preto profundo, vermelho #E54858, rosa, branco quente, fundos vinho selecionados, bordas finas. Texto e controles auditados nos estados testados; não dependem apenas de cor. |
+| Imagens | Oito recursos fornecidos renderizados, sem distorção intencional. Cromo independente, retratos e texturas em camadas. O objeto, retratos e mockups do kit diferem dos presentes no painel: equivalência de linguagem, não do arquivo original. Capa de Syntax permanece ilustrativa. |
+| Texto/conteúdo | Frases principais restauradas. Projetos e status confirmados preservados. Foto identificada como arte, não Renata. Formulário informa que a mensagem é gerada localmente, sem envio. Menu, filtros, texto, rótulos e botões são DOM funcional. |
 
-## Histórico de revisão e correções
+## Iterações e correções
 
-| Iteração / gravidade inicial | Evidência e problema | Correção e evidência posterior |
+| Prioridade | Achado | Correção e verificação |
 | --- | --- | --- |
-| 1 / P1 | `mobile-hero-v1.png`: REALIDADE ultrapassava a largura útil e era cortada pelo quadro. | Escala fluida mobile recalculada; `390-hero.png` e `hero-final-results.json`: título dentro da tela nas oito larguras. |
-| 1 / P2 | `desktop-full-v1.png`: a escultura de serviços ficava alongada, pela altura intrínseca não corrigida. | `height:auto` e dimensões proporcionais; `1440-full.png` e `comparison-sections.jpg` mostram objeto sem distorção. |
-| 1 / P2 | Capturas iniciais não incluíam imagens lazy fora da dobra e atrasos de entrada ainda afetavam movimento reduzido. | Percurso de scroll antes das capturas; animações removidas em reduced motion. Últimas capturas incluem todas as artes. |
-| 2 / P2 | `comparison-v1.jpg`: arte dominante demais, título horizontal e proporção do hero distante da fonte. | Contain, máscara lateral, título inclinado, ajustes da escala serifada e altura do quadro; `comparison-final.jpg`. |
-| 2 / P2 | Cabeçalho da galeria possuía título adicional de grande escala, ausente na composição aprovada; serviços usavam impacto na primeira linha. | Cabeçalho compacto VERSO* com filtros, e serviços em serifada; `comparison-sections.jpg`. |
-| 3 / P2 | Verificação adicional em 1280 px: aproximação excessiva dos CTAs à linha inferior do hero. | Altura e escala refinadas; `hero-final-results.json` demonstra mais de 60 px até o limite inferior em todas as larguras. |
-| 3 / P2 | Nomes acessíveis dos cards não incluíam todo o texto visível; indicador ativo escolhia Contato ao entrar na linha compartilhada com LAB/Sobre. | Nome natural dos links; observação de seções preserva o destino escolhido. Axe sem violações e `navigation-results.json` com seis estados ativos corretos. |
-| 4 / verificação final | Inspeção das comparações normalizadas, desktop, tablet, mobile, menu e estudos. | Nenhum P0/P1/P2 visual acionável permaneceu no escopo dos recursos disponíveis. |
+| P1 | REALIDADE ultrapassava o quadro em 320–390 px; overflow da página não detectava o corte interno. | Escala móvel ajustada. Teste usa Range do texto e compara com a borda do hero nas oito larguras. Capturas `*-iteration-1-hero.png` preservam a primeira iteração; `*-after-hero.png` mostram o ajuste. |
+| P2 | Palavra serifada desktop atravessava demais o rosto. | Escala reduzida, descrição reposicionada; comparação normalizada aberta novamente. |
+| P1 | Nome acessível do cartão do LAB omitia “01 / Experimentar”. | Nome inclui texto visível e finalidade. Sete auditorias da suíte principal voltaram sem violações. |
+| P1 | Vue substituía a classe adicionada pelo observer durante mudanças de estado, ocultando serviços ou pausando o LAB novamente. | Revelação usa `data-visible`, independente das classes Vue. Regressão com hover, foco, filtros, pausa/reinício e retorno de rota. |
+| P1 | Menu fixo era limitado à altura do header pelo `backdrop-filter` do ancestral. | Blur desativado apenas com menu aberto. Verificação de altura e hit testing de todos os links, além de nova captura inspecionada. |
+| P2 | Textura integral do hero carregava também no celular, prejudicando o LCP. | Textura virou imagem responsiva descoberta no HTML, com prioridade de carregamento; preload da variante serifada correta. Aparência recapturada e comparada. |
 
-## Interações e console
+Não restou falha visual P0/P1/P2 acionável identificada nas superfícies e estados revisados. Limites de recurso e diferenças intencionais permanecem explicitados abaixo.
 
-35 verificações do fluxo, oito larguras, cinco auditorias axe, seis rotas com conteúdo sem JavaScript e hidratação sem avisos. Regressão adicional do indicador ativo em desktop/mobile. Menu aberto/fechado por teclado e toque, Tab/Shift+Tab, Escape, filtros, estudos, serviço pré-selecionado, validação/erro/loading/sucesso interceptado, LAB e reduced motion verificados. Nenhum e-mail foi enviado.
+## Testes executados
 
-Não houve erro crítico no console ou de carregamento de recursos. Os resultados brutos estão em `docs/*-results.json`. Sem overflow horizontal. Lighthouse mobile registrado em relatório próprio; a revisão visual não representa certificação de acessibilidade.
+| Comando | Resultado real |
+| --- | --- |
+| `npm run build` | TypeScript, bundles e pré-renderização de 6 rotas concluídos. |
+| `TEST_BASE_URL=http://127.0.0.1:4180 npm run test:e2e` | 57 verificações de interação; 8 larguras; 7 auditorias axe sem violações; nenhum erro de console ou recurso carregado. |
+| `node scripts/test-commercial-mobile.mjs` | 6 fluxos touch em 320/390 px, 2 auditorias axe adicionais sem violações, sem overflow. O nome do script vem da etapa anterior; o conteúdo testa o LAB atual aberto. |
+| `node scripts/test-lab-motion.mjs` | Três modos do LAB, dois reinícios reais por modo, pausa/continuação, recarga e movimento reduzido. |
+| `node scripts/test-editorial-motion.mjs` | 7 verificações: profundidade limitada e reset em hero/LAB, serviços visíveis após estado reativo, filtros/reinserção, transição de estudo e retorno, preferência reduzida, touch sem parallax. |
+| `node scripts/test-navigation.mjs` | 12 verificações de seção ativa e ciclos de foco desktop/mobile. |
+| `npm run test:contact` | 18 verificações do adaptador; chamadas ao provedor interceptadas; nenhum e-mail real enviado. |
+| `npm run test:production` | 6 rotas com conteúdo sem JS e hidratação sem avisos, sem overflow mobile. |
+| `node scripts/capture-editorial.mjs` | Desktop/tablet/mobile capturados, sem overflow horizontal. |
+| `npm audit --json` | 0 vulnerabilidades reportadas em `docs/editorial-dependencies.json`. |
+| `git diff --check` | Sem erros de whitespace. |
 
-## P3 e limitações de recurso
+Larguras: 320, 360, 390, 768, 1024, 1280, 1440 e 1920 px. Os JSON em `docs/editorial-*-results.json`, `contact-results.json`, `navigation-results.json` e `production-results.json` registram a cobertura. São testes em emulação de viewport/touch; não se afirma teste em aparelho físico ou com leitor de tela humano.
 
-- A fonte exata e os arquivos editáveis do painel não foram fornecidos. A comparação mantém uma aproximação tipográfica licenciada.
-- Artes do kit, forma do objeto e mockups são variações da fonte; substituição fiel desses detalhes depende dos arquivos originais correspondentes.
-- Retrato pessoal, evidências dos projetos, canais e integração de e-mail continuam pendentes. Estão apresentados como pendências reais, sem simulação de sucesso.
-- Não há referência mobile aprovada ou Reels disponíveis para comparação de movimento; o mobile foi adaptado preservando a identidade e testado por função/legibilidade.
+## Desempenho
 
-## Checklist final
+A medição Lighthouse atual e sua configuração ficam em `docs/editorial-lighthouse.json`. A primeira medição desta reconstrução, antes da correção da textura, foi preservada em `docs/editorial-lighthouse-before-optimization.json` (desempenho 71; LCP simulado 7,7 s). A medição final (Lighthouse 13, emulação mobile e throttling simulado, 22/10/2026 17:17 UTC) registrou **82 em desempenho, 100 em acessibilidade, 100 em boas práticas e 100 em SEO**. FCP 2,0 s; LCP 4,5 s; TBT 70 ms; CLS 0. O ajuste intermediário marcou 79 e foi preservado em `docs/editorial-lighthouse-intermediate.json`.
 
-- [x] Abrir fonte e capturas reais, inclusive comparações na mesma imagem.
-- [x] Avaliar tipografia, layout, cores, imagens e conteúdo.
-- [x] Corrigir e recapturar os problemas P1/P2 encontrados.
-- [x] Verificar CTAs, filtros, rotas, menu, foco, motion e formulário.
-- [x] Documentar aproximações, recursos faltantes e configuração externa.
-- [x] Manter aplicação local, sem publicação.
+O LCP melhorou, mas permanece acima da meta de 2,5 s nessa simulação. A entrega das imagens e fontes ainda merece acompanhamento em hospedagem real; a pontuação local não é uma garantia para dispositivos ou redes reais. Não foram reduzidos os retratos principais nem removidas camadas artísticas para melhorar a nota. As texturas de fundo no mobile reutilizam a variante de 480 px, adequada à baixa opacidade dessas camadas.
+
+Bundle principal final: JavaScript 189,08 kB / 66,27 kB gzip; rotas de estudos e privacidade mantêm chunks separados. Sem novas dependências de produção.
+
+## Diferenças intencionais e pendências externas
+
+- Painéis internos ampliados, galeria assimétrica e serviços em linhas seguem o pedido mais recente. A organização não repete a grade pequena da prancha de identidade.
+- O cromo é mais presente, usando a escultura autorizada do kit. A forma não corresponde literalmente ao objeto do mockup.
+- Não há referência mobile nem Reels acessíveis para comparação de animação; motion e adaptação mobile são implementações próprias dentro da linguagem aprovada.
+- Fontes exatas e arquivos editáveis do painel não foram fornecidos. A identidade foi aproximada com os recursos locais, sem declarar reprodução idêntica.
+- Envio externo depende de configuração e canais autorizados. Detalhes/evidências dos projetos ainda dependem da autora. Retrato pessoal é opcional para substituir a arte explicitamente identificada.
+- Nenhuma publicação realizada nesta etapa.
 
 **final result: passed**

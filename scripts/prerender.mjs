@@ -1,14 +1,18 @@
 // Native Vue SSR at build time; output is static and hydrated by the client.
 import { readFile, writeFile, mkdir, readdir } from "node:fs/promises";
 import { resolve } from "node:path";
-import { render, staticRoutes as routes, siteOrigin } from "../.prerender/entry-server.js";
+import {
+  render,
+  staticRoutes as routes,
+  siteOrigin,
+} from "../.prerender/entry-server.js";
 const root = resolve("dist");
 const template = await readFile(resolve(root, "index.html"), "utf8");
 const files = await readdir(resolve(root, "assets"));
 const fonts = files.filter(
   (file) =>
     /woff2$/.test(file) &&
-    /barlow-condensed-latin-(300|700)|cormorant-garamond-latin-500-italic/.test(
+    /barlow-condensed-latin-(300|700)|cormorant-garamond-latin-700-italic/.test(
       file,
     ),
 );

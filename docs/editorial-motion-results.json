@@ -1,0 +1,37 @@
+{
+  "checks": [
+    {
+      "mode": "Forma",
+      "repetition": 1,
+      "animationRestarted": true
+    },
+    {
+      "mode": "Forma",
+      "repetition": 2,
+      "animationRestarted": true
+    },
+    {
+      "mode": "Tipo",
+      "repetition": 1,
+      "animationRestarted": true
+    },
+    {
+      "mode": "Tipo",
+      "repetition": 2,
+      "animationRestarted": true
+    },
+    {
+      "mode": "Composição",
+      "repetition": 1,
+      "animationRestarted": true
+    },
+    {
+      "mode": "Composição",
+      "repetition": 2,
+      "animationRestarted": true
+    },
+    {
+      "systemReducedMotionStopsAnimation": true
+    }
+  ]
+}

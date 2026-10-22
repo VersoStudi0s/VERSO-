@@ -10,7 +10,7 @@ const configured = Boolean(import.meta.env.VITE_CONTACT_ENDPOINT);
     ><span class="eyebrow red">Transparência / VERSO*</span>
     <h1>Privacidade<br /><em>& créditos.</em></h1>
     <p>
-      Atualização: 17 de outubro de 2026. Esta página descreve o funcionamento
+      Atualização: 22 de outubro de 2026. Esta página descreve o funcionamento
       desta versão do portfólio de Renata, desenvolvedora e designer em
       formação.
     </p>
@@ -21,12 +21,14 @@ const configured = Boolean(import.meta.env.VITE_CONTACT_ENDPOINT);
       sensíveis ou informações de outras pessoas. Os campos não são armazenados
       no navegador.
     </p>
-    <h2>O que acontece ao enviar?</h2>
+    <h2>O que acontece com a mensagem?</h2>
     <p v-if="!configured">
-      Nesta versão, o serviço de envio não está configurado. Os dados digitados
-      permanecem na memória da página enquanto ela estiver aberta e não são
-      enviados a um serviço de e-mail. O formulário informa quando não consegue
-      enviar.
+      Nesta versão, o formulário gera um texto de orçamento para você revisar e
+      copiar. Os dados ficam na memória da página e não são enviados a um
+      serviço de e-mail nem armazenados pelo site. A cópia para a área de
+      transferência só acontece ao acionar “Copiar mensagem”. Você decide se e
+      onde compartilhar esse texto. Ao recarregar ou fechar a página, o rascunho
+      é descartado.
     </p>
     <p v-else>
       O formulário transmite os dados ao endpoint configurado para atendimento.
@@ -111,7 +113,7 @@ const configured = Boolean(import.meta.env.VITE_CONTACT_ENDPOINT);
   color: var(--red-light);
 }
 .privacy-page h1 {
-  font: 600 clamp(55px, 8vw, 110px)/0.9 var(--display);
+  font: 600 clamp(55px, 8vw, 110px) / 0.9 var(--display);
   margin: 22px 0 35px;
 }
 .privacy-page h1 em {

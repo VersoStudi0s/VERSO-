@@ -9,7 +9,8 @@ import { site, navigation } from "../data/site";
         >VERSO<span>*</span></RouterLink
       >
       <p class="eyebrow">
-        Design, desenvolvimento<br />e outras possibilidades.
+        Portfólio autoral · Estúdio independente<br />Design digital e
+        desenvolvimento web.
       </p>
       <RouterLink to="/#inicio" class="back-top text-link"
         >De volta ao início <PhArrowUp
@@ -50,7 +51,7 @@ import { site, navigation } from "../data/site";
   gap: 40px;
 }
 .footer-logo {
-  font: 500 clamp(52px, 6vw, 85px)/1 var(--editorial);
+  font: 500 clamp(52px, 6vw, 85px) / 1 var(--editorial);
   letter-spacing: -5px;
 }
 .footer-logo span {
@@ -117,5 +118,10 @@ import { site, navigation } from "../data/site";
     flex-direction: column;
     gap: 12px;
   }
+}
+.site-footer nav a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
 }
 </style>

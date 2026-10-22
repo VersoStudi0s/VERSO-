@@ -11,43 +11,49 @@ const expanded = ref(false);
     aria-labelledby="about-title"
   >
     <div class="section-topline">
-      <span class="eyebrow">Sobre mim</span
-      ><span class="section-number">[05]</span>
+      <span class="eyebrow">Sobre mim / [05]</span
+      ><span class="micro">Design + código + curiosidade</span>
     </div>
     <div class="about-layout">
-      <figure class="about-portrait">
-        <AssetImage
-          name="retrato-editorial"
-          alt="Composição artística de perfil em luz vermelha, usada como referência visual."
-          :width="1229"
-          :height="1536"
-        />
-        <div class="portrait-type editorial" aria-hidden="true">
-          mais<br />que<br />design_
-        </div>
-        <figcaption class="micro">
-          Referência visual editorial.<br />Não é um retrato de Renata.
-        </figcaption>
-      </figure>
-      <div class="about-copy">
+      <div class="portrait-composition" data-reveal>
+        <span class="portrait-index micro" aria-hidden="true"
+          >OUTRO OLHAR / OUTRAS POSSIBILIDADES</span
+        >
+        <figure class="about-portrait media-reveal">
+          <AssetImage
+            name="retrato-editorial"
+            alt="Arte editorial de um perfil em luz vermelha. Não é uma fotografia de Renata."
+            :width="1229"
+            :height="1536"
+          /><span class="portrait-type editorial" aria-hidden="true"
+            >mais<br />que<br />design_</span
+          >
+          <figcaption class="micro">
+            Arte editorial do kit VERSO*.<br />Não é um retrato de Renata.
+          </figcaption>
+        </figure>
+        <span class="portrait-note micro" aria-hidden="true"
+          >PESSOA.<br />CRIAÇÃO.<br />ESTRATÉGIA.<br />POSSIBILIDADES.</span
+        >
+      </div>
+      <div class="about-copy" data-reveal>
         <p class="hello">Olá, eu sou a</p>
-        <h2 id="about-title">Renata<span>,</span></h2>
+        <h2 id="about-title" class="about-name">Renata<span>,</span></h2>
         <p class="about-role">Desenvolvedora e Designer.</p>
+        <h3 class="about-heading">
+          Criatividade com<br /><em>repertório técnico.</em>
+        </h3>
         <p>
           Encontro no design e no código duas formas de transformar ideias em
           experiências digitais com identidade.
         </p>
         <p>
-          Sou estudante do <span class="senai">SENAI</span>, desenvolvedora e
-          designer em formação. Gosto de explorar, aprender e construir soluções
-          que façam sentido para quem usa.
+          Sou estudante de Desenvolvimento de Sistemas no
+          <span class="senai">SENAI</span>, com foco em desenvolvimento web,
+          interfaces e design digital. O VERSO* reúne meus projetos,
+          experimentos e serviços criativos.
         </p>
-        <PhPlus
-          class="about-plus red"
-          :size="32"
-          weight="thin"
-          aria-hidden="true"
-        /><button
+        <PhPlus class="about-plus" weight="thin" aria-hidden="true" /><button
           class="btn btn-outline"
           :aria-expanded="expanded"
           aria-controls="trajectory"
@@ -59,7 +65,7 @@ const expanded = ref(false);
           <PhArrowUpRight />
         </button>
         <div v-if="expanded" id="trajectory" class="trajectory">
-          <span class="micro red">Em constante construção</span>
+          <span class="micro">Em constante construção</span>
           <p>
             Minha trajetória está começando no SENAI, conectando desenvolvimento
             web, design de interfaces e experimentação criativa. Este portfólio
@@ -72,155 +78,220 @@ const expanded = ref(false);
   </section>
 </template>
 <style scoped>
+.about {
+  isolation: isolate;
+  overflow: hidden;
+  padding-bottom: 80px;
+}
 .about-layout {
   display: grid;
-  grid-template-columns: 0.9fr 1fr;
-  gap: 35px;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
+  gap: clamp(65px, 9vw, 155px);
+  margin-top: 70px;
+}
+.portrait-composition {
+  position: relative;
+  padding: 0 20px 30px;
+}
+.portrait-composition::before {
+  content: "";
+  position: absolute;
+  inset: -20px 35px 50px 5px;
+  background: #6e2334;
+  transform: rotate(3deg);
+  z-index: -1;
 }
 .about-portrait {
   position: relative;
   transform: rotate(-4deg);
-  margin: 0 0 0 5px;
-  border: 1px solid #8e4853;
-  border-radius: 2px;
-  align-self: start;
+  margin: 0;
+  border: 1px solid #ae586b;
+}
+.about-portrait :deep(picture),
+.about-portrait :deep(img) {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 .about-portrait :deep(img) {
-  aspect-ratio: 0.73;
-  width: 100%;
-  height: auto;
+  aspect-ratio: 0.76;
   object-fit: cover;
+}
+.portrait-index {
+  position: absolute;
+  top: -46px;
+  left: 12px;
+  font-size: 8px;
+  color: var(--pink);
 }
 .portrait-type {
   position: absolute;
-  bottom: 58px;
-  left: 17px;
-  font-size: 44px;
+  bottom: 76px;
+  left: 24px;
+  font-size: clamp(50px, 6vw, 100px);
+  line-height: 0.73;
+  letter-spacing: -0.06em;
   color: var(--pink);
-  line-height: 0.78;
-  letter-spacing: -2px;
 }
 .about-portrait figcaption {
   position: absolute;
-  bottom: 14px;
-  left: 13px;
-  background: #09090bdb;
-  padding: 8px;
-  font-size: 6px;
+  left: 16px;
+  bottom: 18px;
+  background: #0b090cf0;
+  padding: 10px;
+  font-size: 9px;
   color: var(--white);
+}
+.portrait-note {
+  position: absolute;
+  right: -25px;
+  bottom: 10px;
+  background: var(--pink);
+  color: var(--black);
+  padding: 24px 18px;
+  font-size: 10px;
+  line-height: 1.7;
+  transform: rotate(7deg);
+  border: 1px solid #fff5;
 }
 .about-copy {
   position: relative;
+  padding-right: 20px;
 }
 .hello {
-  font-size: 17px;
-  line-height: 1.3;
+  font-size: 21px;
 }
-.about-copy h2 {
-  font: 500 clamp(62px, 6vw, 96px)/0.85 var(--editorial);
+.about-name {
+  font: 500 clamp(100px, 10.4vw, 190px) / 0.85 var(--editorial);
   letter-spacing: -0.055em;
-  margin-top: 10px;
+  margin: 10px 0 23px -6px;
 }
-.about-copy h2 span {
+.about-name > span {
   color: var(--red);
 }
 .about-role {
-  font: 500 10px var(--mono);
+  font: 11px/1.6 var(--mono);
   color: var(--red-light);
   text-transform: uppercase;
-  margin: 17px 0 24px;
-  line-height: 1.5;
+  letter-spacing: 0.05em;
+}
+.about-heading {
+  font: 600 clamp(35px, 3.2vw, 60px) / 1.05 var(--display);
+  margin: 37px 0 24px;
+}
+.about-heading em {
+  font: 500 italic 1.13em/1 var(--editorial);
+  color: var(--pink);
 }
 .about-copy > p:not(.hello):not(.about-role) {
-  font-size: 12px;
-  line-height: 1.7;
   color: var(--muted);
-  margin-top: 16px;
+  font-size: 15px;
+  max-width: 43ch;
+  margin-top: 20px;
 }
 .senai {
   color: var(--white);
   text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.about-copy .btn {
-  margin-top: 24px;
-  width: 100%;
-  font-size: 8px;
-  gap: 10px;
-  padding: 13px;
-  min-height: 44px;
+  text-underline-offset: 4px;
 }
 .about-plus {
   position: absolute;
-  right: 0;
-  top: -30px;
+  right: -5px;
+  top: 8px;
+  width: 43px;
+  height: 43px;
+  color: var(--red);
+}
+.about-copy .btn {
+  margin-top: 32px;
+  font-size: 10px;
 }
 .trajectory {
-  padding: 18px 0 0;
   border-top: 1px solid var(--line);
-  margin-top: 20px;
+  margin-top: 25px;
+  padding-top: 20px;
+}
+.trajectory > .micro {
+  color: var(--red-light);
 }
 .trajectory p {
+  font-size: 14px;
   color: var(--muted);
-  font-size: 12px;
-  margin-top: 10px;
+  margin-top: 14px;
 }
-@media (max-width: 1100px) {
+@media (max-width: 1023px) {
   .about-layout {
-    gap: 23px;
+    gap: 55px;
   }
-  .about-copy > p:not(.hello):not(.about-role) {
-    font-size: 11px;
-  }
-  .about-role {
+  .portrait-note {
+    padding: 17px 12px;
     font-size: 8px;
   }
-  .about-copy h2 {
-    font-size: 72px;
+  .about-name {
+    font-size: 98px;
   }
-  .hello {
+  .about-copy {
+    padding-right: 0;
+  }
+  .about-copy > p:not(.hello):not(.about-role) {
     font-size: 14px;
   }
 }
 @media (max-width: 767px) {
+  .about {
+    padding-bottom: 45px;
+  }
+  .about .section-topline > .micro {
+    display: none;
+  }
   .about-layout {
     grid-template-columns: 1fr;
-    gap: 38px;
+    gap: 55px;
+    margin-top: 65px;
   }
-  .about-portrait {
-    width: 85%;
-    max-width: 340px;
-    margin: 10px auto 0;
+  .portrait-composition {
+    max-width: 440px;
+    width: 92%;
+    margin: auto;
+    padding: 0 10px 20px;
   }
-  .about-portrait :deep(img) {
-    aspect-ratio: 0.85;
-    object-fit: cover;
-    object-position: 50% 25%;
+  .portrait-note {
+    right: -12px;
+    bottom: 0;
+    font-size: 8px;
+  }
+  .about-portrait figcaption {
+    font-size: 7px;
+    left: 8px;
+    bottom: 9px;
+  }
+  .portrait-type {
+    font-size: 65px;
+    bottom: 66px;
+    left: 17px;
+  }
+  .hello {
+    font-size: 18px;
+  }
+  .about-name {
+    font-size: clamp(100px, 27vw, 155px);
   }
   .about-copy {
     padding: 0 3px;
   }
-  .about-copy h2 {
-    font-size: 85px;
-  }
-  .hello {
-    font-size: 17px;
+  .about-heading {
+    font-size: 37px;
+    margin-top: 30px;
   }
   .about-role {
     font-size: 10px;
   }
-  .about-copy > p:not(.hello):not(.about-role) {
-    font-size: 13px;
-  }
   .about-copy .btn {
+    max-width: 100%;
     font-size: 9px;
-    max-width: 300px;
-    margin-top: 27px;
-  }
-  .about-plus {
-    top: 20px;
-    right: 3px;
+    gap: 15px;
+    padding: 14px;
   }
 }
 </style>

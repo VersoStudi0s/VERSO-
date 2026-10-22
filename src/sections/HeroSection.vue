@@ -1,38 +1,43 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from "vue";
 import {
   PhArrowUpRight,
   PhArrowDown,
   PhPlus,
   PhAsterisk,
+  PhArrowRight,
 } from "@phosphor-icons/vue";
 import AssetImage from "../components/AssetImage.vue";
-const art = ref<HTMLElement>();
-let frame = 0;
-function move(event: PointerEvent) {
-  if (
-    event.pointerType !== "mouse" ||
-    matchMedia("(prefers-reduced-motion: reduce)").matches
-  )
-    return;
-  cancelAnimationFrame(frame);
-  frame = requestAnimationFrame(() => {
-    if (art.value)
-      art.value.style.transform = `translate3d(${(event.clientX / innerWidth - 0.5) * 10}px,${(event.clientY / innerHeight - 0.5) * 7}px,0)`;
-  });
-}
-onMounted(() => {
-  window.addEventListener("pointermove", move, { passive: true });
-});
-onBeforeUnmount(() => {
-  window.removeEventListener("pointermove", move);
-  cancelAnimationFrame(frame);
-});
+import { usePointerDepth } from "../composables/usePointerDepth";
+const { surface, move, reset } = usePointerDepth();
 </script>
 <template>
-  <section id="inicio" class="hero frame" aria-labelledby="hero-title">
-    <div class="hero-art-entry">
-      <div ref="art" class="hero-art">
+  <section
+    id="inicio"
+    ref="surface"
+    class="hero frame"
+    aria-labelledby="hero-title"
+    @pointermove="move"
+    @pointerleave="reset"
+  >
+    <div class="hero-texture" aria-hidden="true">
+      <picture>
+        <source
+          media="(max-width: 767px)"
+          srcset="/images/textura-editorial-480.webp"
+        />
+        <img
+          src="/images/textura-editorial.webp"
+          alt=""
+          width="1536"
+          height="1536"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </picture>
+    </div>
+    <div class="hero-art-entry" aria-hidden="true">
+      <div class="hero-art">
         <AssetImage
           name="hero-editorial"
           :eager="true"
@@ -42,34 +47,38 @@ onBeforeUnmount(() => {
       </div>
     </div>
     <div class="hero-shade" aria-hidden="true"></div>
-    <img
-      class="hero-chrome"
-      src="/images/escultura-cromada-480.webp"
-      alt=""
-      width="480"
-      height="480"
-      loading="lazy"
-      decoding="async"
-    />
+    <div class="hero-chrome-entry" aria-hidden="true">
+      <img
+        class="hero-chrome"
+        src="/images/escultura-cromada-480.webp"
+        alt=""
+        width="480"
+        height="480"
+        decoding="async"
+      />
+    </div>
     <div class="hero-content">
       <div class="hero-kicker">
-        <p class="eyebrow">Creative<br />Digital<br />Studio</p>
-        <PhPlus class="red" :size="29" weight="thin" /><span class="micro"
-          >Independente por natureza.<br />Criativo por essência.</span
+        <span class="eyebrow">Creative<br />Digital<br />Studio</span
+        ><PhPlus :size="28" weight="thin" aria-hidden="true" /><span
+          class="micro kicker-note"
+          >Design independente.<br />Ideias em movimento.</span
         >
       </div>
       <h1 id="hero-title" aria-label="Ideias que ganham realidade.">
         <span class="title-mask" aria-hidden="true"
           ><span class="ideas">IDEIAS</span></span
-        ><span class="title-mask become-mask" aria-hidden="true"
+        >
+        <span class="title-mask become-mask" aria-hidden="true"
           ><span class="become">QUE GANHAM</span></span
-        ><span class="title-mask reality-mask" aria-hidden="true"
+        >
+        <span class="title-mask reality-mask" aria-hidden="true"
           ><em>REALIDADE.</em></span
         >
       </h1>
       <div class="hero-description">
         <p>
-          DESIGN, DESENVOLVIMENTO<br />E SOLUÇÕES CRIATIVAS<br />COM PROPÓSITO.
+          Design, desenvolvimento<br />e soluções criativas<br />com propósito.
         </p>
         <div class="hero-actions">
           <RouterLink class="btn btn-primary" to="/#projetos"
@@ -78,70 +87,81 @@ onBeforeUnmount(() => {
             >Conhecer o estúdio <PhArrowUpRight
           /></RouterLink>
         </div>
+        <span class="hero-signature micro"
+          >Web · Interfaces · Identidade · Experimentos</span
+        >
       </div>
     </div>
     <PhAsterisk class="hero-asterisk" weight="thin" aria-hidden="true" />
     <div class="art-annotation" aria-hidden="true">
       <span class="micro">[ processo criativo ]</span
-      ><span>+ criatividade<br />+ estratégia<br />+ intenção</span>
+      ><span>+ criatividade<br />+ estratégia<br />+ código</span>
     </div>
     <RouterLink
       to="/#lab"
-      class="hero-lab-link"
-      aria-label="Código / Forma / Ideia — explorar o laboratório criativo"
-      ><AssetImage name="textura-editorial" :width="1536" :height="1536" /><span
-        class="micro"
-        >CÓDIGO / FORMA / IDEIA</span
-      ><span class="hero-lab-arrow"><PhArrowUpRight :size="22" /></span
-    ></RouterLink>
+      class="hero-lab"
+      aria-label="01 / Experimentar — explorar o laboratório criativo"
+      ><span class="micro">01 / EXPERIMENTAR</span
+      ><span class="lab-ticket-image" aria-hidden="true"></span
+      ><PhArrowRight :size="24" weight="light"
+    /></RouterLink>
     <div class="hero-bottom">
       <RouterLink to="/#projetos" class="scroll-cue"
         ><span class="micro">Scroll<br />para explorar</span
         ><PhArrowDown :size="25" weight="thin" /></RouterLink
       ><span class="construction-line" aria-hidden="true"></span
       ><span class="micro hero-index"
-        >PORTFÓLIO — VOL. 01 <span class="red">[2026]</span></span
+        >EST. VERSO* / RENATA<br />CRIATIVIDADE EM CONSTRUÇÃO</span
       >
-    </div>
-    <div class="hero-art-label micro" aria-hidden="true">
-      Projetos<br />Identidade<br />UI/UX<br />Desenvolvimento<br />Experimentos
     </div>
   </section>
 </template>
 <style scoped>
 .hero {
-  height: clamp(730px, 65vw, 980px);
+  min-height: 820px;
+  height: min(66vw, 1240px);
   isolation: isolate;
   overflow: hidden;
-  background: #09090b;
+  background: #0b090c;
+}
+.hero-texture {
+  position: absolute;
+  inset: 0;
+  z-index: -5;
+  opacity: 0.35;
+}
+.hero-texture :deep(picture),
+.hero-texture :deep(img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 24% 45%;
 }
 .hero-art-entry {
   position: absolute;
-  right: -5.5%;
+  right: -3%;
   top: 1%;
-  width: 82%;
-  height: 113%;
+  width: 75%;
+  height: 108%;
   z-index: -3;
-  animation: art-reveal 1.3s var(--ease) both;
+  animation: art-cut 1.35s var(--ease) both;
 }
 .hero-art {
   width: 100%;
   height: 100%;
-  transition: transform 0.8s ease-out;
+  transform: translate3d(var(--depth-x, 0px), var(--depth-y, 0px), 0);
+  transition: transform 0.65s ease-out;
 }
-.hero-art :deep(picture) {
-  display: flex;
-  justify-content: center;
+.hero-art :deep(picture),
+.hero-art :deep(img) {
+  display: block;
   width: 100%;
   height: 100%;
 }
 .hero-art :deep(img) {
-  width: auto;
-  max-width: none;
-  height: 100%;
   object-fit: contain;
-  mask-image: linear-gradient(90deg, transparent, #000 24%);
-  filter: brightness(0.83) saturate(1.05);
+  object-position: right center;
+  mask-image: linear-gradient(90deg, transparent, #000 22%);
 }
 .hero-shade {
   position: absolute;
@@ -150,600 +170,493 @@ onBeforeUnmount(() => {
   background:
     linear-gradient(
       90deg,
-      #09090b 0%,
-      #09090be6 12%,
-      #09090b70 32%,
-      #09090b00 58%
+      #0b090c 0%,
+      #0b090cc4 23%,
+      #0b090c33 50%,
+      transparent 75%
     ),
     linear-gradient(
       0deg,
-      #09090b 0%,
-      #09090b00 20%,
-      #09090b00 83%,
-      #09090b 100%
+      #0b090c 0%,
+      transparent 24%,
+      transparent 86%,
+      #0b090c 100%
     );
-}
-.hero-chrome {
-  position: absolute;
-  left: -32%;
-  bottom: -29%;
-  width: 40%;
-  height: auto;
-  z-index: -1;
-  pointer-events: none;
-  transform: rotate(-28deg);
-  filter: brightness(0.35);
-  animation: fade-in 1s 0.4s both;
 }
 .hero-content {
   position: relative;
-  padding: 137px var(--gutter) 0;
+  z-index: 2;
+  padding: 145px var(--gutter) 90px;
+  width: 80%;
 }
 .hero-kicker {
   display: flex;
-  align-items: flex-start;
-  gap: 65px;
-  margin-bottom: 38px;
+  gap: 55px;
+  align-items: center;
+  margin-bottom: 28px;
 }
 .hero-kicker .eyebrow {
   font-size: 9px;
-  line-height: 1.25;
-  letter-spacing: 0.16em;
+  line-height: 1.3;
+  letter-spacing: 0.17em;
 }
-.hero-kicker > span {
+.hero-kicker svg {
+  color: var(--red);
+}
+.kicker-note {
   font-size: 8px;
-  margin-top: 4px;
-  color: #cac2c0;
+  letter-spacing: 0.05em;
 }
 .hero h1 {
-  width: 82%;
-  position: relative;
-  z-index: 2;
-  letter-spacing: -0.035em;
   transform: rotate(-4deg);
-  transform-origin: 20% 50%;
-  margin-left: 2.7%;
+  transform-origin: left center;
+  letter-spacing: -0.035em;
 }
 .title-mask {
   display: block;
   overflow: hidden;
-  width: max-content;
-  max-width: 100%;
-  padding-right: 0.025em;
+  padding-bottom: 0.05em;
 }
-.title-mask > span,
-.title-mask > em {
+.title-mask > * {
   display: block;
-  animation: title-reveal 0.95s var(--ease) both;
+  animation: title-reveal 1s var(--ease) both;
 }
 .ideas {
-  font: 700 clamp(100px, 9.7vw, 160px)/0.9 var(--display);
-  animation-delay: 0.2s !important;
+  font: 700 clamp(108px, 10.8vw, 210px) / 0.86 var(--display);
 }
 .become {
-  font: 300 clamp(65px, 8.2vw, 133px)/1 var(--display);
-  letter-spacing: -0.014em;
-  animation-delay: 0.32s !important;
-  scale: 1.16 1;
-  transform-origin: left center;
-}
-.become-mask {
-  width: 100%;
+  font: 300 clamp(64px, 7.8vw, 148px) / 1 var(--display);
+  white-space: nowrap;
+  animation-delay: 0.12s;
 }
 .reality-mask {
-  margin-left: -45px;
   overflow: visible;
 }
 .reality-mask em {
-  font: 700 italic clamp(130px, 12.2vw, 205px)/0.81 var(--editorial);
-  letter-spacing: -0.065em;
+  width: max-content;
+  max-width: 100%;
+  font: 700 italic clamp(130px, 12.5vw, 240px) / 0.86 var(--editorial);
+  letter-spacing: -0.07em;
   color: var(--red);
-  animation-delay: 0.44s !important;
   white-space: nowrap;
-  transform-origin: left center;
+  animation-delay: 0.25s;
 }
 .hero-description {
-  margin: 32px 0 0 14.4%;
-  animation: fade-in 1s 0.8s both;
+  margin: 55px 0 0 16%;
+  max-width: 560px;
+  animation: copy-reveal 0.8s 0.4s both;
 }
 .hero-description > p {
-  font: 400 clamp(12px, 1.15vw, 18px)/1.6 var(--mono);
-  letter-spacing: 0.075em;
+  font: 11px/1.6 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 .hero-actions {
   display: flex;
-  gap: 35px;
+  flex-wrap: wrap;
   align-items: center;
-  margin-top: 24px;
+  gap: 26px;
+  margin-top: 25px;
 }
 .hero-actions .btn {
-  min-width: 270px;
-  min-height: 62px;
-  font-size: 14px;
+  min-height: 55px;
+  padding: 17px 24px;
+  gap: 24px;
+  border-radius: 4px;
+  font-size: 10px;
 }
 .hero-actions .text-link {
-  font-size: 12px;
+  font-size: 9px;
+  min-height: 44px;
+  color: var(--white);
+}
+.hero-signature {
+  display: block;
+  font-size: 8px;
+  margin-top: 20px;
+}
+.hero-chrome-entry {
+  position: absolute;
+  left: 43%;
+  bottom: -15%;
+  width: 34%;
+  z-index: -1;
+  animation: chrome-entry 1.3s 0.35s var(--ease) both;
+  pointer-events: none;
+}
+.hero-chrome {
+  width: 100%;
+  transform: perspective(900px)
+    translate3d(
+      calc(var(--depth-x, 0px) * -1),
+      calc(var(--depth-y, 0px) * -1),
+      0
+    )
+    rotate(-24deg) rotateY(var(--tilt-y, 0deg));
+  transition: transform 0.7s ease-out;
+  filter: brightness(0.8);
+}
+.hero-asterisk {
+  position: absolute;
+  top: 39%;
+  left: -12px;
+  width: 80px;
+  height: 80px;
+  color: var(--red);
+  transform: rotate(-17deg);
+  z-index: 3;
+  pointer-events: none;
+}
+.art-annotation {
+  position: absolute;
+  left: 44%;
+  top: 18%;
+  padding: 18px;
+  border: 1px solid #aaa0a077;
+  background: #0a090bc9;
+  backdrop-filter: blur(7px);
+  transform: rotate(-7deg);
+  z-index: 1;
+  animation: copy-reveal 0.85s 0.6s both;
+}
+.art-annotation .micro {
+  font-size: 7px;
+}
+.art-annotation > span:last-child {
+  display: block;
+  font: 10px/1.8 var(--mono);
+  color: var(--pink);
+  margin-top: 10px;
+}
+.hero-lab {
+  position: absolute;
+  right: 7%;
+  bottom: 11%;
+  width: 172px;
+  height: 145px;
+  border: 1px solid #b1a9aa88;
+  background: #141015c9;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  padding: 15px;
+  transform: rotate(4deg);
+  transition:
+    transform 0.4s,
+    border-color 0.3s;
+}
+.hero-lab > .micro {
+  position: absolute;
+  top: 13px;
+  left: 15px;
+  font-size: 8px;
+  color: var(--white);
+}
+.lab-ticket-image {
+  width: 77px;
+  height: 85px;
+  background: url("/images/textura-editorial-480.webp") center/cover;
+  border: 1px solid #bb5d6e;
+}
+.hero-lab > svg {
+  background: var(--white);
+  color: var(--black);
+  padding: 9px;
+  box-sizing: content-box;
+  border-radius: 50%;
+}
+.hero-lab:hover,
+.hero-lab:focus-visible {
+  transform: rotate(0deg) translateY(-7px);
+  border-color: var(--red);
 }
 .hero-bottom {
   position: absolute;
-  bottom: 30px;
+  bottom: 24px;
   left: var(--gutter);
   right: var(--gutter);
   display: flex;
-  align-items: flex-end;
-  gap: 45px;
-  animation: fade-in 1s 1.2s both;
+  align-items: center;
+  gap: 40px;
+  z-index: 2;
 }
 .scroll-cue {
   display: flex;
-  gap: 65px;
   align-items: center;
+  gap: 70px;
+  min-height: 44px;
 }
 .scroll-cue .micro {
   font-size: 8px;
+  color: var(--muted);
 }
 .scroll-cue svg {
-  transition: transform 0.25s;
+  color: var(--white);
+  transition: transform 0.3s;
 }
 .scroll-cue:hover svg {
   transform: translateY(5px);
 }
 .construction-line {
   height: 1px;
-  background: #73343c;
-  width: 32%;
-  position: relative;
-  margin-bottom: 8px;
-}
-.construction-line::before,
-.construction-line::after {
-  content: "";
-  position: absolute;
-  top: -3px;
-  width: 1px;
-  height: 7px;
-  background: var(--red);
-}
-.construction-line::after {
-  right: 0;
+  background: #77313c;
+  width: 31%;
 }
 .hero-index {
+  font-size: 7px;
   margin-left: auto;
-  margin-bottom: 3px;
-  font-size: 8px;
-}
-.hero-asterisk {
-  position: absolute;
-  left: -18px;
-  top: 43%;
-  font-size: 96px;
-  color: var(--red);
-  transform: rotate(-12deg);
-  animation: fade-in 1s 1s both;
-}
-.art-annotation {
-  position: absolute;
-  top: 28%;
-  right: 41%;
-  padding: 16px;
-  border: 1px solid #b1a9aa70;
-  border-radius: 3px;
-  background: #0c090bb3;
-  backdrop-filter: blur(7px);
-  transform: rotate(-7deg);
-  animation: fade-in 1s 1s both;
-}
-.art-annotation > span:last-child {
-  font: 12px/1.6 var(--mono);
-  display: block;
-  margin-top: 10px;
-  color: var(--pink);
-}
-.art-annotation .micro {
-  font-size: 6px;
-}
-.hero-lab-link {
-  position: absolute;
-  bottom: 5%;
-  right: 25%;
-  width: clamp(180px, 19vw, 295px);
-  height: clamp(135px, 12vw, 186px);
-  border: 1px solid #9f6970;
-  border-radius: 3px;
-  overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-  padding: 12px;
-  isolation: isolate;
-  animation: fade-in 1s 1.15s both;
-}
-.hero-lab-link :deep(picture) {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-}
-.hero-lab-link :deep(img) {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  filter: brightness(0.55);
-  transition:
-    filter 0.3s,
-    transform 0.5s;
-}
-.hero-lab-link:hover :deep(img) {
-  transform: scale(1.08);
-  filter: brightness(1);
-}
-.hero-lab-link > .micro {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  color: var(--white);
-  font-size: 9px;
-}
-.hero-lab-arrow {
-  background: var(--white);
-  color: var(--black);
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: grid;
-  place-items: center;
-  margin-left: auto;
-}
-.hero-art-label {
-  position: absolute;
-  right: 3%;
-  bottom: 9%;
-  color: #d2cac7;
-  font-size: 11px;
-  line-height: 1.65;
-  animation: fade-in 1s 1.2s both;
 }
 @keyframes title-reveal {
   from {
-    transform: translateY(115%);
-    opacity: 0.3;
+    transform: translateY(115%) rotate(3deg);
+    opacity: 0;
   }
   to {
-    transform: translateY(0);
+    transform: none;
     opacity: 1;
   }
 }
-@keyframes art-reveal {
+@keyframes art-cut {
   from {
-    opacity: 0;
-    transform: scale(1.05);
+    clip-path: inset(0 0 100% 0);
+    transform: scale(1.08);
+    opacity: 0.1;
   }
   to {
-    opacity: 1;
+    clip-path: inset(0);
     transform: scale(1);
-  }
-}
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
     opacity: 1;
   }
 }
-@media (min-width: 1100px) {
-  .reality-mask {
-    transform: scaleX(0.8);
-    transform-origin: left center;
+@keyframes chrome-entry {
+  from {
+    opacity: 0;
+    transform: translateY(90px) rotate(20deg);
   }
-  .reality-mask em {
-    font-size: clamp(150px, 14.7vw, 230px);
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
-@media (min-width: 1700px) {
-  .hero-content {
-    padding-top: 150px;
+@keyframes copy-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  .hero-kicker {
-    margin-bottom: 48px;
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (min-width: 1600px) {
+  .hero-content {
+    padding-top: 165px;
   }
   .hero-description {
-    margin-top: 40px;
+    margin-top: 45px;
   }
 }
-@media (max-width: 1150px) {
+@media (min-width: 768px) and (max-width: 1100px) {
   .hero {
-    height: 770px;
+    height: 820px;
   }
   .hero-content {
-    padding-top: 134px;
-  }
-  .hero h1 {
-    width: 90%;
+    width: 92%;
+    padding-top: 140px;
   }
   .hero-art-entry {
-    width: 73%;
-    right: -9%;
-    top: 7%;
+    width: 92%;
+    right: -13%;
+    top: 6%;
+    height: 100%;
   }
-  .hero-actions {
-    gap: 25px;
+  .ideas {
+    font-size: 114px;
   }
-  .hero-actions .btn {
-    min-width: 200px;
+  .become {
+    font-size: 66px;
+  }
+  .reality-mask em {
+    font-size: 145px;
   }
   .hero-description {
-    margin-top: 36px;
-  }
-  .hero-lab-link {
-    right: 13%;
-    bottom: 12%;
-    width: 140px;
-    height: 115px;
+    margin-left: 6%;
   }
   .art-annotation {
-    right: 16%;
-    top: 24%;
+    left: auto;
+    right: 4%;
+    top: 16%;
   }
-  .hero-art-label {
+  .hero-lab {
+    right: 3%;
+    width: 132px;
+    height: 125px;
+  }
+  .hero-chrome-entry {
+    left: 48%;
+    width: 46%;
+    bottom: -9%;
+  }
+  .kicker-note {
     display: none;
   }
 }
 @media (max-width: 767px) {
-  .title-mask > span,
-  .title-mask > em {
-    animation-duration: 0.5s;
-  }
-  .ideas {
-    animation-delay: 0.08s !important;
-  }
-  .become {
-    animation-delay: 0.16s !important;
-  }
-  .reality-mask em {
-    animation-delay: 0.24s !important;
-  }
-  .hero-art-entry {
-    animation-duration: 0.8s;
-  }
-  .hero-description {
-    animation-duration: 0.6s;
-    animation-delay: 0.5s;
-  }
   .hero {
-    height: 890px;
+    min-height: 790px;
+    height: auto;
   }
   .hero-content {
-    padding: 111px 21px 0;
+    width: 100%;
+    padding: 112px 20px 165px;
   }
   .hero-kicker {
-    gap: 38px;
+    gap: 28px;
     margin-bottom: 30px;
   }
   .hero-kicker .eyebrow {
     font-size: 8px;
   }
-  .hero-kicker > span {
-    font-size: 6px;
-    margin-left: auto;
-    max-width: 115px;
-  }
   .hero-kicker svg {
     width: 22px;
   }
+  .kicker-note {
+    display: none;
+  }
   .hero h1 {
-    width: 100%;
-    transform: none;
-    margin-left: 0;
+    transform: rotate(-3deg);
   }
   .ideas {
-    font-size: clamp(87px, 25vw, 170px);
-    line-height: 0.85;
+    font-size: clamp(86px, 23vw, 160px);
   }
   .become {
-    font-size: clamp(57px, 16.55vw, 112px);
-    line-height: 1.12;
-    scale: 1;
-  }
-  .reality-mask {
-    margin-left: -3px;
+    font-size: clamp(42px, 14.5vw, 100px);
   }
   .reality-mask em {
-    font-size: clamp(59px, 18.7vw, 138px);
-    letter-spacing: -0.07em;
-    line-height: 0.9;
+    font-size: clamp(52px, 17.8vw, 125px);
+    letter-spacing: -0.075em;
   }
   .hero-art-entry {
-    top: 255px;
-    right: -8%;
-    width: 99%;
-    height: 475px;
-  }
-  .hero-chrome {
-    display: none;
+    top: 175px;
+    right: -10%;
+    width: 107%;
+    height: 620px;
   }
   .hero-art :deep(img) {
-    width: 100%;
-    max-width: 100%;
-    object-fit: contain;
-    object-position: center;
-    mask-image: none;
-    filter: none;
+    object-fit: cover;
+    object-position: 55% center;
+    mask-image: linear-gradient(90deg, transparent, #000 28%);
   }
   .hero-shade {
-    background: linear-gradient(
-      0deg,
-      #09090b 0%,
-      #09090b 13%,
-      #09090b00 34%,
-      #09090b00 57%,
-      #09090b70 69%,
-      #09090b 83%
-    );
+    background:
+      linear-gradient(90deg, #0b090cd9 0%, #0b090c8a 35%, transparent 80%),
+      linear-gradient(
+        0deg,
+        #0b090c 0%,
+        transparent 30%,
+        transparent 63%,
+        #0b090c 95%
+      );
+  }
+  .hero-texture {
+    opacity: 0.35;
   }
   .hero-description {
-    position: absolute;
-    top: 689px;
-    left: 22px;
-    right: 22px;
-    margin: 0;
-    z-index: 3;
+    margin: 32px 0 0;
+    max-width: 310px;
   }
   .hero-description > p {
-    font-size: 9px;
-    line-height: 1.6;
-  }
-  .hero-description > p br:first-child {
-    display: none;
-  }
-  .hero-actions {
-    gap: 20px;
-    align-items: center;
-    margin-top: 20px;
-    justify-content: space-between;
-  }
-  .hero-actions .btn {
-    font-size: 11px;
-    min-width: 0;
-    min-height: 48px;
-    padding: 15px 13px;
-    gap: 10px;
-  }
-  .hero-actions .text-link {
     font-size: 10px;
-    gap: 6px;
-  }
-  .hero-actions .text-link svg {
-    width: 14px;
-  }
-  .hero-bottom {
-    bottom: 24px;
-    left: 22px;
-    right: 22px;
-    gap: 25px;
-  }
-  .scroll-cue {
-    gap: 25px;
-  }
-  .scroll-cue .micro {
-    font-size: 7px;
-  }
-  .hero-index {
-    font-size: 6px;
-    max-width: 86px;
-    text-align: right;
-  }
-  .construction-line {
-    width: auto;
-    flex: 1;
-  }
-  .hero-asterisk {
-    top: 39%;
-    left: 10px;
-    font-size: 62px;
-  }
-  .hero-lab-link {
-    width: 105px;
-    height: 86px;
-    right: 47%;
-    bottom: 24%;
-    padding: 9px;
-  }
-  .hero-lab-link > .micro {
-    font-size: 5px;
-    top: 8px;
-    left: 8px;
-  }
-  .hero-lab-arrow {
-    width: 27px;
-    height: 27px;
-  }
-  .hero-lab-arrow svg {
-    width: 17px;
-  }
-  .art-annotation {
-    top: 49%;
-    right: 7%;
-    padding: 10px;
-  }
-  .art-annotation > span:last-child {
-    font-size: 8px;
-  }
-  .art-annotation .micro {
-    font-size: 5px;
-  }
-}
-@media (min-width: 480px) and (max-width: 767px) {
-  .hero {
-    height: 1050px;
-  }
-  .hero-art-entry {
-    top: 320px;
-    height: 540px;
-  }
-  .hero-description {
-    top: 845px;
-  }
-  .hero-lab-link {
-    bottom: 22%;
-  }
-}
-@media (max-width: 479px) {
-  .hero {
-    height: 970px;
+    letter-spacing: 0.06em;
+    max-width: 24ch;
   }
   .hero-actions {
     flex-direction: column;
-    align-items: stretch;
+    align-items: flex-start;
     gap: 8px;
+    margin-top: 22px;
   }
-  .hero-actions .text-link {
-    min-height: 44px;
-    justify-content: center;
+  .hero-actions .btn {
+    min-height: 50px;
+    padding: 15px 19px;
   }
-  .hero-lab-link {
-    top: 590px;
-    bottom: auto;
+  .hero-signature {
+    font-size: 7px;
+    max-width: 200px;
+  }
+  .hero-asterisk {
+    width: 45px;
+    height: 45px;
+    top: 32%;
+    left: auto;
+    right: 8px;
+  }
+  .art-annotation {
+    display: none;
+  }
+  .hero-lab {
+    right: 16px;
+    bottom: 90px;
+    width: 91px;
+    height: 101px;
+    padding: 10px;
+    transform: rotate(6deg);
+  }
+  .hero-lab .micro {
+    font-size: 6px;
+    left: 8px;
+    top: 8px;
+  }
+  .lab-ticket-image {
+    width: 30px;
+    height: 50px;
+  }
+  .hero-lab > svg {
+    width: 16px;
+    height: 16px;
+    padding: 6px;
+  }
+  .hero-chrome-entry {
+    left: 34%;
+    bottom: -1%;
+    width: 60%;
+    opacity: 0.7;
+  }
+  .hero-bottom {
+    bottom: 17px;
+    left: 20px;
+    right: 20px;
+    gap: 20px;
+  }
+  .scroll-cue {
+    gap: 24px;
+  }
+  .construction-line {
+    flex: 1;
+  }
+  .hero-index {
+    display: none;
   }
 }
 @media (max-width: 359px) {
-  .hero {
-    height: 930px;
-  }
   .hero-content {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-inline: 16px;
   }
-  .hero-kicker {
-    gap: 25px;
-  }
-  .hero-kicker > span {
-    max-width: 104px;
+  .reality-mask em {
+    font-size: 17.4vw;
   }
   .hero-art-entry {
-    top: 250px;
-    height: 450px;
+    right: -16%;
   }
-  .hero-description {
-    top: 657px;
-    left: 16px;
-    right: 16px;
+  .hero-lab {
+    bottom: 73px;
   }
-  .hero-actions {
-    gap: 9px;
-  }
-  .hero-actions .text-link {
-    font-size: 10px;
-  }
-  .hero-actions .btn {
-    font-size: 11px;
-    padding: 14px 10px;
-  }
-  .hero-bottom {
-    left: 16px;
-    right: 16px;
-  }
-  .hero-lab-link {
-    top: 560px;
-    bottom: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-art,
+  .hero-chrome {
+    transform: none;
   }
 }
 </style>

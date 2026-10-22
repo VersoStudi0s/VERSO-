@@ -19,8 +19,8 @@ export function pageMetadata(path: string) {
         "Esta página não foi encontrada. Explore os projetos do VERSO*.",
     };
   return {
-    title: "VERSO* — Design, desenvolvimento e ideias em movimento",
+    title: "VERSO* — Sites, interfaces e design digital",
     description:
-      "Portfólio de Renata, estudante do SENAI, desenvolvedora e designer em formação. Interfaces, identidades e experiências digitais criativas.",
+      "Sites, interfaces e conteúdo visual para marcas e pequenos negócios. Conheça os serviços e projetos de Renata, estudante de Desenvolvimento de Sistemas no SENAI.",
   };
 }

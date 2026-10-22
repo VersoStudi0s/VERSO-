@@ -7,12 +7,14 @@ Copie `.env.example` para `.env` e preencha apenas informações profissionais a
 | Variável pública | Uso |
 | --- | --- |
 | `VITE_SITE_URL` | Origem HTTPS definitiva, sem caminho; habilita canonical, OG absoluto e sitemap no build. |
-| `VITE_CONTACT_ENDPOINT` | Endpoint compatível com o contrato abaixo; vazio mantém envio indisponível. |
+| `VITE_CONTACT_ENDPOINT` | Endpoint compatível com o contrato abaixo; vazio ativa o gerador local de mensagem, sem envio. |
 | `VITE_CONTACT_EMAIL` | E-mail profissional público e canal de privacidade. |
 | `VITE_WHATSAPP_NUMBER` | Número profissional, só dígitos, incluindo país e DDD. |
 | `VITE_GITHUB_URL`, `VITE_LINKEDIN_URL`, `VITE_INSTAGRAM_URL` | URLs HTTPS dos perfis autorizados. |
 
-O formulário envia `POST` JSON com `name`, `email`, `projectType`, `message`, `website` (honeypot vazio). Só aceita sucesso HTTP com `{ "sent": true }`. Dados são mantidos após falha. Não há persistência no navegador. A confirmação significa aceitação pelo serviço, não comprovação de entrega na caixa de entrada.
+Sem endpoint, o formulário valida os campos e gera um texto editável nos campos de origem para revisar e copiar. Nada é enviado nem persistido; a cópia exige ação do usuário e oferece seleção manual se a área de transferência estiver indisponível. Os serviços e seus exemplos são configurados em `src/data/services.ts`. Os tipos antigos `identidade` e `grafico` continuam aceitos.
+
+Com endpoint configurado, o formulário envia `POST` JSON com `name`, `email`, `projectType`, `message`, `website` (honeypot vazio). Só aceita sucesso HTTP com `{ "sent": true }`. Dados são mantidos após falha. Não há persistência no navegador. A confirmação significa aceitação pelo serviço, não comprovação de entrega na caixa de entrada.
 
 ### Adaptador opcional
 

@@ -26,7 +26,7 @@ const visible = computed(() =>
   >
     <div class="section-topline">
       <h2 id="skills-title" class="eyebrow">Meu repertório</h2>
-      <span class="section-number">[06]</span>
+      <span class="section-number">[05 / EM FORMAÇÃO]</span>
     </div>
     <div class="skill-tabs" role="group" aria-label="Etapa de aprendizagem">
       <button
@@ -47,6 +47,30 @@ const visible = computed(() =>
 </template>
 <style scoped>
 .skills {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  column-gap: 45px;
+}
+.skills .section-topline {
+  grid-row: 1/4;
+  align-self: center;
+  display: block;
+}
+.skills h2 {
+  font: 600 38px/1 var(--display);
+  letter-spacing: -0.02em;
+  color: var(--white);
+}
+.skills .section-number {
+  display: block;
+  margin-top: 14px;
+  font-size: 8px;
+}
+.skills > p {
+  grid-column: 2;
+}
+
+.skills {
   padding-top: 27px;
   padding-bottom: 24px;
 }
@@ -55,16 +79,17 @@ const visible = computed(() =>
 }
 .skill-tabs {
   display: flex;
-  gap: 17px;
+  gap: 14px;
+  flex-wrap: wrap;
   margin-bottom: 16px;
 }
 .skill-tabs button {
   padding: 9px 0;
-  min-height: 36px;
+  min-height: 44px;
   border: 0;
   border-bottom: 1px solid transparent;
   color: var(--muted);
-  font: 7px var(--mono);
+  font: 11px var(--mono);
 }
 .skill-tabs button.active {
   color: var(--red-light);
@@ -80,29 +105,17 @@ const visible = computed(() =>
   border: 1px solid var(--line);
   padding: 10px 12px;
   border-radius: 7px;
-  font: 9px var(--mono);
+  font: 12px var(--mono);
   background: #121214;
 }
 .skills > p {
-  font-size: 6px;
+  font-size: 9px;
   margin-top: 17px;
 }
 @media (max-width: 767px) {
   .skills {
+    display: block;
     padding: 25px 20px;
-  }
-  .skill-tabs button {
-    font-size: 8px;
-    min-height: 44px;
-  }
-  .skill-tabs {
-    gap: 17px;
-  }
-  .skill-list span {
-    font-size: 10px;
-  }
-  .skills > p {
-    font-size: 7px;
   }
 }
 </style>

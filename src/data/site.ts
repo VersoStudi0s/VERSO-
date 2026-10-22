@@ -23,9 +23,10 @@ export const site = {
 };
 export const navigation = [
   { id: "inicio", label: "Início", number: "01" },
-  { id: "projetos", label: "Projetos", number: "02" },
-  { id: "servicos", label: "Serviços", number: "03" },
-  { id: "lab", label: "Lab", number: "04" },
+  { id: "servicos", label: "Serviços", number: "02" },
+  { id: "projetos", label: "Projetos", number: "03" },
+  { id: "processo", label: "Processo", number: "04" },
   { id: "sobre", label: "Sobre", number: "05" },
-  { id: "contato", label: "Contato", number: "06" },
+  { id: "lab", label: "Lab", number: "06" },
+  { id: "contato", label: "Contato", number: "07" },
 ];

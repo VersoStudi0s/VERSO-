@@ -4,7 +4,7 @@ import { writeFile, mkdir } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import assert from "node:assert/strict";
 
-await mkdir("docs/screenshots", { recursive: true });
+await mkdir("docs/screenshots/editorial", { recursive: true });
 const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM_PATH || "/usr/bin/chromium",
   args: ["--no-sandbox"],
@@ -32,6 +32,8 @@ async function open(
   const context = await browser.newContext({
     viewport: { width, height },
     reducedMotion,
+    hasTouch: width < 768,
+    isMobile: width < 768,
   });
   const page = await context.newPage();
   page.on("pageerror", (error) => report.errors.push(error.message));
@@ -69,30 +71,41 @@ try {
       width: innerWidth,
       scrollWidth: document.documentElement.scrollWidth,
       brokenImages: [...document.images]
-        .filter((img) => img.getClientRects().length > 0 && (!img.complete || !img.naturalWidth))
+        .filter(
+          (img) =>
+            img.checkVisibility({ visibilityProperty: true }) &&
+            (!img.complete || !img.naturalWidth),
+        )
         .map((img) => img.src),
       title: (() => {
         const el = document.querySelector(".reality-mask em");
+        const range = document.createRange();
+        range.selectNodeContents(el);
         return {
           width: el.getBoundingClientRect().width,
           scrollWidth: el.scrollWidth,
-          right: el.getBoundingClientRect().right,
+          right: range.getBoundingClientRect().right,
+          left: range.getBoundingClientRect().left,
+          frame: document.querySelector("#inicio").getBoundingClientRect()
+            .right,
         };
       })(),
     }));
     assert.ok(bounds.scrollWidth <= width, `Horizontal overflow at ${width}`);
     assert.equal(bounds.brokenImages.length, 0, `Images at ${width}`);
     assert.ok(
-      bounds.title.right <= width + 1,
+      bounds.title.right < bounds.title.frame && bounds.title.left >= 0,
       `Title clipped at ${width}: ${bounds.title.right}`,
     );
     report.breakpoints.push(bounds);
     if ([390, 768, 1440].includes(width)) {
       await page.screenshot({
-        path: `docs/screenshots/${width}-full.png`,
+        path: `docs/screenshots/editorial/${width}-full.png`,
         fullPage: true,
       });
-      await page.screenshot({ path: `docs/screenshots/${width}-hero.png` });
+      await page.screenshot({
+        path: `docs/screenshots/editorial/${width}-hero.png`,
+      });
       const axe = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
         .analyze();
@@ -116,7 +129,30 @@ try {
         (await page.locator("#mobile-menu").isVisible()) &&
           (await page.locator("#main-content").getAttribute("inert")) !== null,
       );
-      await page.screenshot({ path: "docs/screenshots/390-menu.png" });
+      check(
+        "Every mobile menu link is inside the visible overlay",
+        await page.locator("#mobile-menu").evaluate((menu) => {
+          const box = menu.getBoundingClientRect();
+          return (
+            box.height > innerHeight * 0.7 &&
+            [...menu.querySelectorAll("a")].every((link) => {
+              const rect = link.getBoundingClientRect();
+              const hit = document.elementFromPoint(
+                rect.x + rect.width / 2,
+                rect.y + rect.height / 2,
+              );
+              return (
+                rect.top >= box.top &&
+                rect.bottom <= box.bottom &&
+                link.contains(hit)
+              );
+            })
+          );
+        }),
+      );
+      await page.screenshot({
+        path: "docs/screenshots/editorial/390-menu.png",
+      });
       await page.keyboard.press("Escape");
       check(
         "Escape closes menu and returns focus",
@@ -129,12 +165,14 @@ try {
         .locator("#mobile-menu")
         .getByRole("link", { name: /Projetos/ })
         .click();
+      await page.locator("#mobile-menu").waitFor({ state: "detached" });
       check(
         "Menu navigation closes overlay",
         (await page.locator("#mobile-menu").count()) === 0,
       );
       await page.getByRole("button", { name: "Abrir menu" }).click();
       await page.setViewportSize({ width: 1280, height: 1000 });
+      await page.locator("#mobile-menu").waitFor({ state: "detached" });
       check(
         "Resizing closes mobile menu",
         (await page.locator("#mobile-menu").count()) === 0 &&
@@ -168,7 +206,7 @@ try {
         .isVisible()),
   );
   await page.screenshot({
-    path: "docs/screenshots/1440-case.png",
+    path: "docs/screenshots/editorial/1440-case.png",
     fullPage: true,
   });
   for (let i = 0; i < 4; i++) {
@@ -187,13 +225,67 @@ try {
   });
   await page.getByRole("link", { name: "Voltar aos projetos" }).click();
   check("Case returns to gallery", new URL(page.url()).hash === "#projetos");
-  await page.locator(".service-row").first().click();
+  for (const [id, name, count] of [
+    ["website", "Sites e Landing Pages", 2],
+    ["social", "Design para Redes Sociais", 0],
+    ["uiux", "UX/UI e Protótipos", 2],
+    ["materiais", "Materiais Digitais para Negócios", 0],
+  ]) {
+    await page
+      .getByRole("link", { name: `Ver exemplos de ${name}`, exact: true })
+      .click();
+    await page.waitForURL(`**/?exemplos=${id}#projetos`);
+    check(
+      `Service examples ${id}: ${count} honest matches`,
+      (await page.locator(".project-card").count()) === count,
+    );
+    if (!count)
+      check(
+        `Service ${id} has an honest empty state`,
+        await page
+          .getByRole("heading", { name: "Exemplos ainda não disponíveis." })
+          .isVisible(),
+      );
+    await page.getByRole("button", { name: "Identidade", exact: true }).click();
+    await page.waitForURL("**/#projetos");
+    check(
+      `Category overrides service filter ${id}`,
+      (await page.locator(".project-card").count()) === 1 &&
+        (await page.locator(".project-card").first().textContent()).includes(
+          "Café Aurora",
+        ),
+    );
+    await page
+      .getByRole("link", { name: `Pedir orçamento de ${name}`, exact: true })
+      .click();
+    await page.waitForURL(`**/?servico=${id}#contato`);
+    check(
+      `Service ${id} preselects budget`,
+      (await page.locator("#contact-type").inputValue()) === id,
+    );
+  }
+  await page
+    .getByRole("link", {
+      name: "Ver exemplos de Design para Redes Sociais",
+      exact: true,
+    })
+    .click();
+  await page
+    .getByRole("button", { name: "Ver todos os projetos", exact: true })
+    .click();
+  await page.waitForURL("**/#projetos");
   check(
-    "Service CTA preselects contact type",
-    (await page.locator("#contact-type").inputValue()) === "website",
+    "Empty state returns to all four current projects",
+    (await page.locator(".project-card").count()) === 4,
   );
   await page
-    .getByRole("button", { name: "Enviar mensagem", exact: true })
+    .getByRole("link", {
+      name: "Pedir orçamento de Sites e Landing Pages",
+      exact: true,
+    })
+    .click();
+  await page
+    .getByRole("button", { name: "Gerar mensagem de orçamento", exact: true })
     .click();
   check(
     "Required errors are accessible and focus name",
@@ -202,23 +294,79 @@ try {
         .locator("#contact-name")
         .evaluate((el) => el === document.activeElement)),
   );
+  let localPosts = 0;
+  page.on("request", (request) => {
+    if (request.method() === "POST") localPosts++;
+  });
   await page.locator("#contact-name").fill("Teste de interface");
   await page.locator("#contact-email").fill("teste@example.com");
   await page
     .locator("#contact-message")
     .fill("Mensagem de teste local, sem envio para terceiros.");
   await page
-    .getByRole("button", { name: "Enviar mensagem", exact: true })
+    .getByRole("button", { name: "Gerar mensagem de orçamento", exact: true })
     .click();
+  const draft = await page.locator("#budget-message").inputValue();
   check(
-    "Unconfigured form reports real unavailability",
-    (await page.getByRole("alert").textContent()).includes(
+    "Local draft includes the selected service and entered message",
+    draft.includes("Sites e Landing Pages") &&
+      draft.includes("Mensagem de teste local"),
+  );
+  check(
+    "Local generator never claims a send",
+    (await page.locator(".form-feedback").textContent()).includes(
       "Nenhuma mensagem foi enviada",
     ),
   );
   check(
-    "Failed form preserves user data",
-    (await page.locator("#contact-message").inputValue()).length > 20,
+    "Draft receives focus and preserves input",
+    (await page
+      .locator("#budget-message")
+      .evaluate((el) => el === document.activeElement)) &&
+      (await page.locator("#contact-message").inputValue()).length > 20,
+  );
+  await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page
+    .getByRole("button", { name: "Copiar mensagem", exact: true })
+    .click();
+  check(
+    "Copy uses the actual clipboard",
+    (await page.evaluate(() => navigator.clipboard.readText())) === draft,
+  );
+  check("Generating and copying make no POST requests", localPosts === 0);
+  await page.evaluate(() => {
+    navigator.clipboard.writeText = async () => {
+      throw new Error("Permission denied for fallback test");
+    };
+  });
+  await page
+    .getByRole("button", { name: "Copiar mensagem", exact: true })
+    .click();
+  check(
+    "Clipboard denial offers manual selection",
+    (await page.locator(".form-feedback").textContent()).includes(
+      "cópia automática não ficou disponível",
+    ) &&
+      (await page
+        .locator("#budget-message")
+        .evaluate(
+          (el) =>
+            el.selectionStart === 0 && el.selectionEnd === el.value.length,
+        )),
+  );
+  const draftAxe = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
+    .analyze();
+  report.accessibility.push({
+    state: "budget-draft",
+    violations: draftAxe.violations,
+  });
+  await page
+    .locator("#contact-message")
+    .fill("Uma ideia diferente para atualizar o orçamento local.");
+  check(
+    "Editing invalidates the previous draft",
+    (await page.locator("#budget-message").count()) === 0,
   );
   await page.getByRole("button", { name: "Conhecer minha trajetória" }).click();
   check("Trajectory expands", await page.locator("#trajectory").isVisible());
@@ -232,6 +380,7 @@ try {
       .getByText("TypeScript", { exact: true })
       .isVisible(),
   );
+  await page.locator("#lab").scrollIntoViewIfNeeded();
   for (const mode of ["Tipo", "Composição", "Forma"]) {
     await page.getByRole("button", { name: mode, exact: true }).click();
     check(
@@ -247,6 +396,21 @@ try {
       .getByRole("button", { name: "Movimento reduzido pelo sistema" })
       .isDisabled(),
   );
+  await page.locator(".lab-stage").scrollIntoViewIfNeeded();
+  await page.locator(".lab-object img").evaluate((img) => img.decode());
+  check(
+    "Expanded lab loads its lazy image",
+    await page
+      .locator(".lab-object img")
+      .evaluate((img) => img.naturalWidth > 0),
+  );
+  const labAxe = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
+    .analyze();
+  report.accessibility.push({
+    state: "lab-expanded",
+    violations: labAxe.violations,
+  });
   await page.getByRole("link", { name: "Privacidade & créditos" }).click();
   await page.waitForURL("**/privacidade");
   await page.locator(".privacy-page").waitFor();
@@ -292,6 +456,7 @@ try {
       .locator(".hero-description")
       .evaluate((el) => Number(getComputedStyle(el).opacity) > 0.99),
   );
+  await motionPage.locator("#lab").scrollIntoViewIfNeeded();
   await motionPage.getByRole("button", { name: "Pausar movimento" }).click();
   check(
     "Lab motion can be paused",
@@ -305,6 +470,17 @@ try {
     await motionPage
       .getByRole("button", { name: "Pausar movimento" })
       .isVisible(),
+  );
+  await motionPage.getByRole("button", { name: "Pausar movimento" }).click();
+  await motionPage.emulateMedia({ reducedMotion: "reduce" });
+  await motionPage
+    .getByRole("button", { name: "Movimento reduzido pelo sistema" })
+    .waitFor();
+  check(
+    "System reduced motion stops the visible lab",
+    await motionPage
+      .locator("#lab")
+      .evaluate((el) => el.classList.contains("reduced")),
   );
   await motionPage.close();
   // Separate local server with an explicit adapter endpoint; all email requests are intercepted.
@@ -372,18 +548,24 @@ try {
   await formPage.close();
   assert.equal(report.errors.length, 0, "No browser errors");
   assert.equal(report.requestsFailed.length, 0, "No asset loading errors");
-  await writeFile("docs/browser-results.json", JSON.stringify(report, null, 2));
+  await writeFile(
+    "docs/editorial-browser-results.json",
+    JSON.stringify(report, null, 2),
+  );
   const violations = report.accessibility.flatMap((audit) => audit.violations);
   assert.equal(
     violations.length,
     0,
-    `Axe violations found; see docs/browser-results.json: ${violations.map((v) => v.id).join(", ")}`,
+    `Axe violations found; see docs/editorial-browser-results.json: ${violations.map((v) => v.id).join(", ")}`,
   );
   console.log(
     `Passed ${report.interactions.length} interaction checks, ${report.breakpoints.length} widths, ${report.accessibility.length} axe audits. No browser errors.`,
   );
 } finally {
-  await writeFile("docs/browser-results.json", JSON.stringify(report, null, 2));
+  await writeFile(
+    "docs/editorial-browser-results.json",
+    JSON.stringify(report, null, 2),
+  );
   if (configuredServer?.pid) {
     try {
       process.kill(-configuredServer.pid, "SIGTERM");

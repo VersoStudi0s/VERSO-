@@ -74,7 +74,15 @@ export default async (
     message.trim().length < 20 ||
     message.length > 5000 ||
     typeof projectType !== "string" ||
-    !["website", "uiux", "identidade", "grafico", "outro"].includes(projectType)
+    ![
+      "website",
+      "social",
+      "uiux",
+      "materiais",
+      "identidade",
+      "grafico",
+      "outro",
+    ].includes(projectType)
   )
     return reply(400, { sent: false });
   try {
