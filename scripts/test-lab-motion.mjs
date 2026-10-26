@@ -102,7 +102,7 @@ try {
   );
 } finally {
   await writeFile(
-    "docs/editorial-motion-results.json",
+    "docs/curation-motion-results.json",
     JSON.stringify({ checks }, null, 2),
   );
   await browser.close();

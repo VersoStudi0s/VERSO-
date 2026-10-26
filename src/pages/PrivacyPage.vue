@@ -11,8 +11,7 @@ const configured = Boolean(import.meta.env.VITE_CONTACT_ENDPOINT);
     <h1>Privacidade<br /><em>& créditos.</em></h1>
     <p>
       Atualização: 22 de outubro de 2026. Esta página descreve o funcionamento
-      desta versão do portfólio de Renata, desenvolvedora e designer em
-      formação.
+      desta versão do portfólio de Renata e João Gustavo, dupla em formação que trabalha com desenvolvimento e design.
     </p>
     <h2>Quais dados são solicitados?</h2>
     <p>
@@ -52,6 +51,27 @@ const configured = Boolean(import.meta.env.VITE_CONTACT_ENDPOINT);
       de consentimento decorativo. O serviço de hospedagem poderá manter logs
       técnicos, conforme sua configuração e política.
     </p>
+    <h2>Metadados públicos do GitHub</h2>
+    <p>
+      A área de projetos consulta automaticamente a API pública do GitHub, sem
+      token de autenticação. O GitHub recebe os dados técnicos habituais da
+      conexão, como endereço IP. Consulte a
+      <a
+        href="https://docs.github.com/pt/site-policy/privacy-policies/github-general-privacy-statement"
+        target="_blank"
+        rel="noopener noreferrer"
+        >política de privacidade do GitHub (nova aba)</a
+      >.
+    </p>
+    <p>
+      Um cache local de metadados públicos reduz chamadas repetidas por três
+      horas. Ele não contém dados do formulário, credenciais ou informações de
+      repositórios privados. Uma consulta posterior substitui o cache; se o
+      GitHub estiver indisponível, a última seleção pode continuar visível,
+      identificada pela data da consulta. Você pode apagar esse cache limpando
+      os dados deste site no navegador. Não usamos esse armazenamento para
+      rastreamento.
+    </p>
     <h2>Seus direitos e solicitações</h2>
     <p>
       Você pode solicitar informações sobre o tratamento, correção ou exclusão
@@ -75,11 +95,13 @@ const configured = Boolean(import.meta.env.VITE_CONTACT_ENDPOINT);
     </p>
     <h2>Imagens, fontes e créditos</h2>
     <p>
-      As artes editoriais e os mockups foram fornecidos no kit VERSO*. A pessoa
-      retratada nas composições é uma referência visual e não é Renata. As
-      imagens de projetos são ilustrativas e não comprovam produtos, clientes ou
-      resultados. A origem e os direitos de publicação desses materiais ainda
-      precisam ser confirmados pela responsável.
+      VERSARY, GymFlow e Ritmo Fitness usam capturas das interfaces de seus
+      repositórios públicos, executadas localmente. As legendas distinguem dados
+      demonstrativos e integrações não conectadas. Syntax Studio e Café Aurora
+      usam mockups vetoriais conceituais, não fotografias de produtos
+      fabricados. A referência à Coca-Cola FEMSA pertence à interface acadêmica
+      VERSARY e não indica vínculo comercial. Não há retrato pessoal da autora
+      nesta versão.
     </p>
     <p>
       Barlow Condensed, Cormorant Garamond e IBM Plex Mono são distribuídas sob

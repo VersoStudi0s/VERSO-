@@ -12,7 +12,9 @@ try {
       viewport: { width, height: 1000 },
       reducedMotion: "reduce",
     });
-    await page.goto("http://127.0.0.1:4180", { waitUntil: "networkidle" });
+    await page.goto(process.env.TEST_BASE_URL || "http://127.0.0.1:4180", {
+      waitUntil: "networkidle",
+    });
     for (const [name, id] of [
       ["Serviços", "servicos"],
       ["Projetos", "projetos"],

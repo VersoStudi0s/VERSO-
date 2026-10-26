@@ -1,12 +1,19 @@
 <script setup lang="ts">
+import { useGithub } from "../composables/useGithub";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { PhArrowLeft, PhArrowUpRight, PhPlus } from "@phosphor-icons/vue";
-import { projects } from "../data/projects";
+import { projects, selectedProjects } from "../data/projects";
 import type { Project } from "../types/project";
 import AssetImage from "../components/AssetImage.vue";
 import NotFoundPage from "./NotFoundPage.vue";
 const route = useRoute();
+const { snapshot } = useGithub();
+const repository = computed(() =>
+  snapshot.value?.repositories.find(
+    (r) => r.fullName === project.value?.repository,
+  ),
+);
 const project = computed(() =>
   projects.find((item) => item.slug === route.params.slug),
 );
@@ -30,9 +37,10 @@ const sectionNumber = (key: keyof Project) =>
   String(visibleSections.value.indexOf(key) + 1).padStart(2, "0");
 const nextProject = computed(
   () =>
-    projects[
-      (projects.findIndex((item) => item.slug === route.params.slug) + 1) %
-        projects.length
+    selectedProjects[
+      (selectedProjects.findIndex((item) => item.slug === route.params.slug) +
+        1) %
+        selectedProjects.length
     ]!,
 );
 </script>
@@ -45,7 +53,11 @@ const nextProject = computed(
     <div class="section-topline">
       <RouterLink to="/#projetos" class="text-link"
         ><PhArrowLeft /> Voltar aos projetos</RouterLink
-      ><span class="micro">{{ project.number }} / 04 — ESTUDO DE CASO</span>
+      ><span class="micro"
+        >{{ project.number }} /
+        {{ String(selectedProjects.length).padStart(2, "0") }} — ESTUDO DE
+        CASO</span
+      >
     </div>
     <div class="case-heading">
       <span class="eyebrow red">{{ project.status }}</span>
@@ -55,6 +67,19 @@ const nextProject = computed(
         <span v-for="tag in project.tags" :key="tag" class="tag">{{
           tag
         }}</span>
+      </div>
+      <div v-if="project.repository" class="case-code">
+        <a
+          :href="`https://github.com/${project.repository}`"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-outline"
+          >Ver código ↗<span class="sr-only"> (GitHub, nova aba)</span></a
+        >
+        <p v-if="repository" class="micro">
+          {{ repository.language }} · {{ repository.stars }} estrelas ·
+          metadados do GitHub
+        </p>
       </div>
       <PhPlus
         class="case-plus red"
@@ -69,6 +94,27 @@ const nextProject = computed(
         {{ project.imageCaption }}
       </figcaption>
     </figure>
+    <div v-if="project.gallery?.length" class="case-gallery">
+      <figure v-for="visual in project.gallery" :key="visual.image">
+        <AssetImage :name="visual.image" :alt="visual.alt" />
+        <figcaption>
+          {{ visual.caption }}
+          <a
+            :href="
+              visual.image.startsWith('study-')
+                ? `/images/studies/${visual.image.slice(6)}.svg`
+                : `/images/${visual.image}.webp`
+            "
+            target="_blank"
+            rel="noopener"
+            class="text-link visual-source"
+            >Ver prancha em tamanho original ↗<span class="sr-only">
+              (abre em outra aba)</span
+            ></a
+          >
+        </figcaption>
+      </figure>
+    </div>
     <div class="case-layout">
       <aside class="case-aside">
         <span class="eyebrow">Um olhar sobre<br />o processo.</span>
@@ -135,7 +181,7 @@ const nextProject = computed(
           <h2>O que está documentado</h2>
           <p>{{ project.results }}</p>
           <RouterLink
-            v-if="project.slug === 'lab-movimento'"
+            v-if="['lab-movimento', 'pulse-lab'].includes(project.slug)"
             to="/#lab"
             class="btn btn-outline case-lab"
             >Experimentar no LAB <PhArrowUpRight
@@ -161,6 +207,13 @@ const nextProject = computed(
   <NotFoundPage v-else />
 </template>
 <style scoped>
+.case-code {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+}
 .project-page > .section-topline .micro {
   font-size: 8px;
 }
@@ -196,8 +249,8 @@ const nextProject = computed(
 .case-cover :deep(img) {
   width: 100%;
   height: auto;
-  aspect-ratio: 1.9;
-  object-fit: cover;
+  aspect-ratio: 15 / 11;
+  object-fit: contain;
   object-position: center 52%;
   border: 1px solid var(--line);
   border-radius: 7px;
@@ -306,7 +359,7 @@ const nextProject = computed(
     display: none;
   }
   .case-cover :deep(img) {
-    aspect-ratio: 1.2;
+    aspect-ratio: 15 / 11;
   }
   .case-cover figcaption {
     font-size: 7px;
@@ -341,5 +394,46 @@ const nextProject = computed(
   .case-body section {
     margin-bottom: 40px;
   }
+}
+
+.case-gallery {
+  margin-top: 50px;
+}
+.case-gallery figure {
+  margin: 0;
+}
+.case-gallery :deep(img) {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.visual-source {
+  margin-top: 12px;
+  min-height: 44px;
+  color: var(--pink);
+}
+.case-gallery :deep(img[src*="github-gymflow-detail"]),
+.case-gallery :deep(img[src*="github-ritmo-fitness"]) {
+  width: auto;
+  max-width: 100%;
+  max-height: 820px;
+  margin: auto;
+}
+.case-cover :deep(img[src*="github-ritmo-fitness"]) {
+  height: min(700px, 140vw);
+  aspect-ratio: auto;
+  background: #20171f;
+}
+.case-gallery figcaption {
+  font: 11px/1.6 var(--mono);
+  color: var(--muted);
+  margin-top: 16px;
+}
+.case-cover figcaption {
+  font-size: 11px;
+  line-height: 1.7;
+}
+.case-tags {
+  flex-wrap: wrap;
 }
 </style>

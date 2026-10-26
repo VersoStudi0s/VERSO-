@@ -1,0 +1,336 @@
+{
+  "geometry": [
+    {
+      "width": 320,
+      "overflow": false,
+      "images": [
+        {
+          "box": 258,
+          "image": 256,
+          "loaded": true
+        },
+        {
+          "box": 258,
+          "image": 256,
+          "loaded": true
+        },
+        {
+          "box": 258,
+          "image": 256,
+          "loaded": true
+        },
+        {
+          "box": 258,
+          "image": 256,
+          "loaded": true
+        },
+        {
+          "box": 258,
+          "image": 256,
+          "loaded": true
+        }
+      ],
+      "broken": []
+    },
+    {
+      "width": 360,
+      "overflow": false,
+      "images": [
+        {
+          "box": 298,
+          "image": 296,
+          "loaded": true
+        },
+        {
+          "box": 298,
+          "image": 296,
+          "loaded": true
+        },
+        {
+          "box": 298,
+          "image": 296,
+          "loaded": true
+        },
+        {
+          "box": 298,
+          "image": 296,
+          "loaded": true
+        },
+        {
+          "box": 298,
+          "image": 296,
+          "loaded": true
+        }
+      ],
+      "broken": []
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "images": [
+        {
+          "box": 328,
+          "image": 326,
+          "loaded": true
+        },
+        {
+          "box": 328,
+          "image": 326,
+          "loaded": true
+        },
+        {
+          "box": 328,
+          "image": 326,
+          "loaded": true
+        },
+        {
+          "box": 328,
+          "image": 326,
+          "loaded": true
+        },
+        {
+          "box": 328,
+          "image": 326,
+          "loaded": true
+        }
+      ],
+      "broken": []
+    },
+    {
+      "width": 768,
+      "overflow": false,
+      "images": [
+        {
+          "box": 351.6875,
+          "image": 349.6875,
+          "loaded": true
+        },
+        {
+          "box": 293.078125,
+          "image": 291.078125,
+          "loaded": true
+        },
+        {
+          "box": 351.6875,
+          "image": 349.6875,
+          "loaded": true
+        },
+        {
+          "box": 293.078125,
+          "image": 291.078125,
+          "loaded": true
+        },
+        {
+          "box": 522.40625,
+          "image": 520.40625,
+          "loaded": true
+        }
+      ],
+      "broken": []
+    },
+    {
+      "width": 1024,
+      "overflow": false,
+      "images": [
+        {
+          "box": 470.921875,
+          "image": 468.921875,
+          "loaded": true
+        },
+        {
+          "box": 392.453125,
+          "image": 390.453125,
+          "loaded": true
+        },
+        {
+          "box": 470.921875,
+          "image": 468.921875,
+          "loaded": true
+        },
+        {
+          "box": 392.453125,
+          "image": 390.453125,
+          "loaded": true
+        },
+        {
+          "box": 708.53125,
+          "image": 706.53125,
+          "loaded": true
+        }
+      ],
+      "broken": []
+    },
+    {
+      "width": 1280,
+      "overflow": false,
+      "images": [
+        {
+          "box": 601.0625,
+          "image": 599.0625,
+          "loaded": true
+        },
+        {
+          "box": 500.890625,
+          "image": 498.890625,
+          "loaded": true
+        },
+        {
+          "box": 601.0625,
+          "image": 599.0625,
+          "loaded": true
+        },
+        {
+          "box": 500.890625,
+          "image": 498.890625,
+          "loaded": true
+        },
+        {
+          "box": 894.609375,
+          "image": 892.609375,
+          "loaded": true
+        }
+      ],
+      "broken": []
+    },
+    {
+      "width": 1440,
+      "overflow": false,
+      "images": [
+        {
+          "box": 682.40625,
+          "image": 680.40625,
+          "loaded": true
+        },
+        {
+          "box": 568.6875,
+          "image": 566.6875,
+          "loaded": true
+        },
+        {
+          "box": 682.40625,
+          "image": 680.40625,
+          "loaded": true
+        },
+        {
+          "box": 568.6875,
+          "image": 566.6875,
+          "loaded": true
+        },
+        {
+          "box": 1010.953125,
+          "image": 1008.953125,
+          "loaded": true
+        }
+      ],
+      "broken": []
+    },
+    {
+      "width": 1920,
+      "overflow": false,
+      "images": [
+        {
+          "box": 916.90625,
+          "image": 914.90625,
+          "loaded": true
+        },
+        {
+          "box": 764.09375,
+          "image": 762.09375,
+          "loaded": true
+        },
+        {
+          "box": 916.90625,
+          "image": 914.90625,
+          "loaded": true
+        },
+        {
+          "box": 764.09375,
+          "image": 762.09375,
+          "loaded": true
+        },
+        {
+          "box": 1346.265625,
+          "image": 1344.265625,
+          "loaded": true
+        }
+      ],
+      "broken": []
+    }
+  ],
+  "cases": [
+    {
+      "slug": "versary",
+      "width": 390,
+      "coverAndDetailLoaded": true
+    },
+    {
+      "slug": "versary",
+      "width": 1440,
+      "coverAndDetailLoaded": true
+    },
+    {
+      "slug": "cafe-aurora",
+      "width": 390,
+      "coverAndDetailLoaded": true
+    },
+    {
+      "slug": "cafe-aurora",
+      "width": 1440,
+      "coverAndDetailLoaded": true
+    },
+    {
+      "slug": "syntax-studio",
+      "width": 390,
+      "coverAndDetailLoaded": true
+    },
+    {
+      "slug": "syntax-studio",
+      "width": 1440,
+      "coverAndDetailLoaded": true
+    },
+    {
+      "slug": "gymflow",
+      "width": 390,
+      "coverAndDetailLoaded": true
+    },
+    {
+      "slug": "gymflow",
+      "width": 1440,
+      "coverAndDetailLoaded": true
+    },
+    {
+      "slug": "ritmo-fitness",
+      "width": 390,
+      "coverAndDetailLoaded": true
+    },
+    {
+      "slug": "ritmo-fitness",
+      "width": 1440,
+      "coverAndDetailLoaded": true
+    }
+  ],
+  "accessibility": [
+    {
+      "slug": "versary",
+      "violations": []
+    },
+    {
+      "slug": "cafe-aurora",
+      "violations": []
+    },
+    {
+      "slug": "syntax-studio",
+      "violations": []
+    },
+    {
+      "slug": "gymflow",
+      "violations": []
+    },
+    {
+      "slug": "ritmo-fitness",
+      "violations": []
+    }
+  ],
+  "errors": [],
+  "legacyRequests": []
+}

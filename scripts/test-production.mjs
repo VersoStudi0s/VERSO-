@@ -1,12 +1,16 @@
 import { chromium } from "@playwright/test";
 import assert from "node:assert/strict";
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 const base = process.env.TEST_BASE_URL || "http://127.0.0.1:4180";
 const routes = [
   "/",
   "/projetos/versary",
+  "/projetos/gymflow",
+  "/projetos/ritmo-fitness",
   "/projetos/cafe-aurora",
   "/projetos/syntax-studio",
+  "/projetos/pulse-lab",
+  "/projetos/numa-skin",
   "/projetos/lab-movimento",
   "/privacidade",
 ];
@@ -36,6 +40,13 @@ try {
       reducedMotion: "reduce",
     });
     const page = await context.newPage();
+    await page.route("https://api.github.com/**", async (route) =>
+      route.fulfill({
+        json: JSON.parse(
+          await readFile("scripts/fixtures/github-public.json", "utf8"),
+        ),
+      }),
+    );
     page.on("console", (message) => {
       if (["error", "warning"].includes(message.type()))
         errors.push({ path, message: message.text() });
@@ -64,7 +75,7 @@ try {
   }
   assert.equal(errors.length, 0, "Hydration/console errors");
   console.log(
-    "Six production routes: content available without JavaScript, hydrated without warnings, no mobile overflow.",
+    "Ten production routes: content available without JavaScript, hydrated without warnings, no mobile overflow.",
   );
 } finally {
   await writeFile(

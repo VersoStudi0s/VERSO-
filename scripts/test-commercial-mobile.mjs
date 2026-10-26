@@ -57,7 +57,7 @@ try {
       ).toHaveAttribute("aria-pressed", "true");
     }
     await page.locator(".lab-stage").scrollIntoViewIfNeeded();
-    await page.locator(".lab-object img").evaluate((img) => img.decode());
+    await expect(page.locator(".lab-object > span")).toHaveCount(9);
     assert.ok(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,
@@ -92,7 +92,7 @@ try {
     assert.equal(axe.violations.length, 0);
     if (width === 390)
       await page.screenshot({
-        path: "docs/screenshots/editorial/390-lab-controls.png",
+        path: "docs/screenshots/curation/390-lab-controls.png",
       });
     await page.locator("#lab").scrollIntoViewIfNeeded();
 
@@ -106,7 +106,7 @@ try {
     await page
       .getByRole("link", { name: "Voltar aos projetos", exact: true })
       .tap();
-    await expect(page.locator(".project-card")).toHaveCount(4);
+    await expect(page.locator(".project-card")).toHaveCount(5);
     await page.setViewportSize({ width: 1280, height: 1000 });
     await expect(page.locator(".desktop-nav")).toBeVisible();
     checks.push({ width, flow: "case-return-and-resize", passed: true });
@@ -118,7 +118,7 @@ try {
   );
 } finally {
   await writeFile(
-    "docs/editorial-mobile-results.json",
+    "docs/curation-mobile-results.json",
     JSON.stringify({ checks, accessibility, errors }, null, 2),
   );
   await browser.close();

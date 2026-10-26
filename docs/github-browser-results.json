@@ -1,0 +1,78 @@
+{
+  "widths": [
+    320,
+    360,
+    390,
+    768,
+    1024,
+    1280,
+    1440,
+    1920
+  ],
+  "cases": [
+    {
+      "width": 390,
+      "slug": "versary"
+    },
+    {
+      "width": 390,
+      "slug": "gymflow"
+    },
+    {
+      "width": 390,
+      "slug": "ritmo-fitness"
+    },
+    {
+      "width": 390,
+      "slug": "syntax-studio"
+    },
+    {
+      "width": 390,
+      "slug": "cafe-aurora"
+    },
+    {
+      "width": 1440,
+      "slug": "versary"
+    },
+    {
+      "width": 1440,
+      "slug": "gymflow"
+    },
+    {
+      "width": 1440,
+      "slug": "ritmo-fitness"
+    },
+    {
+      "width": 1440,
+      "slug": "syntax-studio"
+    },
+    {
+      "width": 1440,
+      "slug": "cafe-aurora"
+    }
+  ],
+  "checks": [
+    "Real unauthenticated GitHub API returned 200 and three eligible repositories",
+    "Loading and empty API states",
+    "Browser reload uses valid cache",
+    "Expired browser cache loads changed metadata",
+    "API offline retains cached repositories and five editorial cases",
+    "Cold offline state retains editorial layout and recovery action",
+    "Removed case unavailable"
+  ],
+  "axe": [
+    {
+      "width": 390,
+      "violations": []
+    },
+    {
+      "width": 768,
+      "violations": []
+    },
+    {
+      "width": 1440,
+      "violations": []
+    }
+  ],
+  "errors": []
+}

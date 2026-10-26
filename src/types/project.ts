@@ -6,6 +6,11 @@ export type Category =
   | "Experimentos";
 export interface Project {
   slug: string;
+  repository?: string;
+  techStack?: string[];
+  selected?: boolean;
+  accent?: string;
+  gallery?: { image: string; alt: string; caption: string }[];
   number: string;
   name: string;
   subtitle: string;

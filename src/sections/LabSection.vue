@@ -22,10 +22,10 @@ let preference: MediaQueryList;
 const modes = ["Forma", "Tipo", "Composição"];
 const descriptions: Record<string, string> = {
   Forma:
-    "Profundidade em uma camada 2D. Transformações CSS dão movimento à escultura cromada.",
+    "Uma grade, nove módulos. Transformações CSS exploram ritmo, alinhamento e profundidade.",
   Tipo: "Ritmo visual com tipografia cinética. A palavra se move, a leitura continua.",
   Composição:
-    "Um recorte, outro olhar. Explore as camadas da colagem editorial.",
+    "Contraste e proporção: uma composição editorial feita de módulos e cor.",
 };
 function updateMotion() {
   reduced.value = preference.matches;
@@ -92,24 +92,21 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
       aria-hidden="true"
       @animationend="finishAnimation"
     >
-      <AssetImage
-        v-if="mode === 'Forma'"
-        class="lab-object"
-        name="escultura-cromada"
-        :width="1254"
-        :height="1254"
-      /><span v-else-if="mode === 'Tipo'" class="kinetic-word"
+      <div v-if="mode === 'Forma'" class="lab-object">
+        <span v-for="n in 9" :key="n"></span>
+      </div>
+      <span v-else-if="mode === 'Tipo'" class="kinetic-word"
         >IDEIA<br /><em>em ação.</em></span
       ><AssetImage
         v-else
         class="lab-collage"
-        name="olho-editorial"
+        name="study-lab-grid"
         :width="1536"
         :height="1536"
       />
     </div>
     <span class="lab-coordinate coordinate-top micro" aria-hidden="true"
-      >X / Y / Z<br />ESTUDO DE PROFUNDIDADE</span
+      >X / Y / Z<br />ESTUDO DE MODULAÇÃO</span
     >
     <span class="lab-coordinate coordinate-bottom micro" aria-hidden="true"
       >FORMA. MOVIMENTO.<br />OUTRAS POSSIBILIDADES.</span
@@ -161,7 +158,9 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
 .lab-texture {
   position: absolute;
   inset: 0;
-  background: url("/images/textura-editorial-960.webp") center/cover;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 79px, #ffffff22 79px 80px),
+    repeating-linear-gradient(0deg, transparent 0 79px, #ffffff22 79px 80px);
   opacity: 0.12;
   z-index: -2;
 }
@@ -381,7 +380,7 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
 }
 @media (max-width: 767px) {
   .lab-texture {
-    background-image: url("/images/textura-editorial-480.webp");
+    background-size: 50% 50%;
   }
   .lab {
     min-height: 0;
@@ -456,5 +455,34 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
   .lab-stage {
     transform: none;
   }
+}
+
+.lab-object {
+  width: 65%;
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  transform: rotate(-5deg);
+}
+.lab-object > span {
+  border: 1px solid #ff7886;
+  background: #e54858;
+}
+.lab-object > span:nth-child(2n) {
+  background: transparent;
+}
+.lab-object > span:nth-child(5) {
+  background: #f7f0eb;
+  border-color: #f7f0eb;
+}
+.lab-object > span:nth-child(9) {
+  opacity: 0.5;
+}
+.lab-coordinate {
+  background: #111113;
+}
+.lab-collage {
+  width: 90%;
 }
 </style>

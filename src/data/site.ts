@@ -16,7 +16,7 @@ export const site = {
     ? import.meta.env.VITE_WHATSAPP_NUMBER
     : "",
   socials: [
-    { label: "GitHub", url: httpsUrl(import.meta.env.VITE_GITHUB_URL) },
+    { label: "GitHub da Renata", url: httpsUrl(import.meta.env.VITE_GITHUB_URL || "https://github.com/renataaap") },
     { label: "LinkedIn", url: httpsUrl(import.meta.env.VITE_LINKEDIN_URL) },
     { label: "Instagram", url: httpsUrl(import.meta.env.VITE_INSTAGRAM_URL) },
   ].filter((link) => link.url),

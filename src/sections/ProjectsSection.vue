@@ -3,12 +3,16 @@ import { computed, ref, watch } from "vue";
 import { PhArrowUpRight, PhArrowRight } from "@phosphor-icons/vue";
 import { useRoute, useRouter } from "vue-router";
 import { findService } from "../data/services";
-import { projects, categories } from "../data/projects";
+import { selectedProjects as projects, categories } from "../data/projects";
 import type { Category } from "../types/project";
 import AssetImage from "../components/AssetImage.vue";
 const route = useRoute();
 const router = useRouter();
 const selected = ref<Category>("Todos");
+const technology = ref("Todas");
+const technologies = [
+  ...new Set(projects.flatMap((p) => p.techStack || [])),
+].sort();
 const selectedService = computed(() => findService(route.query.exemplos));
 watch(
   () => route.query.exemplos,
@@ -18,6 +22,7 @@ watch(
 );
 function chooseCategory(category: Category) {
   selected.value = category;
+  technology.value = "Todas";
   if (route.query.exemplos) {
     const { exemplos: _examples, ...query } = route.query;
     router.replace({ path: "/", query, hash: "#projetos" });
@@ -25,13 +30,16 @@ function chooseCategory(category: Category) {
 }
 
 const filtered = computed(() =>
-  projects.filter((project) =>
-    selectedService.value
-      ? (selectedService.value.projectSlugs as readonly string[]).includes(
-          project.slug,
-        )
-      : selected.value === "Todos" ||
-        project.categories.includes(selected.value),
+  projects.filter(
+    (project) =>
+      (technology.value === "Todas" ||
+        project.techStack?.includes(technology.value)) &&
+      (selectedService.value
+        ? (selectedService.value.projectSlugs as readonly string[]).includes(
+            project.slug,
+          )
+        : selected.value === "Todos" ||
+          project.categories.includes(selected.value)),
   ),
 );
 </script>
@@ -42,15 +50,16 @@ const filtered = computed(() =>
     aria-labelledby="projects-title"
   >
     <div class="section-topline">
-      <span class="eyebrow">Projetos selecionados</span>
+      <span class="eyebrow">Projetos em destaque</span>
       <span class="section-number">[03 / SELEÇÃO]</span>
     </div>
     <h2 id="projects-title" class="section-heading projects-heading">
       Trabalhos<br /><em>em evidência.</em>
     </h2>
     <p class="projects-intro">
-      Projetos técnicos, conceitos e trabalhos em desenvolvimento. Cada um com
-      seu contexto e seu processo.
+      Sistemas reais, código aberto e identidade aplicada. Três projetos do
+      GitHub, uma loja autoral em desenvolvimento e um estudo conceitual de
+      branding.
     </p>
     <div class="project-toolbar">
       <span class="gallery-wordmark" aria-hidden="true"
@@ -72,6 +81,13 @@ const filtered = computed(() =>
         </button>
       </div>
     </div>
+    <label class="technology-filter"
+      >Tecnologia dos destaques
+      <select v-model="technology">
+        <option>Todas</option>
+        <option v-for="tech in technologies" :key="tech">{{ tech }}</option>
+      </select></label
+    >
     <div v-if="selectedService" class="service-filter">
       <p>
         Exemplos: <strong>{{ selectedService.title }}</strong>
@@ -94,11 +110,15 @@ const filtered = computed(() =>
     <div
       v-else
       class="project-grid"
-      :class="{ filtered: selected !== 'Todos' || selectedService }"
+      :class="{
+        filtered:
+          selected !== 'Todos' || selectedService || technology !== 'Todas',
+      }"
     >
       <RouterLink
         v-for="project in filtered"
         :key="project.slug"
+        :data-project="project.slug"
         :to="`/projetos/${project.slug}`"
         class="project-card"
         data-reveal
@@ -133,6 +153,31 @@ const filtered = computed(() =>
   </section>
 </template>
 <style scoped>
+.technology-filter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  font: 11px var(--mono);
+  margin-bottom: 30px;
+  color: var(--muted);
+}
+.technology-filter select {
+  min-height: 44px;
+  background: #19191e;
+  color: var(--white);
+  border: 1px solid var(--line);
+  padding: 10px;
+  max-width: 100%;
+}
+.project-card[data-project="ritmo-fitness"] .project-visual {
+  background: #20171f;
+  aspect-ratio: 1 / 1;
+}
+.project-card[data-project="gymflow"] .project-visual {
+  background: #171320;
+  aspect-ratio: 4 / 3;
+}
 .projects {
   overflow: hidden;
 }
@@ -213,44 +258,46 @@ const filtered = computed(() =>
   margin-top: 150px;
 }
 .project-card:nth-child(3) {
-  margin-top: -100px;
+  margin-top: -45px;
 }
 .project-card:nth-child(4) {
   margin-top: 55px;
 }
 .project-visual {
-  height: clamp(300px, 36vw, 620px);
+  aspect-ratio: 15 / 11;
+  height: auto;
   position: relative;
   border: 1px solid var(--line);
   overflow: hidden;
   background: #191116;
 }
 .project-card:nth-child(2) .project-visual {
-  height: clamp(290px, 29vw, 500px);
+  aspect-ratio: 15 / 11;
+  height: auto;
 }
 .project-card:nth-child(3) .project-visual {
-  height: clamp(260px, 29vw, 500px);
+  aspect-ratio: 15 / 11;
+  height: auto;
 }
 .project-card:nth-child(4) .project-visual {
-  height: clamp(250px, 25vw, 440px);
-  clip-path: polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
+  aspect-ratio: 15 / 11;
+  height: auto;
 }
 .project-visual :deep(picture),
 .project-visual :deep(img) {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 .project-visual :deep(img) {
   transition:
     transform 0.8s var(--ease),
     filter 0.7s;
-  filter: saturate(0.8);
+  filter: none;
 }
 .project-card:hover :deep(img),
 .project-card:focus-visible :deep(img) {
-  transform: scale(1.055) rotate(-1deg);
-  filter: saturate(1.2);
+  transform: scale(1.025);
 }
 .project-card-top {
   position: absolute;
@@ -363,7 +410,7 @@ const filtered = computed(() =>
   margin-top: 0;
 }
 .filtered .project-visual {
-  height: clamp(280px, 32vw, 480px);
+  height: auto;
 }
 .service-filter {
   border-block: 1px solid var(--line);
@@ -405,7 +452,7 @@ const filtered = computed(() =>
     margin-top: 90px;
   }
   .project-card:nth-child(3) {
-    margin-top: -40px;
+    margin-top: 0;
   }
   .filtered .project-card {
     margin: 0;
@@ -441,16 +488,16 @@ const filtered = computed(() =>
     margin: 0;
   }
   .project-grid .project-visual {
-    height: 360px;
+    height: auto;
   }
   .project-grid .project-card:nth-child(2) .project-visual {
-    height: 300px;
+    height: auto;
   }
   .project-grid .project-card:nth-child(3) .project-visual {
-    height: 270px;
+    height: auto;
   }
   .project-grid .project-card:nth-child(4) .project-visual {
-    height: 280px;
+    height: auto;
   }
   .project-info h3 {
     font-size: 49px;
@@ -468,6 +515,33 @@ const filtered = computed(() =>
   }
   .project-empty h3 {
     font-size: 30px;
+  }
+}
+
+.project-card:nth-child(5) {
+  grid-column: 1 / -1;
+  width: 78%;
+  margin: 15px auto 0;
+}
+.project-card-top {
+  inset: 12px 12px auto auto;
+}
+.project-card-top > span {
+  display: none;
+}
+.project-card-top svg {
+  padding: 8px;
+  width: 16px;
+  height: 16px;
+}
+@media (max-width: 767px) {
+  .project-card:nth-child(n) {
+    width: 100%;
+    margin: 0;
+  }
+  .project-card:nth-child(n) .project-visual {
+    height: auto;
+    aspect-ratio: 15/11;
   }
 }
 </style>

@@ -12,7 +12,7 @@ export const services = [
       "Página de divulgação",
     ],
     detail: "HTML, CSS, JavaScript e Vue.js, conforme o projeto.",
-    projectSlugs: ["versary", "syntax-studio"],
+    projectSlugs: ["versary", "gymflow", "syntax-studio"],
   },
   {
     id: "social",
@@ -34,7 +34,7 @@ export const services = [
       "Interfaces claras e protótipos navegáveis para transformar ideias em experiências digitais.",
     deliverables: ["Wireframes", "Homepage no Figma", "Protótipo de navegação"],
     detail: "Fluxos, interfaces e redesign de páginas.",
-    projectSlugs: ["versary", "syntax-studio"],
+    projectSlugs: ["versary", "gymflow", "ritmo-fitness", "syntax-studio"],
   },
   {
     id: "materiais",
@@ -49,7 +49,7 @@ export const services = [
       "Apresentações",
     ],
     detail: "Informação organizada para o seu público.",
-    projectSlugs: [],
+    projectSlugs: ["cafe-aurora"],
   },
 ] as const;
 export const contactTypes = [

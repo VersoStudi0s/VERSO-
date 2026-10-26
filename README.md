@@ -2,7 +2,9 @@
 
 Portfólio de Renata em Vue 3, TypeScript e Vite, reconstruído a partir de `references/verso-aprovado.png` e do kit de imagens fornecido. A publicação de uma prévia privada foi solicitada em 18/10/2026; os dados de hospedagem ficam em `.openai/hosting.json`.
 
-A reconstrução visual editorial de 22/10/2026 está somente na cópia local, na branch `local/comercial-fase1`. Não foi publicada. Veja o [relatório atual](docs/REFORMULACAO-VISUAL.md), as [capturas antes/depois](docs/screenshots/editorial/) e a [revisão visual e testes](design-qa.md). A [etapa comercial anterior](docs/REFORMULACAO-COMERCIAL.md) foi preservada como histórico.
+A seleção principal reúne VERSARY, GymFlow e Ritmo Fitness com fontes reais do GitHub, Syntax Studio como projeto autoral em desenvolvimento e Café Aurora como conceito de branding. Metadados públicos atualizam por cache de três horas, sem token no navegador. Veja o [relatório da integração](docs/GITHUB-INTEGRACAO.md) e a [revisão visual e testes](design-qa.md).
+
+As três aplicações usam screenshots da execução local, com limitações explicitadas nas legendas. Syntax e Café usam mockups conceituais SVG. A curadoria anterior permanece como [histórico](docs/CURADORIA-VISUAL.md). Esta atualização está local e não foi publicada.
 
 ## Executar
 
@@ -25,14 +27,15 @@ O build valida TypeScript, gera os bundles e pré-renderiza as páginas com o re
 Com o servidor local aberto:
 
 ```bash
-npm run test:e2e
+TEST_BASE_URL=http://127.0.0.1:4180 npm run test:github
+TEST_BASE_URL=http://127.0.0.1:4180 npm run test:e2e
 npm run test:contact
 npm run test:production
 node scripts/test-navigation.mjs
 node scripts/test-commercial-mobile.mjs
 node scripts/test-lab-motion.mjs
 node scripts/test-editorial-motion.mjs
-node scripts/capture-editorial.mjs
+node scripts/test-curation.mjs
 npm audit
 ```
 

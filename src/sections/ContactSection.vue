@@ -319,8 +319,7 @@ async function submit() {
   content: "";
   position: absolute;
   inset: 0;
-  background: url("/images/textura-editorial-960.webp") no-repeat 70% 5%/100%
-    auto;
+  background: linear-gradient(120deg, #4b1a264d, transparent 65%);
   opacity: 0.2;
   pointer-events: none;
   z-index: -1;
@@ -536,7 +535,7 @@ async function submit() {
 }
 @media (max-width: 767px) {
   .contact::before {
-    background-image: url("/images/textura-editorial-480.webp");
+    background: linear-gradient(180deg, #4b1a264d, transparent 60%);
   }
   .contact-layout {
     grid-template-columns: 1fr;

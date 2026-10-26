@@ -290,9 +290,7 @@ onBeforeUnmount(() => {
   inset: 95px 23px 23px;
   padding: 45px max(35px, 8vw);
   overflow: auto;
-  background:
-    linear-gradient(90deg, #0b090cf5, #0b090cda),
-    url("/images/textura-editorial-960.webp") right center/cover;
+  background: linear-gradient(120deg, #21151b, #0b090c 70%);
   border: 1px solid var(--line);
   display: grid;
   grid-template-columns: 1fr 1fr;

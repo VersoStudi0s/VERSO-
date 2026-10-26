@@ -1,0 +1,20 @@
+[
+  {
+    "repository": "versary",
+    "url": "https://github.com/renataaap/versary",
+    "httpStatus": 200,
+    "commit": "7982322db8878127316d3bc2a04f96420e74dd38"
+  },
+  {
+    "repository": "gymflow",
+    "url": "https://github.com/renataaap/gymflow",
+    "httpStatus": 200,
+    "commit": "6a9812ba211f231daec49dbd5f7e32646455f6f5"
+  },
+  {
+    "repository": "app_fitness",
+    "url": "https://github.com/renataaap/app_fitness",
+    "httpStatus": 200,
+    "commit": "66cf15e5895ecd2f68ff279f4684e252ea39a46d"
+  }
+]

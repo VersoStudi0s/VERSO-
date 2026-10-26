@@ -9,7 +9,8 @@
     "preview": "vite preview --host 0.0.0.0 --port 4173",
     "test:e2e": "node scripts/test-browser.mjs",
     "test:contact": "node scripts/test-contact.mjs",
-    "test:production": "node scripts/test-production.mjs"
+    "test:production": "node scripts/test-production.mjs",
+    "test:github": "node scripts/test-github-service.mjs && node scripts/test-github-browser.mjs"
   },
   "dependencies": {
     "@fontsource/barlow-condensed": "^5.2.8",

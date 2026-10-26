@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { PhAsterisk } from "@phosphor-icons/vue";
 import HeroSection from "../sections/HeroSection.vue";
+import GithubSection from "../sections/GithubSection.vue";
 import ProjectsSection from "../sections/ProjectsSection.vue";
 import FeaturedProject from "../sections/FeaturedProject.vue";
 import ServicesSection from "../sections/ServicesSection.vue";
@@ -24,6 +25,7 @@ useReveal();
   </div>
   <div class="home-sections">
     <ProjectsSection />
+    <GithubSection />
     <ServicesSection />
     <div class="middle-grid"><FeaturedProject /><ProcessSection /></div>
     <AboutSection />

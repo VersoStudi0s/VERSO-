@@ -11,25 +11,24 @@ const expanded = ref(false);
     aria-labelledby="about-title"
   >
     <div class="section-topline">
-      <span class="eyebrow">Sobre mim / [05]</span
+      <span class="eyebrow">Sobre nós / [05]</span
       ><span class="micro">Design + código + curiosidade</span>
     </div>
+    <div class="duo-intro"><h2 id="about-title">Duas perspectivas.<br /><em>Uma criação em conjunto.</em></h2><p>Somos Renata e João Gustavo. Unimos desenvolvimento, design e planejamento para transformar ideias em experiências digitais. Trabalhamos de forma complementar, compartilhando decisões e aprimorando o trabalho um do outro, com atenção à funcionalidade, à identidade visual e à organização de cada projeto.</p></div>
     <div class="about-layout">
       <div class="portrait-composition" data-reveal>
         <span class="portrait-index micro" aria-hidden="true"
-          >OUTRO OLHAR / OUTRAS POSSIBILIDADES</span
+          >FORMA / FUNÇÃO / INTENÇÃO</span
         >
         <figure class="about-portrait media-reveal">
           <AssetImage
-            name="retrato-editorial"
-            alt="Arte editorial de um perfil em luz vermelha. Não é uma fotografia de Renata."
+            name="study-renata"
+            alt="Manifesto tipográfico de Renata: Pensar, desenhar, construir, em branco sobre vinho."
             :width="1229"
             :height="1536"
-          /><span class="portrait-type editorial" aria-hidden="true"
-            >mais<br />que<br />design_</span
-          >
+          />
           <figcaption class="micro">
-            Arte editorial do kit VERSO*.<br />Não é um retrato de Renata.
+            Manifesto visual autoral.<br />Design como prática.
           </figcaption>
         </figure>
         <span class="portrait-note micro" aria-hidden="true"
@@ -38,11 +37,11 @@ const expanded = ref(false);
       </div>
       <div class="about-copy" data-reveal>
         <p class="hello">Olá, eu sou a</p>
-        <h2 id="about-title" class="about-name">Renata<span>,</span></h2>
+        <h3 class="about-name">Renata<span>,</span></h3>
         <p class="about-role">Desenvolvedora e Designer.</p>
-        <h3 class="about-heading">
+        <h4 class="about-heading">
           Criatividade com<br /><em>repertório técnico.</em>
-        </h3>
+        </h4>
         <p>
           Encontro no design e no código duas formas de transformar ideias em
           experiências digitais com identidade.
@@ -50,8 +49,7 @@ const expanded = ref(false);
         <p>
           Sou estudante de Desenvolvimento de Sistemas no
           <span class="senai">SENAI</span>, com foco em desenvolvimento web,
-          interfaces e design digital. O VERSO* reúne meus projetos,
-          experimentos e serviços criativos.
+          interfaces e design digital. No VERSO*, compartilho meus projetos e experimentos e colaboro com João Gustavo na criação de sites.
         </p>
         <PhPlus class="about-plus" weight="thin" aria-hidden="true" /><button
           class="btn btn-outline"
@@ -74,6 +72,10 @@ const expanded = ref(false);
           </p>
         </div>
       </div>
+    </div>
+    <div class="about-layout joao-layout">
+      <div class="joao-manifesto" data-reveal aria-hidden="true"><span class="micro">CRIATIVIDADE / PLANEJAMENTO / DESENVOLVIMENTO</span><strong>JG<span>*</span></strong><p>Pensar a ideia.<br />Planejar a experiência.<br /><em>Construir juntos.</em></p></div>
+      <div class="about-copy" data-reveal><p class="hello">E eu sou o</p><h3 class="about-name joao-name">João<br />Gustavo<span>,</span></h3><p class="about-role">Desenvolvedor em formação.</p><h4 class="about-heading">Criatividade com<br /><em>planejamento.</em></h4><p>Sou estudante de Técnico em Desenvolvimento de Sistemas no <span class="senai">SENAI</span>. Utilizo Next.js, React, HTML, CSS e JavaScript, com interesse em planejar funcionalidades e interfaces que conectem boas ideias à implementação.</p><p>Desenvolvo sites ao lado da Renata, complementando e aprimorando o trabalho da dupla. Participei da Syntax Studio, nosso projeto autoral de e-commerce em desenvolvimento.</p><ul class="joao-tech" aria-label="Tecnologias utilizadas por João Gustavo"><li v-for="tech in ['Next.js','React','HTML','CSS','JavaScript']" :key="tech">{{ tech }}</li></ul><RouterLink to="/projetos/syntax-studio" class="btn btn-outline">Conhecer a Syntax Studio <PhArrowUpRight /></RouterLink></div>
     </div>
   </section>
 </template>
@@ -125,15 +127,7 @@ const expanded = ref(false);
   font-size: 8px;
   color: var(--pink);
 }
-.portrait-type {
-  position: absolute;
-  bottom: 76px;
-  left: 24px;
-  font-size: clamp(50px, 6vw, 100px);
-  line-height: 0.73;
-  letter-spacing: -0.06em;
-  color: var(--pink);
-}
+
 .about-portrait figcaption {
   position: absolute;
   left: 16px;
@@ -266,11 +260,7 @@ const expanded = ref(false);
     left: 8px;
     bottom: 9px;
   }
-  .portrait-type {
-    font-size: 65px;
-    bottom: 66px;
-    left: 17px;
-  }
+
   .hello {
     font-size: 18px;
   }
@@ -294,4 +284,42 @@ const expanded = ref(false);
     padding: 14px;
   }
 }
+
+.about-portrait :deep(img) {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 15/11;
+  object-fit: contain;
+  display: block;
+}
+.about-portrait figcaption {
+  position: static;
+  padding: 14px 18px;
+  font-size: 9px;
+}
+.portrait-note {
+  bottom: -8px;
+  right: -15px;
+  font-size: 8px;
+  padding: 15px;
+}
+.portrait-composition {
+  padding-bottom: 40px;
+}
+
+.duo-intro { margin-top:45px; }
+.duo-intro h2 { font:600 clamp(43px,5.5vw,88px)/1 var(--display); }
+.duo-intro h2 em { font:500 italic 1.05em var(--editorial); color:var(--pink); }
+.duo-intro>p { max-width:72ch; margin-top:25px; color:var(--muted); font-size:15px; }
+.joao-layout { border-top:1px solid var(--line); padding-top:65px; }
+.joao-name { font-size:clamp(80px,8.5vw,140px); }
+.joao-manifesto { padding:35px; border:1px solid #ae586b; background:#27141c; transform:rotate(2deg); }
+.joao-manifesto>.micro { font-size:9px; color:var(--pink); }
+.joao-manifesto strong { display:block; font:500 clamp(110px,15vw,240px)/1 var(--editorial); letter-spacing:-.06em; margin:30px 0; }
+.joao-manifesto strong span { color:var(--red-light); }
+.joao-manifesto p { font:600 clamp(25px,3vw,45px)/1.15 var(--display); }
+.joao-manifesto p em { color:var(--pink); font-family:var(--editorial); }
+.joao-tech { display:flex; flex-wrap:wrap; list-style:none; gap:10px; padding:0; margin-top:25px; }
+.joao-tech li { font:10px var(--mono); border-bottom:1px solid var(--line); padding:8px 0; margin-right:8px; }
+@media(max-width:767px){.duo-intro h2{font-size:42px}.duo-intro>p{font-size:14px}.joao-layout{padding-top:40px}.joao-name{font-size:clamp(80px,23vw,115px)}.joao-manifesto{margin:0 8px;padding:25px}.joao-manifesto strong{font-size:150px}}
 </style>

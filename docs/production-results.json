@@ -1,5 +1,5 @@
 {
-  "base": "http://127.0.0.1:4180",
+  "base": "http://127.0.0.1:4190",
   "routes": [
     {
       "path": "/",
@@ -12,12 +12,32 @@
       "hydrated": true
     },
     {
+      "path": "/projetos/gymflow",
+      "staticContentWithoutJavaScript": true,
+      "hydrated": true
+    },
+    {
+      "path": "/projetos/ritmo-fitness",
+      "staticContentWithoutJavaScript": true,
+      "hydrated": true
+    },
+    {
       "path": "/projetos/cafe-aurora",
       "staticContentWithoutJavaScript": true,
       "hydrated": true
     },
     {
       "path": "/projetos/syntax-studio",
+      "staticContentWithoutJavaScript": true,
+      "hydrated": true
+    },
+    {
+      "path": "/projetos/pulse-lab",
+      "staticContentWithoutJavaScript": true,
+      "hydrated": true
+    },
+    {
+      "path": "/projetos/numa-skin",
       "staticContentWithoutJavaScript": true,
       "hydrated": true
     },

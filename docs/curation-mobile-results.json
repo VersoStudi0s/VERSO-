@@ -1,0 +1,49 @@
+{
+  "checks": [
+    {
+      "width": 320,
+      "flow": "service-to-local-budget",
+      "passed": true
+    },
+    {
+      "width": 320,
+      "flow": "all-lab-modes-by-touch",
+      "touchTargetsAtLeast44": true,
+      "passed": true
+    },
+    {
+      "width": 320,
+      "flow": "case-return-and-resize",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "flow": "service-to-local-budget",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "flow": "all-lab-modes-by-touch",
+      "touchTargetsAtLeast44": true,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "flow": "case-return-and-resize",
+      "passed": true
+    }
+  ],
+  "accessibility": [
+    {
+      "width": 320,
+      "state": "lab-open-and-budget-generated",
+      "violations": []
+    },
+    {
+      "width": 390,
+      "state": "lab-open-and-budget-generated",
+      "violations": []
+    }
+  ],
+  "errors": []
+}

@@ -21,6 +21,6 @@ export function pageMetadata(path: string) {
   return {
     title: "VERSO* — Sites, interfaces e design digital",
     description:
-      "Sites, interfaces e conteúdo visual para marcas e pequenos negócios. Conheça os serviços e projetos de Renata, estudante de Desenvolvimento de Sistemas no SENAI.",
+      "Sites, interfaces e conteúdo visual para marcas e pequenos negócios. Conheça Renata e João Gustavo, estudantes do SENAI que colaboram no desenvolvimento de sites e interfaces.",
   };
 }

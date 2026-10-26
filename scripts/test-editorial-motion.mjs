@@ -115,7 +115,7 @@ try {
   );
 } finally {
   await writeFile(
-    "docs/editorial-interaction-results.json",
+    "docs/curation-interaction-results.json",
     JSON.stringify({ checks }, null, 2),
   );
   await browser.close();

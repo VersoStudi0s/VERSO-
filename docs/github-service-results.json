@@ -1,0 +1,24 @@
+{
+  "passed": 19,
+  "tests": [
+    "Manual project without topics",
+    "Exclude {\"private\":true}",
+    "Exclude {\"fork\":true}",
+    "Exclude {\"archived\":true}",
+    "Exclude {\"disabled\":true}",
+    "Exclude {\"size\":0}",
+    "Exclude {\"full_name\":\"other/versary\"}",
+    "Exclude {\"name\":\"saep_api_notion\",\"full_name\":\"renataaap/saep_api_notion\",\"topics\":[\"portfolio-featured\"]}",
+    "Exclude {\"name\":\"exercise\",\"full_name\":\"renataaap/exercise\"}",
+    "Topic opts in public curated repository",
+    "Fresh cache avoids network and preserves snapshot",
+    "Expired cache reflects changed metadata",
+    "Offline preserves last good cache",
+    "Persistent exclusion reapplied on old cache",
+    "Link pagination follows next page",
+    "Untrusted pagination host blocked",
+    "Blocked storage uses memory",
+    "Rate limit cooldown",
+    "Concurrent calls deduplicated"
+  ]
+}

@@ -12,7 +12,9 @@ import AssetImage from "../components/AssetImage.vue";
       ><span class="section-number">[ESTUDO DE CASO]</span>
     </div>
     <div class="feature-copy">
-      <span class="micro">01 / 04 <span class="red">— CONCLUÍDO</span></span>
+      <span class="micro"
+        >01 / 05 <span class="red">— ESTUDO DE CASO</span></span
+      >
       <h2 id="featured-title">VERSARY</h2>
       <p class="feature-subtitle">Sistema de gestão industrial.</p>
       <div class="feature-tags">
@@ -21,8 +23,8 @@ import AssetImage from "../components/AssetImage.vue";
       <div class="feature-problem">
         <h3 class="micro">Desafios de Ideias</h3>
         <p>
-          Um projeto de gestão industrial desenvolvido para o Desafios de Ideias,
-          já finalizado.
+          Um projeto de gestão industrial desenvolvido para o Desafios de
+          Ideias, já finalizado.
         </p>
       </div>
       <RouterLink to="/projetos/versary" class="text-link"
@@ -31,8 +33,8 @@ import AssetImage from "../components/AssetImage.vue";
     </div>
     <AssetImage
       class="feature-image"
-      name="projeto-versary"
-      alt="Imagem ilustrativa de apresentação: notebook com painel de dados em vermelho e preto."
+      name="github-versary"
+      alt="Dashboard real do VERSARY com dados locais de demonstração."
     />
     <PhPlus
       class="feature-plus red"
@@ -41,7 +43,7 @@ import AssetImage from "../components/AssetImage.vue";
       aria-hidden="true"
     />
     <p class="feature-note micro">
-      Projeto concluído.<br />Imagem ilustrativa de apresentação.
+      Projeto original concluído.<br />Captura real com dados demonstrativos.
     </p>
   </section>
 </template>
@@ -49,154 +51,76 @@ import AssetImage from "../components/AssetImage.vue";
 .featured {
   overflow: hidden;
   min-height: 630px;
-  isolation: isolate;
-}
-.section-topline {
   position: relative;
-  z-index: 2;
 }
 .feature-copy {
-  position: relative;
-  z-index: 2;
-  width: 49%;
-  padding-top: 36px;
+  padding-top: 26px;
 }
 .feature-copy > .micro {
-  font-size: 8px;
+  font-size: 9px;
 }
 .feature-copy h2 {
   font: 700 clamp(54px, 5.3vw, 90px)/1 var(--display);
-  margin: 28px 0 13px;
+  margin: 24px 0 14px;
 }
 .feature-subtitle {
-  font-size: 13px;
+  font-size: 14px;
 }
 .feature-tags {
   display: flex;
   gap: 7px;
-  margin-top: 20px;
+  margin-top: 18px;
 }
 .feature-problem {
-  margin-top: 48px;
-  max-width: 255px;
+  margin-top: 26px;
+  max-width: 40ch;
 }
 .feature-problem h3 {
-  color: var(--white);
-  font-size: 9px;
+  font-size: 10px;
 }
 .feature-problem p {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--muted);
-  margin-top: 10px;
   line-height: 1.7;
+  margin-top: 10px;
 }
 .feature-copy > .text-link {
-  margin-top: 28px;
-  font-size: 9px;
+  margin-top: 24px;
+  font-size: 10px;
 }
 .feature-image {
-  position: absolute;
-  z-index: -2;
-  right: -16%;
-  top: 18%;
-  width: 90%;
-  height: 68%;
-}
-.feature-image :deep(img) {
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 60% 50%;
+  margin: 28px 0 50px;
 }
-.featured::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  background:
-    linear-gradient(90deg, #09090b 0%, #09090be3 23%, #09090b00 67%),
-    linear-gradient(0deg, #09090b 4%, #09090b00 35%);
+.feature-image :deep(img),
+img.feature-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 .feature-plus {
   position: absolute;
-  top: 22%;
-  left: 45%;
+  right: var(--gutter);
+  top: 95px;
 }
 .feature-note {
   position: absolute;
-  bottom: 30px;
+  bottom: 25px;
   right: var(--gutter);
-  font-size: 7px;
-  text-align: right;
+  font-size: 8px;
   color: var(--muted);
-}
-@media (max-width: 1023px) {
-  .featured {
-    min-height: 610px;
-  }
-  .feature-copy {
-    width: 52%;
-  }
-  .feature-copy h2 {
-    font-size: 62px;
-  }
-  .feature-image {
-    top: 22%;
-    right: -24%;
-    width: 100%;
-    height: 63%;
-  }
+  text-align: right;
 }
 @media (max-width: 767px) {
   .featured {
-    min-height: 700px;
-  }
-  .feature-copy {
-    width: 100%;
-    padding-top: 10px;
+    min-height: 0;
   }
   .feature-copy h2 {
     font-size: 68px;
-    margin-top: 22px;
   }
-  .feature-subtitle {
-    font-size: 12px;
-  }
-  .feature-image {
-    top: 210px;
-    width: 130%;
-    height: 300px;
-    right: -24%;
-  }
-  .featured::after {
-    background: linear-gradient(
-      0deg,
-      #09090b 0%,
-      #09090b 22%,
-      #09090b00 57%,
-      #09090b00 71%,
-      #09090b 90%
-    );
-  }
-  .feature-problem {
-    margin-top: 245px;
-    max-width: 250px;
-  }
-  .feature-problem p {
-    font-size: 11px;
-  }
-  .feature-plus {
-    top: 125px;
-    right: 30px;
-    left: auto;
-  }
-  .feature-note {
-    font-size: 6px;
-    bottom: 34px;
-  }
-  .feature-copy > .text-link {
-    margin-top: 20px;
-    font-size: 8px;
+  .feature-copy {
+    padding-top: 10px;
   }
 }
 </style>

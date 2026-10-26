@@ -1,3 +1,17 @@
+## Atualização: capturas reais do GitHub
+
+VERSARY, GymFlow e Ritmo Fitness usam capturas locais dos repositórios públicos autorizados. Consulte [GITHUB-INTEGRACAO.md](GITHUB-INTEGRACAO.md) para commits, origem, limitações de execução e formatos. Os SVGs de VERSARY da etapa anterior ficam preservados, mas não são exibidos como capturas reais.
+
+# Recursos atuais — curadoria de projetos
+
+A interface atual usa 12 SVGs originais em `public/images/studies/`, produzidos por `scripts/create-study-visuals.py`. São mockups vetoriais e pranchas de interface: cinco capas, cinco detalhes, um manifesto tipográfico e uma composição do LAB. Não contêm fotografias externas. Marcas, produtos, dados e valores são conceituais; os contextos reais de VERSARY/Syntax são distinguidos nos estudos.
+
+As fontes locais e ícones mantêm suas licenças descritas abaixo. `verso-social.jpg` é uma captura da homepage atual. O kit anterior está preservado como histórico, sem uso na interface atual.
+
+---
+
+Registro dos recursos anteriores:
+
 # Recursos, fontes e direitos
 
 ## Origem preservada

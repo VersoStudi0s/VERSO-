@@ -1,10 +1,10 @@
 import { chromium } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-import { writeFile, mkdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import assert from "node:assert/strict";
 
-await mkdir("docs/screenshots/editorial", { recursive: true });
+await mkdir("docs/screenshots/curation", { recursive: true });
 const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM_PATH || "/usr/bin/chromium",
   args: ["--no-sandbox"],
@@ -36,6 +36,13 @@ async function open(
     isMobile: width < 768,
   });
   const page = await context.newPage();
+  await page.route("https://api.github.com/**", async (route) =>
+    route.fulfill({
+      json: JSON.parse(
+        await readFile("scripts/fixtures/github-public.json", "utf8"),
+      ),
+    }),
+  );
   page.on("pageerror", (error) => report.errors.push(error.message));
   page.on("console", (message) => {
     if (message.type() === "error") report.errors.push(message.text());
@@ -100,11 +107,11 @@ try {
     report.breakpoints.push(bounds);
     if ([390, 768, 1440].includes(width)) {
       await page.screenshot({
-        path: `docs/screenshots/editorial/${width}-full.png`,
+        path: `docs/screenshots/curation/${width}-full.png`,
         fullPage: true,
       });
       await page.screenshot({
-        path: `docs/screenshots/editorial/${width}-hero.png`,
+        path: `docs/screenshots/curation/${width}-hero.png`,
       });
       const axe = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
@@ -151,7 +158,7 @@ try {
         }),
       );
       await page.screenshot({
-        path: "docs/screenshots/editorial/390-menu.png",
+        path: "docs/screenshots/curation/390-menu.png",
       });
       await page.keyboard.press("Escape");
       check(
@@ -183,11 +190,11 @@ try {
   }
   const page = await open();
   for (const [name, count] of [
-    ["Websites", 2],
-    ["UI/UX", 2],
+    ["Websites", 3],
+    ["UI/UX", 4],
     ["Identidade", 1],
-    ["Experimentos", 1],
-    ["Todos", 4],
+    ["Experimentos", 0],
+    ["Todos", 5],
   ]) {
     await page.getByRole("button", { name, exact: true }).click();
     check(
@@ -206,10 +213,10 @@ try {
         .isVisible()),
   );
   await page.screenshot({
-    path: "docs/screenshots/editorial/1440-case.png",
+    path: "docs/screenshots/curation/1440-case.png",
     fullPage: true,
   });
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 5; i++) {
     const current = page.url();
     await page.locator(".next-project").click();
     await page.waitForURL((url) => url.href !== current);
@@ -226,10 +233,10 @@ try {
   await page.getByRole("link", { name: "Voltar aos projetos" }).click();
   check("Case returns to gallery", new URL(page.url()).hash === "#projetos");
   for (const [id, name, count] of [
-    ["website", "Sites e Landing Pages", 2],
+    ["website", "Sites e Landing Pages", 3],
     ["social", "Design para Redes Sociais", 0],
-    ["uiux", "UX/UI e Protótipos", 2],
-    ["materiais", "Materiais Digitais para Negócios", 0],
+    ["uiux", "UX/UI e Protótipos", 4],
+    ["materiais", "Materiais Digitais para Negócios", 1],
   ]) {
     await page
       .getByRole("link", { name: `Ver exemplos de ${name}`, exact: true })
@@ -275,8 +282,8 @@ try {
     .click();
   await page.waitForURL("**/#projetos");
   check(
-    "Empty state returns to all four current projects",
-    (await page.locator(".project-card").count()) === 4,
+    "Empty state returns to all five selected projects",
+    (await page.locator(".project-card").count()) === 5,
   );
   await page
     .getByRole("link", {
@@ -397,12 +404,9 @@ try {
       .isDisabled(),
   );
   await page.locator(".lab-stage").scrollIntoViewIfNeeded();
-  await page.locator(".lab-object img").evaluate((img) => img.decode());
   check(
-    "Expanded lab loads its lazy image",
-    await page
-      .locator(".lab-object img")
-      .evaluate((img) => img.naturalWidth > 0),
+    "LAB renders nine geometric modules",
+    (await page.locator(".lab-object > span").count()) === 9,
   );
   const labAxe = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
@@ -441,10 +445,13 @@ try {
       .evaluate((el) => el === document.activeElement),
   );
   check(
-    "No cookies or storage created",
+    "No cookies, form persistence or unrelated storage",
     (await page.context().cookies()).length === 0 &&
       (await page.evaluate(
-        () => localStorage.length === 0 && sessionStorage.length === 0,
+        () =>
+          Object.keys(localStorage).every(
+            (key) => key === "verso:github:public:v1",
+          ) && sessionStorage.length === 0,
       )),
   );
   await page.close();
@@ -549,21 +556,21 @@ try {
   assert.equal(report.errors.length, 0, "No browser errors");
   assert.equal(report.requestsFailed.length, 0, "No asset loading errors");
   await writeFile(
-    "docs/editorial-browser-results.json",
+    "docs/curation-browser-results.json",
     JSON.stringify(report, null, 2),
   );
   const violations = report.accessibility.flatMap((audit) => audit.violations);
   assert.equal(
     violations.length,
     0,
-    `Axe violations found; see docs/editorial-browser-results.json: ${violations.map((v) => v.id).join(", ")}`,
+    `Axe violations found; see docs/curation-browser-results.json: ${violations.map((v) => v.id).join(", ")}`,
   );
   console.log(
     `Passed ${report.interactions.length} interaction checks, ${report.breakpoints.length} widths, ${report.accessibility.length} axe audits. No browser errors.`,
   );
 } finally {
   await writeFile(
-    "docs/editorial-browser-results.json",
+    "docs/curation-browser-results.json",
     JSON.stringify(report, null, 2),
   );
   if (configuredServer?.pid) {
