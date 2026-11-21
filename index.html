@@ -13,6 +13,24 @@
     <meta property="og:image" content="/images/verso-social.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/png" href="/favicon.png" />
+    <script>
+  function loadScript(a) {
+    var b = document.getElementsByTagName("head")[0],
+        c = document.createElement("script");
+
+    c.type = "text/javascript";
+    c.src = "https://tracker.metricool.com/resources/be.js";
+    c.onreadystatechange = a;
+    c.onload = a;
+    b.appendChild(c);
+  }
+
+  loadScript(function() {
+    beTracker.t({
+      hash: "357836f408df9b32ea7977eb1eac66d4"
+    });
+  });
+</script>
   </head>
   <body>
     <div id="app"></div>
