@@ -32,14 +32,11 @@ const team = [
     </div>
     <ul class="team-grid" aria-label="Equipe VERSO*">
       <li
-        v-for="(person, index) in team"
+        v-for="person in team"
         :key="person.name"
         class="team-card"
         data-reveal
       >
-        <span class="micro team-index" aria-hidden="true"
-          >0{{ index + 1 }} / 04</span
-        >
         <strong class="team-mark" aria-hidden="true"
           >{{ person.mark }}<span>*</span></strong
         >
@@ -103,15 +100,11 @@ const team = [
 .team-card:hover {
   transform: rotate(0deg) translateY(-4px);
 }
-.team-index {
-  font-size: 9px;
-  color: var(--pink);
-}
 .team-mark {
   display: block;
   font: 500 clamp(80px, 8vw, 140px) / 1 var(--editorial);
   letter-spacing: -0.06em;
-  margin: 26px 0 18px;
+  margin: 0 0 18px;
 }
 .team-mark span {
   color: var(--red-light);
@@ -164,7 +157,7 @@ const team = [
   }
   .team-mark {
     font-size: 72px;
-    margin: 16px 0 12px;
+    margin: 0 0 12px;
   }
   .team-name {
     font-size: 22px;

@@ -234,7 +234,7 @@ try {
   check("Case returns to gallery", new URL(page.url()).hash === "#projetos");
   for (const [id, name, count] of [
     ["website", "Sites e Landing Pages", 3],
-    ["apps", "Apps e Sistemas sob Medida", 0],
+    ["apps", "Apps e Sistemas sob Medida", 2],
     ["uiux", "UX/UI e Protótipos", 4],
     ["identidade", "Identidade Visual e Materiais", 1],
   ]) {
@@ -271,20 +271,6 @@ try {
       (await page.locator("#contact-type").inputValue()) === id,
     );
   }
-  await page
-    .getByRole("link", {
-      name: "Ver exemplos de Apps e Sistemas sob Medida",
-      exact: true,
-    })
-    .click();
-  await page
-    .getByRole("button", { name: "Ver todos os projetos", exact: true })
-    .click();
-  await page.waitForURL("**/#projetos");
-  check(
-    "Empty state returns to all five selected projects",
-    (await page.locator(".project-card").count()) === 5,
-  );
   await page
     .getByRole("link", {
       name: "Pedir orçamento de Sites e Landing Pages",
@@ -375,8 +361,13 @@ try {
     "Editing invalidates the previous draft",
     (await page.locator("#budget-message").count()) === 0,
   );
-  await page.getByRole("button", { name: "Conhecer minha trajetória" }).click();
-  check("Trajectory expands", await page.locator("#trajectory").isVisible());
+  const aboutText = await page.locator("#sobre").innerText();
+  check(
+    "Team section lists the four members",
+    ["Renata", "João Gustavo", "David", "Isaque"].every((name) =>
+      aboutText.includes(name),
+    ),
+  );
   await page
     .getByRole("button", { name: "Desenvolvendo", exact: true })
     .click();

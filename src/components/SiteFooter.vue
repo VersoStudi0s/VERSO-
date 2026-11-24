@@ -9,8 +9,8 @@ import { site, navigation } from "../data/site";
         >VERSO<span>*</span></RouterLink
       >
       <p class="eyebrow">
-        Portfólio autoral · Estúdio independente<br />Design digital e
-        desenvolvimento web.
+        Studio de design e desenvolvimento.<br />Sites, apps e sistemas sob
+        medida.
       </p>
       <RouterLink to="/#inicio" class="back-top text-link"
         >De volta ao início <PhArrowUp
@@ -91,7 +91,20 @@ import { site, navigation } from "../data/site";
 }
 .social-links a {
   display: flex;
+  align-items: center;
   gap: 10px;
+  min-height: 24px;
+}
+.footer-bottom a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+}
+@media (pointer: coarse) {
+  .social-links a,
+  .footer-bottom a {
+    min-height: 44px;
+  }
 }
 @media (max-width: 767px) {
   .site-footer {

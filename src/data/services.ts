@@ -27,7 +27,7 @@ export const services = [
       "Painel administrativo",
     ],
     detail: "Vue.js, React, Next.js e banco de dados, conforme o projeto.",
-    projectSlugs: [],
+    projectSlugs: ["versary", "gymflow"],
   },
   {
     id: "uiux",

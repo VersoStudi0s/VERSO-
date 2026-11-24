@@ -192,7 +192,7 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
 }
 .lab-stage {
   position: absolute;
-  right: -3%;
+  right: 0;
   top: 20px;
   width: 63%;
   height: 95%;

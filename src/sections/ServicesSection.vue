@@ -11,7 +11,7 @@ const active = ref<string>(services[0].id);
     aria-labelledby="services-title"
   >
     <div class="section-topline">
-      <span class="eyebrow">[02] / O que posso criar</span
+      <span class="eyebrow">[02] / O que criamos</span
       ><span class="micro">Da ideia à experiência.</span>
     </div>
     <div class="services-heading" data-reveal>

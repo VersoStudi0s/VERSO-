@@ -30,10 +30,10 @@ const { surface, move, reset } = usePointerDepth();
         >
       </h1>
       <div class="hero-description">
-        <p>Design, desenvolvimento e soluções criativas com propósito.</p>
+        <p>Sites, apps e sistemas sob medida para o seu negócio.</p>
         <span class="hero-intro"
-          >Interfaces claras. Marcas com identidade.<br />Projetos que conectam
-          forma e função.</span
+          >Você vê um protótipo grátis antes de fechar.<br />Design e código
+          feitos por uma equipe de quatro.</span
         >
         <div class="hero-actions">
           <RouterLink to="/#projetos" class="btn btn-primary"
