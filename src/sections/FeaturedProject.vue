@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { PhArrowUpRight, PhPlus } from "@phosphor-icons/vue";
 import AssetImage from "../components/AssetImage.vue";
 </script>
 <template>
@@ -9,14 +8,14 @@ import AssetImage from "../components/AssetImage.vue";
   >
     <div class="section-topline">
       <span class="eyebrow">Por dentro de uma ideia</span
-      ><span class="section-number">[ESTUDO DE CASO]</span>
+      ><span class="section-number">Estudo de caso</span>
     </div>
     <div class="feature-copy">
       <span class="micro"
-        >01 / 05 <span class="red">— ESTUDO DE CASO</span></span
+        ><span class="red">Projeto concluído</span></span
       >
       <h2 id="featured-title">VERSARY</h2>
-      <p class="feature-subtitle">Sistema de gestão industrial.</p>
+      <p class="feature-subtitle">Sistema de gestão industrial</p>
       <div class="feature-tags">
         <span class="tag">UI/UX</span><span class="tag">Dashboard</span>
       </div>
@@ -28,19 +27,12 @@ import AssetImage from "../components/AssetImage.vue";
         </p>
       </div>
       <RouterLink to="/projetos/versary" class="text-link"
-        >Conhecer o projeto <PhArrowUpRight
-      /></RouterLink>
+        >Conhecer o projeto</RouterLink>
     </div>
     <AssetImage
       class="feature-image"
       name="github-versary"
       alt="Dashboard real do VERSARY com dados locais de demonstração."
-    />
-    <PhPlus
-      class="feature-plus red"
-      :size="32"
-      weight="thin"
-      aria-hidden="true"
     />
     <p class="feature-note micro">
       Projeto original concluído.<br />Captura real com dados demonstrativos.
@@ -57,10 +49,10 @@ import AssetImage from "../components/AssetImage.vue";
   padding-top: 26px;
 }
 .feature-copy > .micro {
-  font-size: 9px;
+  font-size: 11px;
 }
 .feature-copy h2 {
-  font: 700 clamp(54px, 5.3vw, 90px)/1 var(--display);
+  font: 600 clamp(54px, 5.3vw, 90px)/1 var(--display);
   margin: 24px 0 14px;
 }
 .feature-subtitle {
@@ -76,7 +68,7 @@ import AssetImage from "../components/AssetImage.vue";
   max-width: 40ch;
 }
 .feature-problem h3 {
-  font-size: 10px;
+  font-size: 11px;
 }
 .feature-problem p {
   font-size: 13px;
@@ -86,7 +78,7 @@ import AssetImage from "../components/AssetImage.vue";
 }
 .feature-copy > .text-link {
   margin-top: 24px;
-  font-size: 10px;
+  font-size: 11px;
 }
 .feature-image {
   display: block;
@@ -108,7 +100,7 @@ img.feature-image {
   position: absolute;
   bottom: 25px;
   right: var(--gutter);
-  font-size: 8px;
+  font-size: 11px;
   color: var(--muted);
   text-align: right;
 }

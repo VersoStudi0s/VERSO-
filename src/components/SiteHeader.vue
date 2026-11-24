@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onBeforeUnmount, nextTick } from "vue";
 import { useRoute } from "vue-router";
-import { PhList, PhX, PhArrowUpRight } from "@phosphor-icons/vue";
+import { PhList, PhX } from "@phosphor-icons/vue";
 import { navigation } from "../data/site";
 const route = useRoute();
 const open = ref(false),
@@ -125,12 +125,11 @@ onBeforeUnmount(() => {
           route.path === '/' && active === item.id ? 'location' : undefined
         "
         :class="{ active: route.path === '/' && active === item.id }"
-        ><span>[{{ item.number }}]</span> {{ item.label }}</RouterLink
+        >{{ item.label }}</RouterLink
       >
     </nav>
     <RouterLink to="/#contato" class="header-budget text-link" :inert="open"
-      >Pedir orçamento <PhArrowUpRight aria-hidden="true"
-    /></RouterLink>
+      >Pedir orçamento</RouterLink>
     <button
       ref="menuButton"
       class="menu-toggle"
@@ -165,9 +164,8 @@ onBeforeUnmount(() => {
             route.path === '/' && active === item.id ? 'location' : undefined
           "
           @click="open = false"
-          ><span class="micro">[{{ item.number }}]</span>{{ item.label
-          }}<PhArrowUpRight weight="light"
-        /></RouterLink>
+          >{{ item.label
+          }}</RouterLink>
         <p class="micro">
           Criatividade é o ponto de partida.<br />O próximo passo é construir.
         </p>
@@ -216,15 +214,14 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: baseline;
   gap: 5px;
-  font: 10px var(--mono);
+  font: 11px var(--mono);
   color: var(--muted);
-  text-transform: uppercase;
   padding: 18px 0;
   white-space: nowrap;
   transition: color 0.25s;
 }
 .desktop-nav a > span {
-  font-size: 8px;
+  font-size: 11px;
   color: var(--subtle);
 }
 .desktop-nav a::after {
@@ -248,7 +245,7 @@ onBeforeUnmount(() => {
   transform: scaleX(1);
 }
 .header-budget {
-  font-size: 9px;
+  font-size: 11px;
   min-height: 44px;
   gap: 9px;
   white-space: nowrap;
@@ -265,8 +262,7 @@ onBeforeUnmount(() => {
   margin-right: -10px;
 }
 .menu-label {
-  font: 8px var(--mono);
-  text-transform: uppercase;
+  font: 11px var(--mono);
 }
 .site-header.scrolled,
 .site-header.is-open {
@@ -290,7 +286,7 @@ onBeforeUnmount(() => {
   inset: 95px 23px 23px;
   padding: 45px max(35px, 8vw);
   overflow: auto;
-  background: linear-gradient(120deg, #21151b, #0b090c 70%);
+  background: #160e12;
   border: 1px solid var(--line);
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -311,7 +307,6 @@ onBeforeUnmount(() => {
   min-height: 75px;
   padding: 15px 0;
   font: 600 clamp(35px, 4.2vw, 70px) / 1.1 var(--display);
-  text-transform: uppercase;
   transition:
     color 0.3s,
     padding-left 0.3s;
@@ -327,7 +322,7 @@ onBeforeUnmount(() => {
   color: var(--red);
 }
 .mobile-menu > a > .micro {
-  font-size: 10px;
+  font-size: 11px;
 }
 .mobile-menu > p {
   grid-column: 1/-1;
@@ -387,7 +382,7 @@ onBeforeUnmount(() => {
     font-size: 36px;
   }
   .header-budget {
-    font-size: 8px;
+    font-size: 11px;
     gap: 6px;
   }
   .header-budget svg {
@@ -421,11 +416,16 @@ onBeforeUnmount(() => {
   }
   .mobile-menu > .eyebrow {
     margin-bottom: 14px;
-    font-size: 8px;
+    font-size: 11px;
   }
   .mobile-menu > p {
     margin-top: 22px;
-    font-size: 8px;
+    font-size: 11px;
+  }
+}
+@media (max-width: 359px) {
+  .header-budget {
+    display: none;
   }
 }
 </style>

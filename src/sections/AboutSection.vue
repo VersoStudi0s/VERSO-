@@ -13,12 +13,12 @@ const team = [
     aria-labelledby="about-title"
   >
     <div class="section-topline">
-      <span class="eyebrow">Sobre nós / [05]</span
+      <span class="eyebrow">Sobre nós</span
       ><span class="micro">Design + código + curiosidade</span>
     </div>
     <div class="team-intro">
       <h2 id="about-title">
-        Quatro perspectivas.<br /><em>Uma criação em conjunto.</em>
+        Quatro perspectivas<br /><em>Uma criação em conjunto</em>
       </h2>
       <p>
         Somos Renata, João Gustavo, David e Isaque, estudantes de
@@ -44,7 +44,7 @@ const team = [
       </li>
     </ul>
     <p class="team-note micro">
-      PENSAR A IDEIA. PLANEJAR A EXPERIÊNCIA. <em>CONSTRUIR JUNTOS.</em>
+      Pensar a ideia, planejar a experiência, <em>construir juntos</em>
     </p>
   </section>
 </template>
@@ -88,7 +88,7 @@ const team = [
   padding: 28px 24px 30px;
   border: 1px solid #ae586b;
   background: #27141c;
-  transition: transform var(--fast) var(--ease);
+  transition: border-color var(--fast) var(--ease);
 }
 .team-card:nth-child(odd) {
   transform: rotate(-1.5deg);
@@ -98,7 +98,7 @@ const team = [
   background: #1c1117;
 }
 .team-card:hover {
-  transform: rotate(0deg) translateY(-4px);
+  border-color: var(--red-light);
 }
 .team-mark {
   display: block;
@@ -111,14 +111,13 @@ const team = [
 }
 .team-name {
   font: 600 clamp(24px, 2.2vw, 34px) / 1.05 var(--display);
-  text-transform: uppercase;
   letter-spacing: 0.01em;
 }
 .team-note {
   margin-top: 45px;
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.02em;
 }
 .team-note em {
   font-style: normal;

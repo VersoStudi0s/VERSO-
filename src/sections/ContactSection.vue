@@ -306,7 +306,7 @@ async function submit() {
     </div>
     <div class="contact-baseline" aria-hidden="true">
       <PhArrowUpRight :size="20" /><span></span
-      ><span class="micro">O PRÓXIMO VERSO É SEU.</span>
+      ><span class="micro">O próximo verso é seu</span>
     </div>
   </section>
 </template>
@@ -319,8 +319,7 @@ async function submit() {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, #4b1a264d, transparent 65%);
-  opacity: 0.2;
+  background: none;
   pointer-events: none;
   z-index: -1;
 }
@@ -329,13 +328,13 @@ async function submit() {
 }
 .contact .section-number {
   margin-left: 14px;
-  font-size: 9px;
+  font-size: 11px;
 }
 .contact-label {
   border: 1px solid #63242f;
   border-radius: 20px;
   padding: 8px 10px;
-  font-size: 9px;
+  font-size: 11px;
   color: var(--red-light);
   white-space: nowrap;
 }
@@ -348,10 +347,9 @@ async function submit() {
 .contact h2 {
   font: 600 clamp(64px, 6.7vw, 112px) / 0.9 var(--display);
   letter-spacing: -0.02em;
-  text-transform: uppercase;
 }
 .contact h2 em {
-  font: 700 italic 1.12em/0.9 var(--editorial);
+  font: 600 italic 1.12em/0.9 var(--editorial);
   color: var(--red);
   text-transform: none;
 }
@@ -502,7 +500,7 @@ async function submit() {
   flex: 1;
 }
 .contact-baseline .micro {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--muted);
 }
 .honeypot {
@@ -535,7 +533,7 @@ async function submit() {
 }
 @media (max-width: 767px) {
   .contact::before {
-    background: linear-gradient(180deg, #4b1a264d, transparent 60%);
+    background: none;
   }
   .contact-layout {
     grid-template-columns: 1fr;
@@ -549,7 +547,7 @@ async function submit() {
     gap: 10px;
   }
   .contact-label {
-    font-size: 8px;
+    font-size: 11px;
   }
   .contact-intro {
     font-size: 14px;
@@ -577,7 +575,7 @@ async function submit() {
     margin-top: 30px;
   }
   .contact-baseline .micro {
-    font-size: 7px;
+    font-size: 11px;
   }
 }
 </style>

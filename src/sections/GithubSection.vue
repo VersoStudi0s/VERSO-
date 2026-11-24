@@ -112,8 +112,8 @@ const date = (value: string | number, withTime = false) =>
         }}</span>
         <div class="repo-main">
           <span class="micro"
-            >{{ repo.language || "Linguagem não informada" }} / REPOSITÓRIO
-            PÚBLICO</span
+            >{{ repo.language || "Linguagem não informada" }} / repositório
+            público</span
           >
           <h3>
             <a :href="repo.url" target="_blank" rel="noopener noreferrer"
@@ -264,7 +264,7 @@ const date = (value: string | number, withTime = false) =>
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  font: 10px var(--mono);
+  font: 11px var(--mono);
   color: var(--pink);
   margin-top: 12px;
 }
@@ -273,7 +273,7 @@ const date = (value: string | number, withTime = false) =>
   flex-direction: column;
   align-items: start;
   gap: 15px;
-  font: 10px/1.7 var(--mono);
+  font: 11px/1.7 var(--mono);
   color: var(--muted);
 }
 .curation-note {

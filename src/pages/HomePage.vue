@@ -10,8 +10,6 @@ import AboutSection from "../sections/AboutSection.vue";
 import LabSection from "../sections/LabSection.vue";
 import SkillsSection from "../sections/SkillsSection.vue";
 import ContactSection from "../sections/ContactSection.vue";
-import { useReveal } from "../composables/useReveal";
-useReveal();
 </script>
 <template>
   <HeroSection />
@@ -46,9 +44,8 @@ useReveal();
   align-items: center;
   gap: 22px;
   padding: 26px var(--gutter);
-  font: 10px var(--mono);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font: 11px var(--mono);
+  letter-spacing: 0.02em;
   color: var(--muted);
 }
 .studio-strip svg {
@@ -70,7 +67,7 @@ useReveal();
   .studio-strip {
     padding: 23px 12px;
     gap: 14px;
-    font-size: 8px;
+    font-size: 11px;
   }
   .studio-strip > span:last-child,
   .studio-strip > svg:last-of-type {

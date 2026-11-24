@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import { PhArrowUpRight, PhArrowRight } from "@phosphor-icons/vue";
+import { PhArrowRight } from "@phosphor-icons/vue";
 import { useRoute, useRouter } from "vue-router";
 import { findService } from "../data/services";
 import { selectedProjects as projects, categories } from "../data/projects";
@@ -104,7 +104,7 @@ const filtered = computed(() =>
       <h3>Exemplos ainda não disponíveis.</h3>
       <p>Veja os projetos atuais ou conte o que você precisa criar.</p>
       <button class="btn btn-outline" @click="chooseCategory('Todos')">
-        Ver todos os projetos <PhArrowRight />
+        Ver todos os projetos
       </button>
     </div>
     <div
@@ -127,7 +127,7 @@ const filtered = computed(() =>
         <div class="project-visual media-reveal">
           <AssetImage :name="project.image" :alt="project.alt" />
           <div class="project-card-top">
-            <span>{{ project.number }} /</span><PhArrowUpRight :size="19" />
+            <span>{{ project.number }} /</span>
           </div>
         </div>
         <div class="project-info">
@@ -138,7 +138,7 @@ const filtered = computed(() =>
           <p v-if="project.summaryRole" class="project-role">
             <span>Papel /</span> {{ project.summaryRole }}
           </p>
-          <span class="project-open">Abrir estudo <PhArrowUpRight /></span>
+          <span class="project-open">Abrir estudo</span>
           <div class="project-tags">
             <span
               v-for="tag in project.tags.slice(0, 2)"
@@ -183,7 +183,6 @@ const filtered = computed(() =>
 }
 .projects-heading {
   font: 600 clamp(65px, 8vw, 135px) / 0.8 var(--display);
-  text-transform: uppercase;
   letter-spacing: -0.04em;
   margin: 45px 0 25px;
 }
@@ -223,8 +222,7 @@ const filtered = computed(() =>
   gap: 8px 24px;
 }
 .filters button {
-  font: 10px var(--mono);
-  text-transform: uppercase;
+  font: 11px var(--mono);
   color: var(--muted);
   border: 0;
   border-bottom: 1px solid transparent;
@@ -297,7 +295,7 @@ const filtered = computed(() =>
 }
 .project-card:hover :deep(img),
 .project-card:focus-visible :deep(img) {
-  transform: scale(1.025);
+  filter: brightness(1.06);
 }
 .project-card-top {
   position: absolute;
@@ -332,9 +330,9 @@ const filtered = computed(() =>
   position: relative;
 }
 .project-status {
-  font: 9px/1.6 var(--mono);
+  font: 11px/1.6 var(--mono);
   color: var(--pink);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.02em;
 }
 .project-info h3 {
   font: 600 clamp(43px, 4.8vw, 80px) / 1 var(--display);
@@ -369,8 +367,7 @@ const filtered = computed(() =>
   display: flex;
   align-items: center;
   gap: 12px;
-  font: 10px var(--mono);
-  text-transform: uppercase;
+  font: 11px var(--mono);
   margin-top: 20px;
   color: var(--red-light);
   transform: translateY(4px);
@@ -393,7 +390,7 @@ const filtered = computed(() =>
   margin-top: 18px;
 }
 .project-tags .tag {
-  font-size: 8px;
+  font-size: 11px;
   border: 0;
   padding: 0 8px 0 0;
   border-radius: 0;
@@ -478,7 +475,7 @@ const filtered = computed(() =>
     gap: 0 18px;
   }
   .filters button {
-    font-size: 9px;
+    font-size: 11px;
   }
   .project-grid {
     grid-template-columns: 1fr;

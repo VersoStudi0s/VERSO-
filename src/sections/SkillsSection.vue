@@ -26,7 +26,7 @@ const visible = computed(() =>
   >
     <div class="section-topline">
       <h2 id="skills-title" class="eyebrow">Nosso repertório</h2>
-      <span class="section-number">[05 / EM FORMAÇÃO]</span>
+      <span class="section-number">Em formação</span>
     </div>
     <div class="skill-tabs" role="group" aria-label="Etapa de aprendizagem">
       <button
@@ -42,7 +42,7 @@ const visible = computed(() =>
     <div class="skill-list" aria-live="polite">
       <span v-for="skill in visible" :key="skill.name">{{ skill.name }}</span>
     </div>
-    <p class="micro">Aprender. Experimentar. Evoluir.</p>
+    <p class="micro">Aprender, experimentar, evoluir</p>
   </section>
 </template>
 <style scoped>
@@ -64,7 +64,7 @@ const visible = computed(() =>
 .skills .section-number {
   display: block;
   margin-top: 14px;
-  font-size: 8px;
+  font-size: 11px;
 }
 .skills > p {
   grid-column: 2;
@@ -109,7 +109,7 @@ const visible = computed(() =>
   background: #121214;
 }
 .skills > p {
-  font-size: 9px;
+  font-size: 11px;
   margin-top: 17px;
 }
 @media (max-width: 767px) {

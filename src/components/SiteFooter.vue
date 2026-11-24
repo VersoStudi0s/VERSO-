@@ -36,7 +36,7 @@ import { site, navigation } from "../data/site";
     </div>
     <div class="footer-bottom micro">
       <span>© {{ new Date().getFullYear() }} VERSO*. Feito com intenção.</span
-      ><span>Renata, João Gustavo, David e Isaque · Desenvolvimento e design</span
+      ><span>Renata, João Gustavo, David e Isaque</span
       ><RouterLink to="/privacidade">Privacidade & créditos</RouterLink>
     </div>
   </footer>
@@ -58,7 +58,7 @@ import { site, navigation } from "../data/site";
   color: var(--red);
 }
 .footer-main p {
-  font-size: 9px;
+  font-size: 11px;
 }
 .back-top {
   margin-left: auto;
@@ -67,8 +67,7 @@ import { site, navigation } from "../data/site";
   display: flex;
   gap: 30px;
   margin-top: 35px;
-  font: 10px var(--mono);
-  text-transform: uppercase;
+  font: 11px var(--mono);
 }
 .site-footer nav a:hover,
 .footer-bottom a:hover {
@@ -81,7 +80,7 @@ import { site, navigation } from "../data/site";
   margin-top: 32px;
   padding-top: 24px;
   border-top: 1px solid var(--line-soft);
-  font-size: 8px;
+  font-size: 11px;
 }
 .social-links {
   display: flex;
@@ -115,17 +114,17 @@ import { site, navigation } from "../data/site";
     gap: 20px;
   }
   .footer-main p {
-    font-size: 8px;
+    font-size: 11px;
   }
   .back-top {
     margin: 0;
     width: 100%;
-    font-size: 9px;
+    font-size: 11px;
   }
   .site-footer nav {
     gap: 19px;
     flex-wrap: wrap;
-    font-size: 9px;
+    font-size: 11px;
   }
   .footer-bottom {
     flex-direction: column;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { PhArrowUpRight, PhArrowRight, PhAsterisk } from "@phosphor-icons/vue";
+import { PhAsterisk } from "@phosphor-icons/vue";
 import { services } from "../data/services";
 const active = ref<string>(services[0].id);
 </script>
@@ -11,8 +11,8 @@ const active = ref<string>(services[0].id);
     aria-labelledby="services-title"
   >
     <div class="section-topline">
-      <span class="eyebrow">[02] / O que criamos</span
-      ><span class="micro">Da ideia à experiência.</span>
+      <span class="eyebrow">O que criamos</span
+      ><span class="micro">Da ideia à experiência</span>
     </div>
     <div class="services-heading" data-reveal>
       <h2 id="services-title">Serviços<br /><em>criativos.</em></h2>
@@ -56,7 +56,7 @@ const active = ref<string>(services[0].id);
             }"
             class="text-link"
             :aria-label="`Ver exemplos de ${service.title}`"
-            >Ver exemplos <PhArrowRight /></RouterLink
+            >Ver exemplos</RouterLink
           ><RouterLink
             :to="{
               path: '/',
@@ -65,16 +65,14 @@ const active = ref<string>(services[0].id);
             }"
             class="service-budget text-link"
             :aria-label="`Pedir orçamento de ${service.title}`"
-            >Pedir orçamento <PhArrowUpRight
-          /></RouterLink>
+            >Pedir orçamento</RouterLink>
         </div>
       </article>
     </div>
     <p class="services-note micro">
       Projetos com escopo, intenção e personalidade.
       <RouterLink to="/#processo"
-        >Conheça o processo <PhArrowUpRight aria-hidden="true"
-      /></RouterLink>
+        >Conheça o processo</RouterLink>
     </p>
   </section>
 </template>
@@ -92,7 +90,6 @@ const active = ref<string>(services[0].id);
 }
 .services-heading h2 {
   font: 600 clamp(65px, 7.7vw, 130px) / 0.8 var(--display);
-  text-transform: uppercase;
   letter-spacing: -0.035em;
 }
 .services-heading h2 em {
@@ -213,7 +210,7 @@ const active = ref<string>(services[0].id);
 }
 .service-actions .text-link {
   min-height: 44px;
-  font-size: 10px;
+  font-size: 11px;
 }
 .service-budget {
   color: var(--pink);
@@ -228,7 +225,7 @@ const active = ref<string>(services[0].id);
   align-items: center;
   justify-content: space-between;
   gap: 15px;
-  font-size: 9px;
+  font-size: 11px;
 }
 .services-note a {
   display: flex;
@@ -285,14 +282,14 @@ const active = ref<string>(services[0].id);
     grid-column: 2;
   }
   .service-details ul {
-    font-size: 10px;
+    font-size: 11px;
   }
   .service-actions {
     grid-column: 1/-1;
     flex-wrap: wrap;
   }
   .service-actions .text-link {
-    font-size: 9px;
+    font-size: 11px;
     gap: 8px;
   }
   .service-active h3 {

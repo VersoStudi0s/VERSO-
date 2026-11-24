@@ -2,7 +2,7 @@
 import { useGithub } from "../composables/useGithub";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import { PhArrowLeft, PhArrowUpRight, PhPlus } from "@phosphor-icons/vue";
+import { PhArrowLeft, PhArrowUpRight } from "@phosphor-icons/vue";
 import { projects, selectedProjects } from "../data/projects";
 import type { Project } from "../types/project";
 import AssetImage from "../components/AssetImage.vue";
@@ -55,8 +55,7 @@ const nextProject = computed(
         ><PhArrowLeft /> Voltar aos projetos</RouterLink
       ><span class="micro"
         >{{ project.number }} /
-        {{ String(selectedProjects.length).padStart(2, "0") }} — ESTUDO DE
-        CASO</span
+        {{ String(selectedProjects.length).padStart(2, "0") }}</span
       >
     </div>
     <div class="case-heading">
@@ -81,12 +80,6 @@ const nextProject = computed(
           metadados do GitHub
         </p>
       </div>
-      <PhPlus
-        class="case-plus red"
-        :size="55"
-        weight="thin"
-        aria-hidden="true"
-      />
     </div>
     <figure class="case-cover">
       <AssetImage :name="project.image" :alt="project.alt" :eager="true" />
@@ -119,10 +112,10 @@ const nextProject = computed(
       <aside class="case-aside">
         <span class="eyebrow">Um olhar sobre<br />o processo.</span>
         <p>{{ project.description }}</p>
-        <span class="micro">ESTADO DO PROJETO</span>
+        <span class="micro">Estado do projeto</span>
         <p>{{ project.status }}</p>
         <template v-if="project.technologies">
-          <span class="micro">TECNOLOGIAS</span>
+          <span class="micro">Tecnologias</span>
           <p>{{ project.technologies }}</p>
         </template>
         <p v-if="project.documentationNote">{{ project.documentationNote }}</p>
@@ -130,21 +123,21 @@ const nextProject = computed(
       <div class="case-body prose">
         <section>
           <span class="micro red"
-            >{{ sectionNumber("context") }} / CONTEXTO</span
+            >{{ sectionNumber("context") }} / Contexto</span
           >
           <h2>O ponto de partida</h2>
           <p>{{ project.context }}</p>
         </section>
         <section v-if="project.problem">
           <span class="micro red"
-            >{{ sectionNumber("problem") }} / PROBLEMA</span
+            >{{ sectionNumber("problem") }} / Problema</span
           >
           <h2>Uma pergunta para explorar</h2>
           <p>{{ project.problem }}</p>
         </section>
         <section v-if="project.objectives?.length">
           <span class="micro red"
-            >{{ sectionNumber("objectives") }} / OBJETIVOS</span
+            >{{ sectionNumber("objectives") }} / Objetivos</span
           >
           <h2>O que buscamos construir</h2>
           <ul>
@@ -153,14 +146,14 @@ const nextProject = computed(
         </section>
         <section v-if="project.participation">
           <span class="micro red"
-            >{{ sectionNumber("participation") }} / PARTICIPAÇÃO</span
+            >{{ sectionNumber("participation") }} / Participação</span
           >
           <h2>Papel no projeto</h2>
           <p>{{ project.participation }}</p>
         </section>
         <section v-if="project.process?.length">
           <span class="micro red"
-            >{{ sectionNumber("process") }} / PROCESSO</span
+            >{{ sectionNumber("process") }} / Processo</span
           >
           <h2>Processo de desenvolvimento</h2>
           <ol>
@@ -169,14 +162,14 @@ const nextProject = computed(
         </section>
         <section v-if="project.solution">
           <span class="micro red"
-            >{{ sectionNumber("solution") }} / SOLUÇÃO</span
+            >{{ sectionNumber("solution") }} / Solução</span
           >
           <h2>A solução</h2>
           <p>{{ project.solution }}</p>
         </section>
         <section>
           <span class="micro red"
-            >{{ sectionNumber("results") }} / RESULTADOS</span
+            >{{ sectionNumber("results") }} / Resultados</span
           >
           <h2>O que está documentado</h2>
           <p>{{ project.results }}</p>
@@ -184,12 +177,11 @@ const nextProject = computed(
             v-if="['lab-movimento', 'pulse-lab'].includes(project.slug)"
             to="/#lab"
             class="btn btn-outline case-lab"
-            >Experimentar no LAB <PhArrowUpRight
-          /></RouterLink>
+            >Experimentar no LAB</RouterLink>
         </section>
         <section v-if="project.learning">
           <span class="micro red"
-            >{{ sectionNumber("learning") }} / APRENDIZADOS</span
+            >{{ sectionNumber("learning") }} / Aprendizados</span
           >
           <h2>O próximo movimento</h2>
           <p>{{ project.learning }}</p>
@@ -198,7 +190,7 @@ const nextProject = computed(
     </div>
     <RouterLink :to="`/projetos/${nextProject.slug}`" class="next-project"
       ><div>
-        <span class="micro">PRÓXIMO PROJETO</span
+        <span class="micro">Próximo projeto</span
         ><span class="next-title">{{ nextProject.name }}</span>
       </div>
       <PhArrowUpRight weight="thin" :size="60"
@@ -215,7 +207,7 @@ const nextProject = computed(
   align-items: center;
 }
 .project-page > .section-topline .micro {
-  font-size: 8px;
+  font-size: 11px;
 }
 .case-heading {
   margin: 65px 0 40px;
@@ -225,7 +217,7 @@ const nextProject = computed(
   color: var(--red-light);
 }
 .case-heading h1 {
-  font: 700 clamp(65px, 12vw, 180px) / 0.92 var(--display);
+  font: 600 clamp(65px, 12vw, 180px) / 0.92 var(--display);
   letter-spacing: -0.025em;
   margin: 20px 0;
 }
@@ -256,7 +248,7 @@ const nextProject = computed(
   border-radius: 7px;
 }
 .case-cover figcaption {
-  font-size: 8px;
+  font-size: 11px;
   margin-top: 13px;
   text-transform: none;
 }
@@ -287,7 +279,7 @@ const nextProject = computed(
   margin-bottom: 55px;
 }
 .case-body section > .micro {
-  font-size: 9px;
+  font-size: 11px;
   color: var(--red-light);
 }
 .case-body h2 {
@@ -337,12 +329,12 @@ const nextProject = computed(
     align-items: flex-start;
   }
   .project-page > .section-topline > .micro {
-    font-size: 6px;
+    font-size: 11px;
     text-align: right;
     max-width: 90px;
   }
   .project-page > .section-topline > .text-link {
-    font-size: 8px;
+    font-size: 11px;
     gap: 7px;
   }
   .case-heading {
@@ -362,7 +354,7 @@ const nextProject = computed(
     aspect-ratio: 15 / 11;
   }
   .case-cover figcaption {
-    font-size: 7px;
+    font-size: 11px;
   }
   .case-layout {
     grid-template-columns: 1fr;

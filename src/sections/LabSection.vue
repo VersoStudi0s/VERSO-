@@ -1,11 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onBeforeUnmount } from "vue";
-import {
-  PhAsterisk,
-  PhPause,
-  PhPlay,
-  PhArrowUpRight,
-} from "@phosphor-icons/vue";
+import { PhAsterisk, PhPause, PhPlay } from "@phosphor-icons/vue";
 import AssetImage from "../components/AssetImage.vue";
 import { usePointerDepth } from "../composables/usePointerDepth";
 const { surface, move, reset } = usePointerDepth();
@@ -106,10 +101,10 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
       />
     </div>
     <span class="lab-coordinate coordinate-top micro" aria-hidden="true"
-      >X / Y / Z<br />ESTUDO DE MODULAÇÃO</span
+      >X / Y / Z<br />Estudo de modulação</span
     >
     <span class="lab-coordinate coordinate-bottom micro" aria-hidden="true"
-      >FORMA. MOVIMENTO.<br />OUTRAS POSSIBILIDADES.</span
+      >Forma e movimento<br />Outras possibilidades</span
     >
     <div class="lab-controls">
       <div class="lab-modes" role="group" aria-label="Selecionar experimento">
@@ -145,8 +140,7 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
     </div>
     <p class="lab-description" aria-live="polite">{{ descriptions[mode] }}</p>
     <RouterLink to="/projetos/lab-movimento" class="text-link"
-      >Sobre o experimento <PhArrowUpRight
-    /></RouterLink>
+      >Sobre o experimento</RouterLink>
   </section>
 </template>
 <style scoped>
@@ -229,8 +223,7 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
   flex-wrap: wrap;
 }
 .lab-modes button {
-  font: 10px var(--mono);
-  text-transform: uppercase;
+  font: 11px var(--mono);
   border: 1px solid var(--control-line);
   border-radius: 2px;
   min-height: 44px;
@@ -252,7 +245,7 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
   gap: 8px;
   border: 0;
   min-height: 44px;
-  font: 10px var(--mono);
+  font: 11px var(--mono);
   color: var(--white);
   background: #0d0b0ee8;
 }
@@ -272,7 +265,7 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
 .lab > .text-link {
   position: relative;
   z-index: 2;
-  font-size: 10px;
+  font-size: 11px;
   color: var(--red-light);
   min-height: 44px;
   margin-top: 16px;
@@ -280,7 +273,7 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
 .lab-coordinate {
   position: absolute;
   z-index: 1;
-  font-size: 8px;
+  font-size: 11px;
   border: 1px solid #a5979c88;
   background: #0d0b0ebf;
   padding: 16px;
@@ -298,7 +291,7 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
   transform: rotate(-4deg);
 }
 .kinetic-word {
-  font: 700 clamp(90px, 10vw, 160px) / 0.8 var(--display);
+  font: 600 clamp(90px, 10vw, 160px) / 0.8 var(--display);
   animation: kinetic 4s ease-in-out 1 both;
   color: var(--red);
   text-align: center;
@@ -438,7 +431,7 @@ onBeforeUnmount(() => preference?.removeEventListener("change", updateMotion));
   .coordinate-top {
     top: 43%;
     right: 6%;
-    font-size: 6px;
+    font-size: 11px;
     padding: 10px;
   }
   .coordinate-bottom {

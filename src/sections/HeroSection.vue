@@ -1,24 +1,19 @@
 <script setup lang="ts">
-import { PhArrowUpRight, PhArrowDown, PhPlus } from "@phosphor-icons/vue";
+import { PhArrowUpRight, PhArrowDown } from "@phosphor-icons/vue";
 import AssetImage from "../components/AssetImage.vue";
-import { usePointerDepth } from "../composables/usePointerDepth";
-const { surface, move, reset } = usePointerDepth();
 </script>
 <template>
   <section
     id="inicio"
-    ref="surface"
     class="hero frame"
     aria-labelledby="hero-title"
-    @pointermove="move"
-    @pointerleave="reset"
   >
     <div class="hero-content">
       <div class="hero-kicker eyebrow">
         <span>Creative digital studio</span
-        ><PhPlus :size="22" weight="thin" aria-hidden="true" />
+        >
       </div>
-      <h1 id="hero-title" aria-label="Ideias que ganham realidade.">
+      <h1 id="hero-title" aria-label="Ideias que ganham realidade">
         <span class="title-mask" aria-hidden="true"
           ><span class="ideas">IDEIAS</span></span
         >
@@ -26,11 +21,11 @@ const { surface, move, reset } = usePointerDepth();
           ><span class="become">QUE GANHAM</span></span
         >
         <span class="title-mask reality-mask" aria-hidden="true"
-          ><em>REALIDADE.</em></span
+          ><em>REALIDADE</em></span
         >
       </h1>
       <div class="hero-description">
-        <p>Sites, apps e sistemas sob medida para o seu negócio.</p>
+        <p>Sites, apps e sistemas sob medida para o seu negócio</p>
         <span class="hero-intro"
           >Você vê um protótipo grátis antes de fechar.<br />Design e código
           feitos por uma equipe de quatro.</span
@@ -40,13 +35,12 @@ const { surface, move, reset } = usePointerDepth();
             >Explorar projetos <PhArrowUpRight
           /></RouterLink>
           <RouterLink to="/#contato" class="text-link"
-            >Pedir orçamento <PhArrowUpRight
-          /></RouterLink>
+            >Pedir orçamento</RouterLink>
         </div>
       </div>
     </div>
     <div class="hero-art" aria-label="Seleção de estudos visuais">
-      <span class="art-index micro">PORTFÓLIO SELECIONADO / 01—05</span>
+      <span class="art-index micro">Portfólio selecionado</span>
       <RouterLink
         to="/projetos/versary"
         class="hero-work hero-work-main"
@@ -58,8 +52,7 @@ const { surface, move, reset } = usePointerDepth();
           :eager="true"
         />
         <span class="work-caption"
-          ><span>VERSARY / INTERFACE REAL</span><PhArrowUpRight aria-hidden="true"
-        /></span>
+          ><span>VERSARY, interface real</span></span>
       </RouterLink>
       <RouterLink
         to="/projetos/cafe-aurora"
@@ -72,11 +65,10 @@ const { surface, move, reset } = usePointerDepth();
           :eager="true"
         />
         <span class="work-caption"
-          ><span>AURORA / BRAND STUDY</span><PhArrowUpRight aria-hidden="true"
-        /></span>
+          ><span>Café Aurora, estudo de marca</span></span>
       </RouterLink>
       <span class="art-note micro"
-        >DA IDEIA À APLICAÇÃO.<br />CONCEITOS COM CONTEXTO.</span
+        >Da ideia à aplicação<br />Conceitos com contexto</span
       >
     </div>
     <div class="hero-bottom">
@@ -84,7 +76,7 @@ const { surface, move, reset } = usePointerDepth();
         ><span class="micro">Explore a seleção</span
         ><PhArrowDown :size="22" aria-hidden="true" /></RouterLink
       ><span class="construction-line" aria-hidden="true"></span
-      ><span class="micro">RENATA, JOÃO GUSTAVO, DAVID & ISAQUE / DESIGN & CÓDIGO</span>
+      ><span class="micro">Design e código por Renata, João Gustavo, David e Isaque</span>
     </div>
   </section>
 </template>
@@ -125,7 +117,7 @@ const { surface, move, reset } = usePointerDepth();
   align-items: center;
   color: var(--muted);
   margin-bottom: 50px;
-  font-size: 10px;
+  font-size: 11px;
 }
 .hero-kicker svg {
   color: var(--red);
@@ -146,7 +138,7 @@ h1 {
   animation: title-reveal 0.95s var(--ease) both;
 }
 .ideas {
-  font: 700 clamp(105px, 10vw, 190px)/0.9 var(--display);
+  font: 600 clamp(105px, 10vw, 190px)/0.9 var(--display);
 }
 .become {
   font: 300 clamp(58px, 5.8vw, 110px)/1.05 var(--display);
@@ -159,7 +151,7 @@ h1 {
 .reality-mask em {
   width: max-content;
   max-width: 100%;
-  font: 700 italic clamp(100px, 9.7vw, 184px)/0.95 var(--editorial);
+  font: 600 italic clamp(100px, 9.7vw, 184px)/0.95 var(--editorial);
   letter-spacing: -0.065em;
   color: var(--red);
   animation-delay: 0.24s;
@@ -188,12 +180,12 @@ h1 {
   margin-top: 29px;
 }
 .hero-actions .btn {
-  font-size: 10px;
+  font-size: 11px;
   min-height: 54px;
   gap: 28px;
 }
 .hero-actions .text-link {
-  font-size: 10px;
+  font-size: 11px;
   white-space: nowrap;
 }
 .hero-art {
@@ -208,10 +200,10 @@ h1 {
 .art-index {
   display: block;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 11px;
   text-align: right;
   margin-bottom: 25px;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.02em;
 }
 .hero-work {
   display: block;
@@ -249,21 +241,21 @@ h1 {
   justify-content: space-between;
   align-items: center;
   padding: 13px 17px;
-  font: 9px var(--mono);
-  letter-spacing: 0.08em;
+  font: 11px var(--mono);
+  letter-spacing: 0.02em;
   background: #e5e5e0;
   color: #303033;
 }
 .hero-work-brand .work-caption {
   background: #dfd3bf;
   color: #502b29;
-  font-size: 8px;
+  font-size: 11px;
 }
 .art-note {
   position: absolute;
   bottom: -70px;
   left: 5%;
-  font-size: 8px;
+  font-size: 11px;
   line-height: 1.8;
   color: var(--muted);
 }
@@ -278,7 +270,7 @@ h1 {
   color: var(--muted);
 }
 .hero-bottom .micro {
-  font-size: 8px;
+  font-size: 11px;
 }
 .scroll-cue {
   display: flex;
@@ -356,7 +348,7 @@ h1 {
     width: 60%;
   }
   .art-index {
-    font-size: 7px;
+    font-size: 11px;
   }
   .art-note {
     left: -58%;
@@ -390,7 +382,7 @@ h1 {
     padding: 125px 20px 0;
   }
   .hero-kicker {
-    font-size: 8px;
+    font-size: 11px;
     margin-bottom: 32px;
     gap: 20px;
   }
@@ -419,11 +411,11 @@ h1 {
     flex-wrap: wrap;
   }
   .hero-actions .btn {
-    font-size: 9px;
+    font-size: 11px;
     gap: 20px;
   }
   .hero-actions .text-link {
-    font-size: 9px;
+    font-size: 11px;
     min-height: 44px;
   }
   .hero-art {
@@ -436,7 +428,7 @@ h1 {
     transform: none;
   }
   .art-index {
-    font-size: 7px;
+    font-size: 11px;
     text-align: left;
   }
   .hero-work-main {
@@ -447,14 +439,14 @@ h1 {
     width: 62%;
   }
   .work-caption {
-    font-size: 7px;
+    font-size: 11px;
     padding: 10px;
   }
   .hero-work-brand .work-caption {
-    font-size: 6px;
+    font-size: 11px;
   }
   .art-note {
-    font-size: 6px;
+    font-size: 11px;
     left: 0;
     bottom: -28px;
   }
@@ -466,7 +458,7 @@ h1 {
     display: none;
   }
   .hero-bottom .micro {
-    font-size: 7px;
+    font-size: 11px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

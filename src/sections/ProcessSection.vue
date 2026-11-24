@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { PhArrowUpRight } from "@phosphor-icons/vue";
 const steps = [
   {
     title: "Conversa",
@@ -38,7 +37,7 @@ const steps = [
       ><span class="section-number">[04]</span>
     </div>
     <h2 id="process-title">
-      Uma ideia bem executada<br />começa com <em>clareza.</em>
+      Uma ideia bem executada<br />começa com <em>clareza</em>
     </h2>
     <ol class="process-steps">
       <li v-for="(step, index) in steps" :key="step.title">
@@ -53,8 +52,7 @@ const steps = [
       Você só paga depois de aprovar o protótipo e combinar todos os detalhes.
     </p>
     <RouterLink to="/#contato" class="text-link"
-      >Vamos definir seu projeto <PhArrowUpRight
-    /></RouterLink>
+      >Vamos definir seu projeto</RouterLink>
   </section>
 </template>
 <style scoped>
@@ -99,7 +97,7 @@ const steps = [
 }
 .process .text-link {
   min-height: 44px;
-  font-size: 10px;
+  font-size: 11px;
   color: var(--pink);
 }
 </style>
