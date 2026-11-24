@@ -155,7 +155,7 @@ const nextProject = computed(
           <span class="micro red"
             >{{ sectionNumber("participation") }} / PARTICIPAÇÃO</span
           >
-          <h2>Meu papel</h2>
+          <h2>Papel no projeto</h2>
           <p>{{ project.participation }}</p>
         </section>
         <section v-if="project.process?.length">

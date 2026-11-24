@@ -235,7 +235,7 @@ export const projects: Project[] = [
     results:
       "Duas interfaces conceituais documentadas. Não há checkout operacional, catálogo comercial ou métricas de conversão associados a essas pranchas.",
     learning:
-      "As próximas decisões dependem de catálogo, fotografia de produto e requisitos confirmados com a dupla de desenvolvimento.",
+      "As próximas decisões dependem de catálogo, fotografia de produto e requisitos confirmados com a equipe de desenvolvimento.",
     gallery: [
       {
         image: "study-syntax-studio-detail",

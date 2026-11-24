@@ -82,7 +82,7 @@ async function submit() {
     const service = types.find(
       (type) => type.value === values.projectType,
     )?.label;
-    generated.value = `Olá, Renata! Gostaria de conversar sobre um projeto.\n\nNome ou negócio: ${values.name.trim()}\nE-mail para retorno: ${values.email.trim()}\nServiço de interesse: ${service}\n\nMinha ideia:\n${values.message.trim()}`;
+    generated.value = `Olá, equipe VERSO*! Gostaria de conversar sobre um projeto.\n\nNome ou negócio: ${values.name.trim()}\nE-mail para retorno: ${values.email.trim()}\nServiço de interesse: ${service}\n\nMinha ideia:\n${values.message.trim()}`;
     state.value = "draft";
     feedback.value =
       "Mensagem preparada para copiar. Nenhuma mensagem foi enviada.";
@@ -297,7 +297,7 @@ async function submit() {
         >{{ site.email }} <PhArrowUpRight /></a
       ><a
         v-if="site.whatsapp"
-        :href="`https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Olá, Renata! Conheci o VERSO e gostaria de conversar sobre um projeto.')}`"
+        :href="`https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Olá, equipe VERSO*! Conheci o portfólio de vocês e gostaria de conversar sobre um projeto.')}`"
         target="_blank"
         rel="noopener noreferrer"
         class="text-link"

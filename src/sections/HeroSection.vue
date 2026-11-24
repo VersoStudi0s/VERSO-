@@ -84,7 +84,7 @@ const { surface, move, reset } = usePointerDepth();
         ><span class="micro">Explore a seleção</span
         ><PhArrowDown :size="22" aria-hidden="true" /></RouterLink
       ><span class="construction-line" aria-hidden="true"></span
-      ><span class="micro">RENATA & JOÃO GUSTAVO / DESIGN & CÓDIGO</span>
+      ><span class="micro">RENATA, JOÃO GUSTAVO, DAVID & ISAQUE / DESIGN & CÓDIGO</span>
     </div>
   </section>
 </template>

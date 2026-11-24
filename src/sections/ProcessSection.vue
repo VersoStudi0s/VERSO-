@@ -2,20 +2,28 @@
 import { PhArrowUpRight } from "@phosphor-icons/vue";
 const steps = [
   {
-    title: "Entendimento",
-    text: "Uma conversa breve para conhecer seu objetivo e seu público.",
+    title: "Conversa",
+    text: "Entendemos o seu negócio, o seu público e o que você precisa resolver.",
   },
   {
-    title: "Proposta",
-    text: "Entrega, escopo, prazo e orçamento definidos antes de começar.",
+    title: "Protótipo grátis",
+    text: "Montamos um protótipo simples, sem custo, para você ver a ideia na prática.",
   },
   {
-    title: "Criação",
-    text: "Desenvolvimento visual e técnico, com as revisões combinadas.",
+    title: "Validação e contrato",
+    text: "Ajustamos o protótipo com você e fechamos escopo, prazo e valor, com entrada de 40% a 50%.",
+  },
+  {
+    title: "Desenvolvimento",
+    text: "Construímos o projeto completo e validamos com você antes de finalizar.",
   },
   {
     title: "Entrega",
-    text: "Testes, ajustes finais e os arquivos acordados para o projeto.",
+    text: "Após o pagamento do restante, entregamos tudo publicado e funcionando.",
+  },
+  {
+    title: "Manutenção",
+    text: "Depois da entrega, ajustes e melhorias são feitos sob orçamento.",
   },
 ];
 </script>
@@ -26,7 +34,7 @@ const steps = [
     aria-labelledby="process-title"
   >
     <div class="section-topline">
-      <span class="eyebrow">Como trabalho</span
+      <span class="eyebrow">Como trabalhamos</span
       ><span class="section-number">[04]</span>
     </div>
     <h2 id="process-title">
@@ -42,7 +50,7 @@ const steps = [
       </li>
     </ol>
     <p class="process-note">
-      Os detalhes do projeto são combinados antes do início do trabalho.
+      Você só paga depois de aprovar o protótipo e combinar todos os detalhes.
     </p>
     <RouterLink to="/#contato" class="text-link"
       >Vamos definir seu projeto <PhArrowUpRight

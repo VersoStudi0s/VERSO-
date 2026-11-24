@@ -234,9 +234,9 @@ try {
   check("Case returns to gallery", new URL(page.url()).hash === "#projetos");
   for (const [id, name, count] of [
     ["website", "Sites e Landing Pages", 3],
-    ["social", "Design para Redes Sociais", 0],
+    ["apps", "Apps e Sistemas sob Medida", 0],
     ["uiux", "UX/UI e Protótipos", 4],
-    ["materiais", "Materiais Digitais para Negócios", 1],
+    ["identidade", "Identidade Visual e Materiais", 1],
   ]) {
     await page
       .getByRole("link", { name: `Ver exemplos de ${name}`, exact: true })
@@ -273,7 +273,7 @@ try {
   }
   await page
     .getByRole("link", {
-      name: "Ver exemplos de Design para Redes Sociais",
+      name: "Ver exemplos de Apps e Sistemas sob Medida",
       exact: true,
     })
     .click();

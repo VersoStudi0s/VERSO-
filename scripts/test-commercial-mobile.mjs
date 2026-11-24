@@ -23,11 +23,11 @@ try {
     await page.goto(base, { waitUntil: "networkidle" });
     await page
       .getByRole("link", {
-        name: "Pedir orçamento de Design para Redes Sociais",
+        name: "Pedir orçamento de Apps e Sistemas sob Medida",
         exact: true,
       })
       .tap();
-    await expect(page.locator("#contact-type")).toHaveValue("social");
+    await expect(page.locator("#contact-type")).toHaveValue("apps");
     await page
       .getByRole("button", { name: "Gerar mensagem de orçamento", exact: true })
       .tap();
@@ -41,7 +41,7 @@ try {
       .getByRole("button", { name: "Gerar mensagem de orçamento", exact: true })
       .tap();
     await expect(page.locator("#budget-message")).toHaveValue(
-      /Design para Redes Sociais/,
+      /Apps e Sistemas sob Medida/,
     );
     assert.ok(
       await page.evaluate(

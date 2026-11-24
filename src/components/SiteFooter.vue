@@ -36,7 +36,7 @@ import { site, navigation } from "../data/site";
     </div>
     <div class="footer-bottom micro">
       <span>© {{ new Date().getFullYear() }} VERSO*. Feito com intenção.</span
-      ><span>Renata & João Gustavo · Desenvolvimento e design</span
+      ><span>Renata, João Gustavo, David e Isaque · Desenvolvimento e design</span
       ><RouterLink to="/privacidade">Privacidade & créditos</RouterLink>
     </div>
   </footer>

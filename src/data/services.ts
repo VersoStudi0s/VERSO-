@@ -5,7 +5,7 @@ export const services = [
     title: "Sites e Landing Pages",
     icon: "web",
     description:
-      "Páginas responsivas para apresentar seu negócio, divulgar serviços e facilitar o contato com clientes.",
+      "Sites responsivos para apresentar seu estabelecimento, divulgar serviços e facilitar o contato com clientes.",
     deliverables: [
       "Landing page",
       "Site institucional simples",
@@ -15,14 +15,18 @@ export const services = [
     projectSlugs: ["versary", "gymflow", "syntax-studio"],
   },
   {
-    id: "social",
+    id: "apps",
     number: "02",
-    title: "Design para Redes Sociais",
-    icon: "social",
+    title: "Apps e Sistemas sob Medida",
+    icon: "apps",
     description:
-      "Posts, Stories e capas de Reels consistentes com a identidade visual da marca.",
-    deliverables: ["Kits de posts", "Templates", "Capas e peças promocionais"],
-    detail: "Peças visuais para uma comunicação consistente.",
+      "Agendamentos, pedidos, cadastro de clientes e controle interno: soluções feitas para a rotina do seu negócio.",
+    deliverables: [
+      "Sistema de agendamento",
+      "App ou sistema web",
+      "Painel administrativo",
+    ],
+    detail: "Vue.js, React, Next.js e banco de dados, conforme o projeto.",
     projectSlugs: [],
   },
   {
@@ -37,24 +41,23 @@ export const services = [
     projectSlugs: ["versary", "gymflow", "ritmo-fitness", "syntax-studio"],
   },
   {
-    id: "materiais",
+    id: "identidade",
     number: "04",
-    title: "Materiais Digitais para Negócios",
+    title: "Identidade Visual e Materiais",
     icon: "materials",
     description:
-      "Cardápios, catálogos e apresentações que organizam seus produtos e serviços de forma profissional.",
+      "Logotipo, cores, cardápios e catálogos para a sua marca ser reconhecida em todo lugar.",
     deliverables: [
-      "PDF / cardápio digital",
-      "Catálogo de produtos",
-      "Apresentações",
+      "Identidade visual",
+      "Cardápio / catálogo digital",
+      "Kit para redes sociais",
     ],
-    detail: "Informação organizada para o seu público.",
+    detail: "Uma marca consistente do balcão ao Instagram.",
     projectSlugs: ["cafe-aurora"],
   },
 ] as const;
 export const contactTypes = [
   ...services.map(({ id, title }) => ({ value: id as string, label: title })),
-  { value: "identidade", label: "Identidade visual" },
   { value: "grafico", label: "Outros materiais gráficos" },
   { value: "outro", label: "Outra ideia" },
 ];

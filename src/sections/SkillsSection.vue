@@ -25,7 +25,7 @@ const visible = computed(() =>
     aria-labelledby="skills-title"
   >
     <div class="section-topline">
-      <h2 id="skills-title" class="eyebrow">Meu repertório</h2>
+      <h2 id="skills-title" class="eyebrow">Nosso repertório</h2>
       <span class="section-number">[05 / EM FORMAÇÃO]</span>
     </div>
     <div class="skill-tabs" role="group" aria-label="Etapa de aprendizagem">

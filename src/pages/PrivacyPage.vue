@@ -11,7 +11,7 @@ const configured = Boolean(import.meta.env.VITE_CONTACT_ENDPOINT);
     <h1>Privacidade<br /><em>& créditos.</em></h1>
     <p>
       Atualização: 22 de outubro de 2026. Esta página descreve o funcionamento
-      desta versão do portfólio de Renata e João Gustavo, dupla em formação que trabalha com desenvolvimento e design.
+      desta versão do portfólio do VERSO*, equipe formada por Renata, João Gustavo, David e Isaque, que trabalha com desenvolvimento e design.
     </p>
     <h2>Quais dados são solicitados?</h2>
     <p>
