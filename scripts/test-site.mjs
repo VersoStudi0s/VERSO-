@@ -69,7 +69,10 @@ for (const [width, height] of [
     images.filter((image) => !image.complete || image.naturalWidth === 0).map((image) => image.currentSrc || image.src),
   );
   check("Todas as imagens carregadas", broken.length === 0, broken.join(", "));
-  const faded = await page.$$eval("main *", (elements) => elements.filter((element) => getComputedStyle(element).opacity === "0").length);
+  const faded = await page.$$eval("main *", (elements) =>
+    // A imagem/canvas do objeto 3D trocam de opacidade de propósito (um substitui o outro).
+    elements.filter((element) => !element.closest(".object3d") && getComputedStyle(element).opacity === "0").length,
+  );
   check("Nada fica invisível esperando rolagem", faded === 0, `${faded} invisíveis`);
 
   const hrefs = await page.$$eval("a[href]", (links) => links.map((link) => link.getAttribute("href")));

@@ -2,13 +2,67 @@
 import { RouterLink } from "vue-router";
 import ConversationLink from "../components/ui/ConversationLink.vue";
 import TornEdge from "../components/ui/TornEdge.vue";
+import HeroObject3D from "../components/hero/HeroObject3D.vue";
+import { createHeroPointer } from "../components/hero/heroPointer";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 import { track } from "../lib/analytics";
+
+// Hover: o objeto inclina para o cursor (no componente 3D) e a colagem e a etiqueta
+// fazem paralaxe no sentido oposto. Só com mouse e com movimento permitido.
+const pointer = createHeroPointer();
+const paper = ref<HTMLElement>();
+const stamp = ref<HTMLElement>();
+const PARALLAX_MAX = 12;
+const LERP = 0.08;
+let motionAllowed = false;
+let frame = 0;
+let offsetX = 0;
+let offsetY = 0;
+
+const animateParallax = () => {
+  const targetX = pointer.active ? -pointer.x * PARALLAX_MAX : 0;
+  const targetY = pointer.active ? -pointer.y * PARALLAX_MAX : 0;
+  offsetX += (targetX - offsetX) * LERP;
+  offsetY += (targetY - offsetY) * LERP;
+  const value = `${offsetX.toFixed(2)}px ${offsetY.toFixed(2)}px`;
+  if (paper.value) paper.value.style.translate = value;
+  if (stamp.value) stamp.value.style.translate = value;
+  const settled = !pointer.active && Math.abs(offsetX) < 0.05 && Math.abs(offsetY) < 0.05;
+  frame = settled ? 0 : requestAnimationFrame(animateParallax);
+};
+const wake = () => {
+  if (!frame) frame = requestAnimationFrame(animateParallax);
+};
+
+const onPointerMove = (event: PointerEvent) => {
+  if (!motionAllowed || event.pointerType !== "mouse") return;
+  const box = (event.currentTarget as HTMLElement).getBoundingClientRect();
+  pointer.x = Math.max(-1, Math.min(1, ((event.clientX - box.left) / box.width) * 2 - 1));
+  pointer.y = Math.max(-1, Math.min(1, ((event.clientY - box.top) / box.height) * 2 - 1));
+  pointer.active = true;
+  wake();
+};
+const onPointerLeave = () => {
+  pointer.active = false;
+  wake();
+};
+
+onMounted(() => {
+  motionAllowed = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+});
+onBeforeUnmount(() => cancelAnimationFrame(frame));
 
 const offer = ["Sites", "Landing pages", "Identidade visual", "Redes sociais", "Sistemas"];
 </script>
 
 <template>
-  <section id="inicio" class="hero theme-dark" aria-labelledby="hero-title">
+  <section
+    id="inicio"
+    class="hero theme-dark"
+    aria-labelledby="hero-title"
+    @pointermove="onPointerMove"
+    @pointerleave="onPointerLeave"
+  >
     <div class="container hero__grid">
       <div class="hero__copy">
         <p class="label hero__kicker">Creative Digital Studio <span aria-hidden="true">✦</span> 100% remoto</p>
@@ -38,7 +92,7 @@ const offer = ["Sites", "Landing pages", "Identidade visual", "Redes sociais", "
       </div>
 
       <div class="hero__art" aria-hidden="true">
-        <div class="hero__paper">
+        <div ref="paper" class="hero__paper">
           <img
             src="/images/textura-editorial-640.webp"
             srcset="/images/textura-editorial-400.webp 400w, /images/textura-editorial-640.webp 640w, /images/textura-editorial-960.webp 960w"
@@ -49,17 +103,8 @@ const offer = ["Sites", "Landing pages", "Identidade visual", "Redes sociais", "
             decoding="async"
           />
         </div>
-        <img
-          class="hero__chrome"
-          src="/images/escultura-cromada-480.webp"
-          srcset="/images/escultura-cromada-400.webp 400w, /images/escultura-cromada-480.webp 480w, /images/escultura-cromada-960.webp 960w"
-          sizes="(min-width: 960px) 30vw, min(300px, 72vw)"
-          width="960"
-          height="960"
-          alt=""
-          decoding="async"
-        />
-        <span class="hero__stamp">Protótipo<br />grátis</span>
+        <HeroObject3D class="hero__chrome" :pointer="pointer" />
+        <span ref="stamp" class="hero__stamp">Protótipo<br />grátis</span>
         <span class="hero__note label">[ design + código ]</span>
       </div>
     </div>
@@ -81,7 +126,7 @@ const offer = ["Sites", "Landing pages", "Identidade visual", "Redes sociais", "
   overflow: hidden;
   padding-top: clamp(var(--s-7), 6vw, var(--s-11));
   background:
-    radial-gradient(in oklch ellipse 60% 50% at 85% 30%, oklch(64.4% 0.242 29.6 / 0.16), oklch(15% 0 29.6 / 0) 70%),
+    radial-gradient(in oklch ellipse 60% 50% at 85% 30%, oklch(64.4% 0.242 29.6 / 0.16), oklch(64.4% 0.242 29.6 / 0) 70%),
     var(--bg);
 }
 .hero__grid {
@@ -161,10 +206,14 @@ const offer = ["Sites", "Landing pages", "Identidade visual", "Redes sociais", "
   left: -2%;
   bottom: -10%;
   width: 72%;
-  filter: drop-shadow(0 2px 2px oklch(0% 0 0 / 0.4)) drop-shadow(0 18px 24px oklch(0% 0 0 / 0.5));
+}
+.hero__paper,
+.hero__stamp {
+  will-change: translate;
 }
 .hero__stamp {
   position: absolute;
+  z-index: 2;
   right: 0;
   top: 0;
   padding: var(--s-3) var(--s-4);
@@ -177,6 +226,7 @@ const offer = ["Sites", "Landing pages", "Identidade visual", "Redes sociais", "
 }
 .hero__note {
   position: absolute;
+  z-index: 2;
   right: 4%;
   bottom: 2%;
   color: var(--fg);

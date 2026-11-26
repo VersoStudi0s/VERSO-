@@ -5,6 +5,7 @@ import SiteHeader from "./components/layout/SiteHeader.vue";
 import SiteFooter from "./components/layout/SiteFooter.vue";
 import FloatingContact from "./components/layout/FloatingContact.vue";
 import ConsentBanner from "./components/layout/ConsentBanner.vue";
+import CustomCursor from "./components/layout/CustomCursor.vue";
 import TornEdge from "./components/ui/TornEdge.vue";
 
 // Rodapé vermelho só na página inicial (longa). Em páginas curtas ele passaria de 10% da tela.
@@ -22,4 +23,5 @@ const impactFooter = computed(() => route.path === "/");
   <SiteFooter :impact="impactFooter" />
   <FloatingContact />
   <ConsentBanner />
+  <CustomCursor />
 </template>
