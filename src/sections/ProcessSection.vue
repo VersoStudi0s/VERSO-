@@ -7,7 +7,7 @@ import { commercial, downPaymentText } from "../config/commercial";
 </script>
 
 <template>
-  <section id="como-funciona" class="section process" aria-labelledby="processo-title">
+  <section id="como-funciona" class="section process theme-dark" aria-labelledby="processo-title">
     <div class="container">
       <SectionHeading id="processo-title" number="04" label="Como funciona">
         Do primeiro oi à <em class="accent-word">entrega</em>
@@ -22,7 +22,6 @@ import { commercial, downPaymentText } from "../config/commercial";
           :key="step.title"
           class="step"
           :class="{ 'step--free': step.free, 'step--payment': step.payment }"
-          data-reveal
         >
           <span class="step__number" aria-hidden="true">{{ String(index + 1).padStart(2, "0") }}</span>
           <div>
@@ -36,10 +35,11 @@ import { commercial, downPaymentText } from "../config/commercial";
         </li>
       </ol>
 
-      <div class="prototype" data-reveal>
+      <div class="prototype theme-light">
+        <span class="prototype__stamp" aria-hidden="true">Grátis</span>
         <div class="prototype__head">
-          <p class="label prototype__label">O protótipo grátis, sem letra miúda</p>
           <h3 class="display prototype__title">Uma prévia pra você decidir com calma</h3>
+          <p class="label prototype__label">O protótipo grátis, sem letra miúda</p>
           <p>
             É uma amostra do caminho visual que a gente propõe para o seu projeto. Serve pra você ver se gosta da
             direção antes de qualquer pagamento. Não é o projeto pronto.
@@ -71,24 +71,20 @@ import { commercial, downPaymentText } from "../config/commercial";
 </template>
 
 <style scoped>
-.process {
-  background: var(--graphite);
-}
 .steps {
   display: grid;
-  counter-reset: none;
   border-top: 1px solid var(--line);
 }
 .step {
   display: grid;
   grid-template-columns: 56px 1fr;
-  gap: 14px;
-  padding-block: 20px;
+  gap: var(--s-4);
+  padding-block: var(--s-5);
   border-bottom: 1px solid var(--line);
 }
 .step__number {
   font: 400 2.2rem / 1 var(--font-display);
-  color: #77727c;
+  color: var(--fg-subtle);
 }
 .step--free .step__number,
 .step--payment .step__number {
@@ -98,79 +94,96 @@ import { commercial, downPaymentText } from "../config/commercial";
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
-  font: 700 1.15rem / 1.3 var(--font-body);
+  gap: var(--s-2);
+  font: 600 1.15rem / 1.3 var(--font-body);
 }
 .step__tag {
-  padding: 3px 7px 2px;
-  border-radius: 3px;
+  padding: var(--s-1) var(--s-2);
+  border-radius: var(--radius-min);
   background: var(--red);
-  color: #120607;
+  color: var(--black);
   font: 400 0.6875rem / 1.2 var(--font-mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 .step__tag--pay {
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--beige);
 }
 .step__text {
-  margin-top: 4px;
-  color: var(--paper-dim);
+  margin-top: var(--s-1);
+  color: var(--fg-muted);
   font-size: var(--text-sm);
 }
 
-/* Bloco do protótipo: papel claro, o único da página */
+/* Bloco do protótipo: papel bege com carimbo vermelho em multiply. */
 .prototype {
+  --r-outer: var(--radius-lg);
+  position: relative;
   display: grid;
-  gap: 24px;
-  margin-top: clamp(40px, 7vw, 72px);
-  padding: clamp(24px, 4vw, 44px);
-  border-radius: 2px;
-  background: var(--paper);
-  color: var(--ink);
-  box-shadow: 0 20px 50px rgb(0 0 0 / 0.35);
+  gap: var(--s-6);
+  margin-top: clamp(var(--s-8), 7vw, var(--s-11));
+  padding: clamp(var(--s-6), 4vw, var(--s-9));
+  border-radius: var(--r-outer);
+  box-shadow: var(--shadow-lg);
+  isolation: isolate;
 }
-.prototype__label {
-  color: var(--red-deep);
+.prototype__stamp {
+  position: absolute;
+  z-index: -1;
+  right: clamp(var(--s-4), 4vw, var(--s-9));
+  bottom: clamp(var(--s-4), 3vw, var(--s-7));
+  padding: var(--s-2) var(--s-4);
+  border: 3px solid var(--red);
+  border-radius: var(--radius);
+  color: var(--red);
+  font: 400 clamp(2rem, 6vw, 3.6rem) / 1 var(--font-display);
+  text-transform: uppercase;
+  transform: rotate(-8deg);
+  mix-blend-mode: multiply;
 }
 .prototype__title {
-  margin-block: 10px 12px;
   font-size: clamp(2rem, 5vw, 3rem);
+  max-width: 14ch;
+}
+.prototype__label {
+  margin-block: var(--s-3);
+  color: var(--link);
 }
 .prototype__head p:last-child {
   max-width: 60ch;
-  color: #3b3638;
+  color: var(--fg-muted);
 }
 .prototype__cols {
   display: grid;
-  gap: 20px;
+  gap: var(--s-5);
 }
 .prototype__col-title {
-  margin-bottom: 8px;
-  font-weight: 700;
+  margin-bottom: var(--s-2);
+  font-weight: 600;
 }
 .prototype__cols ul {
   display: grid;
-  gap: 8px;
+  gap: var(--s-2);
 }
 .prototype__cols li {
   display: flex;
-  gap: 10px;
+  gap: var(--s-3);
   align-items: flex-start;
 }
 .prototype__cols svg {
+  flex: none;
   margin-top: 3px;
-  color: #1f7a45;
+  color: var(--fg);
+  stroke-width: 2.25;
 }
 .prototype__excludes svg {
-  color: var(--red-deep);
+  color: var(--link);
 }
 .prototype__payment {
-  padding-top: 16px;
-  border-top: 1px solid #d8cfc9;
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--line);
   font-size: var(--text-sm);
-  color: #3b3638;
+  color: var(--fg-muted);
 }
 .prototype__cta {
   justify-self: start;
@@ -178,7 +191,7 @@ import { commercial, downPaymentText } from "../config/commercial";
 @media (min-width: 720px) {
   .steps {
     grid-template-columns: repeat(2, 1fr);
-    column-gap: 40px;
+    column-gap: var(--s-8);
   }
   .prototype__cols {
     grid-template-columns: 1fr 1fr;
@@ -187,21 +200,20 @@ import { commercial, downPaymentText } from "../config/commercial";
 @media (min-width: 1100px) {
   .steps {
     grid-template-columns: repeat(4, 1fr);
-    column-gap: 28px;
+    column-gap: var(--s-7);
   }
   .step {
     grid-template-columns: 1fr;
     align-content: start;
-    gap: 10px;
-    padding-block: 24px 28px;
+    gap: var(--s-3);
+    padding-block: var(--s-6) var(--s-7);
   }
   .step__number {
     font-size: 3rem;
   }
   .prototype {
     grid-template-columns: 1.1fr 1fr;
-    column-gap: 56px;
-    transform: rotate(-0.6deg);
+    column-gap: var(--s-10);
   }
   .prototype__head {
     grid-row: span 3;

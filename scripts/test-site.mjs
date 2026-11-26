@@ -69,8 +69,8 @@ for (const [width, height] of [
     images.filter((image) => !image.complete || image.naturalWidth === 0).map((image) => image.currentSrc || image.src),
   );
   check("Todas as imagens carregadas", broken.length === 0, broken.join(", "));
-  const hidden = await page.$$eval("[data-reveal]:not(.is-visible)", (elements) => elements.length);
-  check("Conteúdo revelado ao rolar", hidden === 0, `${hidden} ocultos`);
+  const faded = await page.$$eval("main *", (elements) => elements.filter((element) => getComputedStyle(element).opacity === "0").length);
+  check("Nada fica invisível esperando rolagem", faded === 0, `${faded} invisíveis`);
 
   const hrefs = await page.$$eval("a[href]", (links) => links.map((link) => link.getAttribute("href")));
   const external = hrefs.filter((href) => /^https?:|^mailto:/.test(href));
@@ -128,7 +128,18 @@ for (const [width, height] of [
   check("Erros de validação exibidos", (await page.locator(".field__error").count()) === 3);
   check("Foco vai para o primeiro erro", (await page.evaluate(() => document.activeElement?.id)) === "f-name");
   check("Campo inválido marcado", (await page.locator("#f-name").getAttribute("aria-invalid")) === "true");
+  check(
+    "Campos com limite de tamanho",
+    (await page.locator("#f-name").getAttribute("maxlength")) === "80" &&
+      (await page.locator("#f-contact").getAttribute("maxlength")) === "120" &&
+      (await page.locator("#f-description").getAttribute("maxlength")) === "800",
+  );
   await page.fill("#f-name", "Maria Teste");
+  await page.fill("#f-contact", "abc123");
+  await page.fill("#f-description", "Quero uma landing page para divulgar meus bolos.");
+  await page.locator(".form button[type=submit]").click();
+  check("Contato inválido é rejeitado", (await page.locator("#e-contact").count()) === 1);
+  check("Nada abre com contato inválido", (await page.evaluate(() => window.__opened.length)) === 0);
   await page.fill("#f-contact", "maria@exemplo.com");
   await page.fill("#f-description", "Quero uma landing page para divulgar meus bolos.");
   await page.locator(".form button[type=submit]").click();
@@ -139,6 +150,10 @@ for (const [width, height] of [
   check("Evento formulario_enviado registrado", events.includes("formulario_enviado"));
   const status = await page.locator(".form__status").innerText();
   check("Confirmação exibida", status.length > 10, status);
+  await page.locator(".form button[type=submit]").click();
+  await page.waitForTimeout(200);
+  check("Limite de tentativas: segundo envio imediato bloqueado", (await page.evaluate(() => window.__opened.length)) === 1);
+  check("Aviso de espera exibido", (await page.locator(".form__status").innerText()).includes("Aguarde"));
   if (opened[0]?.includes("ig.me")) {
     const clip = await page.evaluate(() => navigator.clipboard.readText());
     check("Mensagem copiada com nome, serviço e contato", clip.includes("Maria Teste") && clip.includes("Landing page") && clip.includes("maria@exemplo.com"));

@@ -9,7 +9,9 @@ function metricoolHash(value: string | undefined) {
 export const analyticsConfig = {
   /** Hash do Metricool da marca. VITE_METRICOOL_HASH=off desativa. */
   metricoolHash: metricoolHash(import.meta.env.VITE_METRICOOL_HASH),
-  plausibleDomain: import.meta.env.VITE_PLAUSIBLE_DOMAIN ?? "",
+  plausibleDomain: /^[a-z0-9.-]+\.[a-z]{2,}$/i.test(import.meta.env.VITE_PLAUSIBLE_DOMAIN ?? "")
+    ? (import.meta.env.VITE_PLAUSIBLE_DOMAIN as string)
+    : "",
   gaId: /^G-[A-Z0-9]+$/.test(import.meta.env.VITE_GA_ID ?? "")
     ? (import.meta.env.VITE_GA_ID as string)
     : "",

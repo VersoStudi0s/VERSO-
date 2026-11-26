@@ -1,42 +1,32 @@
 <script setup lang="ts">
+// Tipo do projeto em texto simples, exibido depois do título (não é um selo acima dele).
 import { kindLabels, type ProjectKind } from "../../content/projects";
 defineProps<{ kind: ProjectKind }>();
 </script>
 
 <template>
-  <span class="badge" :class="`badge--${kind}`">{{ kindLabels[kind] }}</span>
+  <span class="kind" :class="{ 'kind--client': kind === 'comercial' }">{{ kindLabels[kind] }}</span>
 </template>
 
 <style scoped>
-.badge {
+.kind {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 9px 4px;
-  border: 1px solid currentColor;
-  border-radius: 3px;
-  font: 400 0.6875rem / 1.2 var(--font-mono);
+  gap: var(--s-2);
+  font: 400 var(--text-xs) / 1.3 var(--font-mono);
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  color: var(--fg-muted);
   white-space: nowrap;
 }
-.badge::before {
+.kind::before {
   content: "";
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: currentColor;
+  background: var(--fg-subtle);
 }
-.badge--comercial {
-  color: var(--red-ink);
-}
-.badge--autoral {
-  color: var(--paper);
-}
-.badge--academico {
-  color: #9fc2ff;
-}
-.badge--conceitual {
-  color: var(--pink);
+.kind--client::before {
+  background: var(--red);
 }
 </style>

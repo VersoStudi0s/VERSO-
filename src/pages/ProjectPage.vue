@@ -29,14 +29,27 @@ const facts = computed(() =>
 
 <template>
   <NotFoundPage v-if="!project" />
-  <article v-else class="case" :style="{ '--accent': project.accent }" aria-labelledby="case-title">
+  <article v-else class="case theme-dark" aria-labelledby="case-title">
+    <div class="case__top theme-light-desktop">
     <header class="container case__header">
       <RouterLink :to="{ path: '/', hash: '#projetos' }" class="case__back">
         <AppIcon name="arrow-right" :size="18" class="case__back-icon" /> Todos os projetos
       </RouterLink>
-      <KindBadge :kind="project.kind" />
       <h1 id="case-title" class="display case__title">{{ project.name }}</h1>
+      <KindBadge :kind="project.kind" />
       <p class="lead">{{ project.tagline }}</p>
+    </header>
+    </div>
+
+    <figure class="container case__cover" :class="{ 'case__cover--phone': project.cover.width < project.cover.height }">
+      <div class="case__frame">
+        <AppImage :image="project.cover" eager sizes="(min-width: 1240px) 1240px, 100vw" />
+      </div>
+      <figcaption>{{ project.cover.caption }}</figcaption>
+    </figure>
+
+    <div class="case__paper theme-light">
+    <div class="container">
       <dl class="case__meta">
         <div>
           <dt class="label">Categoria</dt>
@@ -55,15 +68,7 @@ const facts = computed(() =>
           <dd>{{ project.participation }}</dd>
         </div>
       </dl>
-    </header>
-
-    <figure class="container case__cover" :class="{ 'case__cover--phone': project.cover.width < project.cover.height }">
-      <div class="case__frame">
-        <AppImage :image="project.cover" eager sizes="(min-width: 1240px) 1240px, 100vw" />
-      </div>
-      <figcaption>{{ project.cover.caption }}</figcaption>
-    </figure>
-
+    </div>
     <div class="container case__body">
       <dl class="case__facts">
         <div v-for="fact in facts" :key="fact.label" class="case__fact">
@@ -71,13 +76,14 @@ const facts = computed(() =>
           <dd>{{ fact.value }}</dd>
         </div>
       </dl>
-      <aside class="case__side">
+      <aside class="case__side theme-dark-mobile">
         <h2 class="label">Ferramentas e tecnologias</h2>
         <ul role="list" class="case__tech">
           <li v-for="tech in project.technologies" :key="tech">{{ tech }}</li>
         </ul>
         <p v-if="project.note" class="case__note">{{ project.note }}</p>
       </aside>
+    </div>
     </div>
 
     <div v-if="project.comparison" class="container case__comparison">
@@ -107,16 +113,18 @@ const facts = computed(() =>
       </figure>
     </div>
 
-    <section class="container case__cta" aria-labelledby="case-cta-title">
+    <div class="container">
+    <section class="case__cta" aria-labelledby="case-cta-title">
       <h2 id="case-cta-title" class="display">Quer algo nesse caminho para o seu negócio?</h2>
       <p>A primeira conversa e o protótipo são por nossa conta.</p>
       <div class="case__cta-actions">
-        <ConversationLink :position="`case-${project.slug}`" intent="prototipo" variant="light" />
+        <ConversationLink :position="`case-${project.slug}`" intent="prototipo" class="case__cta-btn" />
         <RouterLink v-if="nextProject" :to="`/projetos/${nextProject.slug}`" class="link-arrow">
           Próximo: {{ nextProject.name }} <AppIcon name="arrow-right" :size="18" />
         </RouterLink>
       </div>
     </section>
+    </div>
   </article>
 </template>
 
@@ -127,20 +135,27 @@ const facts = computed(() =>
 .case__header {
   display: grid;
   justify-items: start;
-  gap: 16px;
-  padding-top: clamp(28px, 5vw, 56px);
+  gap: var(--s-4);
+  padding-top: clamp(var(--s-7), 5vw, var(--s-10));
+}
+@media (min-width: 1000px) {
+  .case__top {
+    padding-bottom: var(--s-10);
+  }
 }
 .case__back {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--s-2);
   min-height: 44px;
-  margin-bottom: 8px;
-  color: var(--paper-dim);
+  margin-bottom: var(--s-2);
+  color: var(--fg-muted);
   text-decoration: none;
+  transition: color var(--fast) var(--ease);
 }
-.case__back:hover {
-  color: var(--paper);
+.case__back:hover,
+.case__back:active {
+  color: var(--link);
 }
 .case__back-icon {
   transform: rotate(180deg);
@@ -150,25 +165,25 @@ const facts = computed(() =>
 }
 .case__meta {
   display: grid;
-  gap: 14px;
+  gap: var(--s-4);
   width: 100%;
-  margin-top: 12px;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
+  margin-bottom: var(--s-9);
+  padding-bottom: var(--s-6);
+  border-bottom: 1px solid var(--line);
   font-size: var(--text-sm);
 }
 .case__meta dd {
-  margin-top: 2px;
+  margin-top: var(--s-1);
 }
 .case__cover,
 .case__gallery figure {
-  margin-top: clamp(32px, 6vw, 56px);
+  margin-top: clamp(var(--s-7), 6vw, var(--s-10));
 }
+/* Imagem sem borda: cantos recortados por máscara. */
 .case__frame {
   overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: color-mix(in srgb, var(--accent) 16%, var(--graphite-2));
+  clip-path: inset(0 round var(--radius-lg));
+  background: var(--surface-2);
 }
 .case__frame :deep(img) {
   width: 100%;
@@ -176,90 +191,110 @@ const facts = computed(() =>
 .case__cover--phone .case__frame {
   display: grid;
   place-items: center;
-  padding: clamp(20px, 5vw, 48px);
+  padding: clamp(var(--s-5), 5vw, var(--s-9));
 }
 .case__cover--phone .case__frame :deep(img) {
   width: min(320px, 80%);
-  border-radius: 18px;
-  box-shadow: 0 0 0 6px rgb(0 0 0 / 0.55);
+  clip-path: inset(0 round 22px);
 }
 figcaption {
-  margin-top: 10px;
+  margin-top: var(--s-3);
   font-size: var(--text-sm);
-  color: var(--muted);
+  color: var(--fg-muted);
+}
+.case__paper {
+  margin-top: clamp(var(--s-8), 7vw, var(--s-11));
+  padding-block: clamp(var(--s-9), 7vw, var(--s-11));
 }
 .case__body {
   display: grid;
-  gap: 40px;
-  margin-top: clamp(40px, 7vw, 72px);
+  gap: var(--s-8);
 }
 .case__facts {
   display: grid;
-  gap: 28px;
+  gap: var(--s-7);
 }
 .case__fact dd {
-  margin-top: 6px;
+  margin-top: var(--s-2);
   font-size: var(--text-lg);
-  color: var(--paper-dim);
+  color: var(--fg-muted);
   max-width: 62ch;
 }
 .case__side {
   align-self: start;
-  padding: 22px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--graphite);
+  padding: var(--s-6);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
 }
 .case__tech {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 12px;
+  gap: var(--s-2);
+  margin-top: var(--s-3);
 }
 .case__tech li {
-  padding: 6px 10px;
-  border: 1px solid var(--line-strong);
-  border-radius: 3px;
-  font: 400 var(--text-xs) / 1.3 var(--font-mono);
+  padding: var(--s-1) var(--s-3);
+  border-radius: var(--radius-min);
+  background: var(--bg);
+  font: 400 var(--text-xs) / 1.6 var(--font-mono);
 }
 .case__note {
-  margin-top: 18px;
+  margin-top: var(--s-5);
   font-size: var(--text-sm);
-  color: var(--muted);
+  color: var(--fg-muted);
 }
 .case__comparison {
-  margin-top: 56px;
+  margin-top: var(--s-10);
 }
 .case__pair {
   display: grid;
-  gap: 20px;
-  margin-top: 14px;
+  gap: var(--s-5);
+  margin-top: var(--s-4);
 }
+.case__pair :deep(img) {
+  clip-path: inset(0 round var(--radius-lg));
+}
+/* Painel de impacto: vermelho, texto preto (5,3:1). */
 .case__cta {
+  --fg: var(--black);
+  --fg-muted: var(--black);
+  --link: var(--black);
+  --focus: var(--black);
   display: grid;
-  gap: 14px;
-  margin-top: clamp(56px, 9vw, 96px);
-  padding-top: 40px;
-  border-top: 1px solid var(--line);
+  gap: var(--s-4);
+  margin-top: clamp(var(--s-9), 8vw, var(--s-11));
+  padding: clamp(var(--s-6), 5vw, var(--s-10));
+  border-radius: var(--radius-lg);
+  background: var(--red);
+  color: var(--black);
+  box-shadow: var(--shadow-lg);
+}
+.case__cta :deep(.case__cta-btn) {
+  background: var(--black);
+  color: var(--beige);
+}
+.case__cta :deep(.case__cta-btn:hover) {
+  background: var(--black-3);
 }
 .case__cta h2 {
   font-size: var(--title-md);
   max-width: 22ch;
 }
 .case__cta p {
-  color: var(--paper-dim);
+  color: var(--fg-muted);
 }
 .case__cta-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 16px 28px;
-  margin-top: 8px;
+  gap: var(--s-4) var(--s-7);
+  margin-top: var(--s-2);
 }
 @media (min-width: 720px) {
   .case__meta {
     grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
+    gap: var(--s-6);
   }
   .case__pair {
     grid-template-columns: 1fr 1fr;
@@ -268,11 +303,11 @@ figcaption {
 @media (min-width: 1000px) {
   .case__body {
     grid-template-columns: 1fr 340px;
-    gap: 64px;
+    gap: var(--s-10);
   }
   .case__side {
     position: sticky;
-    top: calc(var(--header-h) + 24px);
+    top: calc(var(--header-h) + var(--s-6));
   }
 }
 </style>

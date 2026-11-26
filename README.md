@@ -8,7 +8,7 @@ O planejamento (análise, informações reais × pendentes, arquitetura, direç�
 
 ## Rodar
 
-Node 20 ou superior.
+Node 20.19 ou superior (exigência do Vite 8).
 
 ```bash
 npm ci
@@ -28,7 +28,9 @@ npm run build && npm run preview
 npm test
 ```
 
-`npm test` verifica 8 larguras de tela (320 a 1920 px), CTA acima da dobra, links, formulário, menu, consentimento, conteúdo sem JS, metadados e acessibilidade (axe). Nenhuma requisição sai para a internet durante o teste.
+`npm test` verifica 8 larguras de tela (320 a 1920 px), CTA acima da dobra, links, formulário (validação, limite de tentativas, tamanho máximo), menu, consentimento, conteúdo sem JS, metadados e acessibilidade (axe). Nenhuma requisição sai para a internet durante o teste.
+
+Revisão de segurança, paleta 60-30-10 e design, com medições: [`docs/REVISAO.md`](docs/REVISAO.md).
 
 ## Onde editar
 
@@ -40,7 +42,7 @@ npm test
 | Projetos e estudos de caso | `src/content/projects.ts` |
 | Etapas do processo | `src/content/process.ts` |
 | Pacotes e preços (hoje vazio e oculto) | `src/content/pricing.ts` |
-| Cores, fontes, espaçamentos | `src/styles/tokens.css` |
+| Cores (OKLCH, 60-30-10), temas claro/escuro, fontes, escala de espaço, sombras | `src/styles/tokens.css` |
 | Imagem de compartilhamento e ícones | `npm run og-image` (gera a partir de `scripts/make-og-image.mjs`) |
 
 Para adicionar um projeto, inclua um item em `projects.ts` e as imagens em `public/images/` (`nome.webp`, `nome-480.webp`, `nome-960.webp`). A página do estudo de caso é criada na build. O primeiro cliente real entra com `kind: "comercial"` e `featured: true` e passa a abrir a seção.

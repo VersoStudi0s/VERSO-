@@ -12,6 +12,34 @@ export type ContactDraft = {
 
 const greeting = "Olá, equipe VERSO*!";
 
+/** Limites de tamanho. Os mesmos valores vão para o maxlength dos campos. */
+export const limits = { name: 80, contact: 120, description: 800 } as const;
+
+/** Intervalo mínimo entre dois envios do formulário (limite de tentativas no navegador). */
+export const submitCooldownMs = 10_000;
+
+// Remove caracteres de controle (exceto quebra de linha) e corta no limite.
+const clean = (value: string, max: number) =>
+  value.replace(/[\u0000-\u0009\u000B-\u001F\u007F]/g, "").trim().slice(0, max);
+
+const isEmail = (value: string) => /^[^\s@]{1,64}@[^\s@]{1,190}\.[a-z]{2,}$/i.test(value);
+const isPhone = (value: string) => /^\+?[\d\s().-]{10,20}$/.test(value) && value.replace(/\D/g, "").length >= 10;
+
+export type DraftErrors = Partial<Record<"name" | "contact" | "description", string>>;
+
+/** Valida o rascunho. Retorna só os campos com erro. */
+export const validateDraft = (draft: ContactDraft): DraftErrors => {
+  const errors: DraftErrors = {};
+  const name = clean(draft.name, limits.name);
+  const contact = clean(draft.contact, limits.contact);
+  const description = clean(draft.description, limits.description);
+  if (name.length < 2) errors.name = "Escreva seu nome.";
+  if (!isEmail(contact) && !isPhone(contact))
+    errors.contact = "Informe um e-mail válido ou um WhatsApp com DDD.";
+  if (description.length < 10) errors.description = "Conte em poucas palavras o que você precisa.";
+  return errors;
+};
+
 export const defaultMessage = (context?: string) =>
   context
     ? `${greeting} Vi o site de vocês e quero conversar sobre ${context}.`
@@ -24,12 +52,12 @@ export const buildMessage = (draft: ContactDraft) => {
   const service = findService(draft.serviceId);
   return [
     greeting,
-    `Meu nome é ${draft.name.trim()}.`,
+    `Meu nome é ${clean(draft.name, limits.name)}.`,
     service ? `Tenho interesse em: ${service.name}.` : "Ainda não sei qual serviço preciso.",
     "",
-    draft.description.trim(),
+    clean(draft.description, limits.description),
     "",
-    `Meu contato: ${draft.contact.trim()}`,
+    `Meu contato: ${clean(draft.contact, limits.contact)}`,
   ].join("\n");
 };
 

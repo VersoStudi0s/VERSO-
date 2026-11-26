@@ -22,15 +22,14 @@ const principles = [
 ];
 
 const swatches = [
-  { name: "Preto", value: "#0B0B0D" },
-  { name: "Vermelho", value: "#E54858" },
-  { name: "Grafite", value: "#1F1E23" },
-  { name: "Branco", value: "#F7F0EB" },
+  { name: "Preto · 60%", value: "#0B0B0B" },
+  { name: "Bege · 30%", value: "#F2EEE6" },
+  { name: "Vermelho · 10%", value: "#FF2E1F" },
 ];
 </script>
 
 <template>
-  <section id="sobre" class="section about" aria-labelledby="sobre-title">
+  <section id="sobre" class="section about theme-light" aria-labelledby="sobre-title">
     <div class="container about__grid">
       <div class="about__copy">
         <SectionHeading id="sobre-title" number="05" label="Sobre · Time VERSO*">
@@ -49,7 +48,8 @@ const swatches = [
           </p>
         </div>
         <ul role="list" class="principles">
-          <li v-for="item in principles" :key="item.title" data-reveal>
+          <li v-for="(item, index) in principles" :key="item.title">
+            <span class="principles__n" aria-hidden="true">{{ String(index + 1).padStart(2, "0") }}</span>
             <h3>{{ item.title }}</h3>
             <p>{{ item.text }}</p>
           </li>
@@ -58,8 +58,8 @@ const swatches = [
       </div>
 
       <div class="backstage" aria-label="Bastidores">
-        <figure class="bs bs--code" data-reveal>
-          <pre tabindex="0" aria-label="Trecho de código em TypeScript"><code><span class="c">// src/lib/contact.ts — monta a mensagem do formulário</span>
+        <figure class="bs bs--code theme-dark">
+          <pre tabindex="0" aria-label="Trecho de código em TypeScript"><code><span class="c">// src/lib/contact.ts: monta a mensagem do formulário</span>
 <span class="k">export const</span> <span class="f">buildMessage</span> = (draft) =&gt; [
   greeting,
   <span class="s">`Meu nome é ${draft.name}.`</span>,
@@ -69,7 +69,7 @@ const swatches = [
           <figcaption>Código deste site: o formulário de contato monta a mensagem e você envia pelo seu app.</figcaption>
         </figure>
 
-        <figure class="bs bs--wire" data-reveal>
+        <figure class="bs bs--wire">
           <div class="wire" aria-hidden="true">
             <span class="wire__bar"></span>
             <span class="wire__title"></span>
@@ -83,15 +83,15 @@ const swatches = [
           <figcaption>Wireframe da versão para celular desta página, feito antes do layout final.</figcaption>
         </figure>
 
-        <figure class="bs bs--palette" data-reveal>
+        <figure class="bs bs--palette">
           <ul role="list">
             <li v-for="swatch in swatches" :key="swatch.value">
               <span :style="{ background: swatch.value }" aria-hidden="true"></span>
               <strong>{{ swatch.name }}</strong> {{ swatch.value }}
             </li>
           </ul>
-          <p class="bs__type"><span class="display">Anton</span> <em class="accent-word">Cormorant</em></p>
-          <figcaption>Paleta e tipografia: as mesmas do nosso Instagram.</figcaption>
+          <p class="bs__type"><span class="display">Anton</span> <span class="bs__serif">Cormorant</span> <span class="bs__mono">Plex</span></p>
+          <figcaption>Paleta 60-30-10 e tipografia do site.</figcaption>
         </figure>
 
         <img
@@ -114,91 +114,102 @@ const swatches = [
 }
 .about__grid {
   display: grid;
-  gap: 56px;
+  gap: var(--s-10);
 }
 .about__grid > *,
 .backstage > * {
   min-width: 0;
 }
 .about__copy :deep(.heading) {
-  margin-bottom: 28px;
+  margin-bottom: var(--s-7);
 }
 .about__text {
   display: grid;
-  gap: 16px;
+  gap: var(--s-4);
   max-width: 62ch;
-  color: var(--paper-dim);
+  color: var(--fg-muted);
   font-size: var(--text-lg);
 }
 .principles {
   display: grid;
-  gap: 18px;
-  margin-top: 36px;
+  gap: var(--s-5);
+  margin-top: var(--s-8);
 }
 .principles li {
-  padding-left: 16px;
-  border-left: 2px solid var(--red);
+  display: grid;
+  grid-template-columns: var(--s-8) 1fr;
+  column-gap: var(--s-3);
+}
+.principles__n {
+  grid-row: span 2;
+  font: 400 1.5rem / 1 var(--font-display);
+  color: var(--accent-text);
 }
 .principles h3 {
-  font: 700 1.05rem / 1.3 var(--font-body);
+  font: 600 1.05rem / 1.3 var(--font-body);
 }
 .principles p {
-  margin-top: 2px;
+  margin-top: var(--s-1);
   font-size: var(--text-sm);
-  color: var(--paper-dim);
+  color: var(--fg-muted);
 }
 .about__cta {
-  margin-top: 32px;
+  margin-top: var(--s-7);
 }
 
-/* Bastidores */
+/* Bastidores: cartões com raio concêntrico (externo 14px, padding 12px, interno 3px mín.). */
 .backstage {
   position: relative;
   display: grid;
-  gap: 18px;
+  gap: var(--s-5);
+  isolation: isolate;
 }
 .bs {
+  --r-outer: var(--radius-lg);
+  --pad: var(--s-3);
   position: relative;
   z-index: 1;
-  padding: 16px;
+  padding: var(--pad);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--graphite-2);
+  border-radius: var(--r-outer);
+  background: var(--surface);
+  box-shadow: var(--shadow);
 }
 .bs figcaption {
-  margin-top: 12px;
+  margin: var(--s-3) var(--s-1) var(--s-1);
   font-size: var(--text-xs);
   line-height: 1.5;
-  color: var(--muted);
+  color: var(--fg-muted);
+}
+.bs--code {
+  background: var(--black-2);
 }
 .bs--code pre {
   margin: 0;
   overflow-x: auto;
-  padding: 14px;
-  border-radius: 4px;
-  background: #0f0f12;
+  padding: var(--s-4);
+  border-radius: max(var(--radius-min), calc(var(--r-outer) - var(--pad)));
+  background: var(--black);
   font: 400 0.78rem / 1.65 var(--font-mono);
-  color: var(--paper);
+  color: var(--beige);
 }
 .bs--code .c {
-  color: #8a8389;
+  color: var(--fg-subtle);
 }
-.bs--code .k {
-  color: var(--pink);
-}
+.bs--code .k,
 .bs--code .f {
-  color: #9fc2ff;
+  color: var(--red);
 }
 .bs--code .s {
-  color: #f2b880;
+  color: var(--fg-muted);
 }
 .wire {
   display: grid;
-  gap: 8px;
+  gap: var(--s-2);
   width: 170px;
-  margin-inline: auto;
-  padding: 14px 12px 18px;
-  border: 1.5px solid var(--paper-dim);
+  margin: var(--s-3) auto 0;
+  padding: var(--s-4) var(--s-3) var(--s-5);
+  border: 1.5px solid var(--line-strong);
   border-radius: 18px;
 }
 .wire span,
@@ -206,16 +217,16 @@ const swatches = [
   display: block;
   height: 8px;
   border-radius: 2px;
-  background: var(--line-strong);
+  background: var(--surface-2);
 }
 .wire__bar {
   height: 6px !important;
   width: 40%;
-  margin-bottom: 6px;
+  margin-bottom: var(--s-2);
 }
 .wire__title {
   height: 18px !important;
-  background: var(--paper-dim) !important;
+  background: var(--black) !important;
 }
 .wire__title--short {
   width: 60%;
@@ -223,7 +234,7 @@ const swatches = [
 }
 .wire__btn {
   height: 20px !important;
-  margin-top: 4px;
+  margin-top: var(--s-1);
   background: var(--red) !important;
 }
 .wire__btn--ghost {
@@ -234,9 +245,9 @@ const swatches = [
 .wire__grid {
   display: grid !important;
   grid-template-columns: 1fr 1fr;
-  gap: 6px;
+  gap: var(--s-2);
   height: auto !important;
-  margin-top: 6px;
+  margin-top: var(--s-2);
   background: none !important;
 }
 .wire__grid i {
@@ -244,36 +255,45 @@ const swatches = [
 }
 .bs--palette ul {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: var(--s-2);
   font: 400 var(--text-xs) / 1.4 var(--font-mono);
-  color: var(--paper-dim);
+  color: var(--fg-muted);
 }
 .bs--palette li {
   display: grid;
-  gap: 6px;
+  grid-template-columns: var(--s-10) 1fr;
+  align-items: center;
+  column-gap: var(--s-3);
 }
 .bs--palette li span {
-  height: 36px;
-  border: 1px solid var(--line-strong);
-  border-radius: 3px;
+  grid-row: span 2;
+  height: var(--s-8);
+  border-radius: max(var(--radius-min), calc(var(--r-outer) - var(--pad)));
+  box-shadow: inset 0 0 0 1px var(--line);
 }
 .bs--palette strong {
-  color: var(--paper);
+  color: var(--fg);
   font-weight: 400;
 }
 .bs__type {
-  margin-top: 14px;
+  margin-top: var(--s-4);
   font-size: 1.8rem;
   line-height: 1;
 }
+.bs__serif {
+  font: 600 1em var(--font-editorial);
+}
+.bs__mono {
+  font: 400 0.7em var(--font-mono);
+}
+/* Escultura cromada sobre o bege em multiply: os brancos somem e o cromo vira tinta. */
 .backstage__chrome {
   position: absolute;
   z-index: 0;
-  right: -18%;
-  top: -10%;
-  width: 60%;
-  opacity: 0.5;
+  right: -14%;
+  top: -12%;
+  width: 52%;
+  mix-blend-mode: multiply;
   pointer-events: none;
 }
 @media (min-width: 640px) {
@@ -287,11 +307,11 @@ const swatches = [
 @media (min-width: 1100px) {
   .about__grid {
     grid-template-columns: 1fr 1fr;
-    gap: 72px;
+    gap: var(--s-11);
     align-items: start;
   }
   .backstage {
-    margin-top: 72px;
+    margin-top: var(--s-11);
   }
   .bs--code {
     transform: rotate(-1deg);

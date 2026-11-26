@@ -58,22 +58,22 @@ const onClick = () =>
 <style scoped>
 .floating {
   position: fixed;
-  right: 16px;
-  bottom: calc(16px + env(safe-area-inset-bottom));
+  right: var(--s-4);
+  bottom: calc(var(--s-4) + env(safe-area-inset-bottom));
   z-index: 40;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--s-2);
   min-height: 56px;
-  padding: 0 16px;
+  padding: 0 var(--s-5) 0 var(--s-4);
   border-radius: 999px;
   background: var(--red);
-  color: #120607;
-  font-weight: 700;
+  color: var(--black);
+  font-weight: 600;
   text-decoration: none;
-  box-shadow: 0 10px 30px rgb(0 0 0 / 0.45);
+  box-shadow: var(--shadow-lg);
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateY(var(--s-4));
   pointer-events: none;
   transition:
     opacity 200ms var(--ease),
@@ -86,7 +86,13 @@ const onClick = () =>
   pointer-events: auto;
 }
 .floating:hover {
-  background: var(--red-ink);
+  background: var(--red-hover);
+}
+.floating.is-visible:active {
+  transform: scale(0.95);
+}
+.floating :deep(svg) {
+  stroke-width: 2.25;
 }
 .floating__label {
   font-size: var(--text-sm);

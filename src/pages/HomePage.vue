@@ -6,21 +6,17 @@ import ProcessSection from "../sections/ProcessSection.vue";
 import AboutSection from "../sections/AboutSection.vue";
 import ContactSection from "../sections/ContactSection.vue";
 import TornEdge from "../components/ui/TornEdge.vue";
-import { useReveal } from "../composables/useReveal";
 
-useReveal();
 </script>
 
 <template>
   <HeroSection />
-  <TornEdge color="var(--graphite)" />
   <ServicesSection />
-  <TornEdge color="var(--ink)" :variant="2" />
+  <TornEdge color="var(--black)" :variant="2" />
   <ProjectsSection />
-  <TornEdge color="var(--graphite)" />
   <ProcessSection />
-  <TornEdge color="var(--ink)" :variant="2" />
+  <TornEdge color="var(--beige)" />
   <AboutSection />
-  <TornEdge color="var(--graphite)" />
+  <TornEdge color="var(--black)" :variant="2" />
   <ContactSection />
 </template>

@@ -1,20 +1,21 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
 import ConversationLink from "../components/ui/ConversationLink.vue";
+import TornEdge from "../components/ui/TornEdge.vue";
 import { track } from "../lib/analytics";
 
 const offer = ["Sites", "Landing pages", "Identidade visual", "Redes sociais", "Sistemas"];
 </script>
 
 <template>
-  <section id="inicio" class="hero" aria-labelledby="hero-title">
+  <section id="inicio" class="hero theme-dark" aria-labelledby="hero-title">
     <div class="container hero__grid">
       <div class="hero__copy">
         <p class="label hero__kicker">Creative Digital Studio <span aria-hidden="true">✦</span> 100% remoto</p>
         <h1 id="hero-title" class="display hero__title">
           <span class="hero__line">Seu negócio</span>
           <span class="hero__line">merece ser</span>
-          <span class="hero__line"><em class="accent-word">visto.</em></span>
+          <span class="hero__line"><em class="accent-serif">visto.</em></span>
         </h1>
         <p class="lead hero__lead">
           A VERSO* cria sites, identidade visual e conteúdo para redes sociais para pequenos negócios,
@@ -58,15 +59,18 @@ const offer = ["Sites", "Landing pages", "Identidade visual", "Redes sociais", "
           alt=""
           decoding="async"
         />
-        <span class="hero__stamp">Protótipo<br />grátis ✦</span>
+        <span class="hero__stamp">Protótipo<br />grátis</span>
         <span class="hero__note label">[ design + código ]</span>
       </div>
     </div>
 
-    <div class="container">
-      <ul class="hero__offer" role="list" aria-label="O que fazemos">
-        <li v-for="item in offer" :key="item">{{ item }}</li>
-      </ul>
+    <TornEdge color="var(--beige)" />
+    <div class="hero__strip theme-light">
+      <div class="container">
+        <ul class="hero__offer" role="list" aria-label="O que fazemos">
+          <li v-for="item in offer" :key="item">{{ item }}</li>
+        </ul>
+      </div>
     </div>
   </section>
 </template>
@@ -75,21 +79,22 @@ const offer = ["Sites", "Landing pages", "Identidade visual", "Redes sociais", "
 .hero {
   position: relative;
   overflow: hidden;
-  padding-block: clamp(28px, 6vw, 72px) clamp(56px, 8vw, 96px);
+  padding-top: clamp(var(--s-7), 6vw, var(--s-11));
   background:
-    radial-gradient(ellipse 60% 50% at 85% 30%, rgb(229 72 88 / 0.12), transparent 70%),
-    var(--ink);
+    radial-gradient(in oklch ellipse 60% 50% at 85% 30%, oklch(64.4% 0.242 29.6 / 0.16), oklch(15% 0 29.6 / 0) 70%),
+    var(--bg);
 }
 .hero__grid {
   display: grid;
-  gap: 40px;
+  gap: var(--s-8);
   align-items: center;
+  padding-bottom: clamp(var(--s-9), 7vw, var(--s-12));
 }
 .hero__kicker span {
   color: var(--red);
 }
 .hero__title {
-  margin-top: 16px;
+  margin-top: var(--s-4);
   /* Limita pela altura para o CTA caber na primeira tela de notebooks baixos. */
   font-size: clamp(3.1rem, min(12vw, 12.5svh), 7.6rem);
 }
@@ -99,31 +104,35 @@ const offer = ["Sites", "Landing pages", "Identidade visual", "Redes sociais", "
 .hero__line:last-child {
   margin-top: -0.04em;
 }
-.hero__title .accent-word {
+.hero__title .accent-serif {
   font-size: 1.12em;
   line-height: 0.8;
   color: var(--red);
 }
 .hero__lead {
-  margin-top: 22px;
+  margin-top: var(--s-6);
 }
 .hero__ctas {
   display: grid;
-  gap: 12px;
-  margin-top: 28px;
+  gap: var(--s-3);
+  margin-top: var(--s-7);
 }
 .hero__promise {
-  margin-top: 18px;
+  margin-top: var(--s-4);
   font-size: var(--text-sm);
-  color: var(--paper-dim);
+  color: var(--fg-muted);
 }
 .hero__promise strong {
-  color: var(--paper);
+  color: var(--fg);
 }
 .hero__promise a {
-  margin-left: 4px;
-  color: var(--pink);
+  margin-left: var(--s-1);
+  color: var(--link);
+  font-weight: 600;
   text-underline-offset: 3px;
+}
+.hero__promise a:hover {
+  color: var(--red-hover);
 }
 
 /* Arte: textura recortada como papel rasgado + escultura cromada */
@@ -152,42 +161,45 @@ const offer = ["Sites", "Landing pages", "Identidade visual", "Redes sociais", "
   left: -2%;
   bottom: -10%;
   width: 72%;
-  filter: drop-shadow(0 24px 30px rgb(0 0 0 / 0.55));
+  filter: drop-shadow(0 2px 2px oklch(0% 0 0 / 0.4)) drop-shadow(0 18px 24px oklch(0% 0 0 / 0.5));
 }
 .hero__stamp {
   position: absolute;
   right: 0;
   top: 0;
-  padding: 10px 14px;
-  background: var(--paper);
-  color: var(--ink);
+  padding: var(--s-3) var(--s-4);
+  background: var(--beige);
+  color: var(--black);
   font: 400 1.05rem / 1 var(--font-display);
   text-transform: uppercase;
   transform: rotate(6deg);
-  box-shadow: 0 10px 24px rgb(0 0 0 / 0.4);
+  box-shadow: var(--shadow-md);
 }
 .hero__note {
   position: absolute;
   right: 4%;
   bottom: 2%;
-  color: var(--paper);
+  color: var(--fg);
+}
+
+/* Tira bege com os serviços */
+.hero__strip {
+  position: relative;
+  padding-block: var(--s-4);
 }
 .hero__offer {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 14px;
-  margin-top: clamp(40px, 6vw, 72px);
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
+  gap: var(--s-2) var(--s-4);
   font: 400 var(--text-xs) / 1.4 var(--font-mono);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--paper-dim);
+  color: var(--fg);
 }
 .hero__offer li + li::before {
   content: "✦";
-  margin-right: 14px;
-  color: var(--red);
+  margin-right: var(--s-4);
+  color: var(--red-on-light);
 }
 
 @media (min-width: 560px) {
@@ -199,16 +211,19 @@ const offer = ["Sites", "Landing pages", "Identidade visual", "Redes sociais", "
 @media (min-width: 960px) {
   .hero__grid {
     grid-template-columns: 1.15fr 0.85fr;
-    gap: 24px;
+    gap: var(--s-6);
     min-height: min(640px, calc(100svh - var(--header-h) - 140px));
   }
   .hero__art {
     width: 100%;
     max-width: 520px;
   }
+  .hero__offer {
+    justify-content: space-between;
+  }
 }
 
-/* Entrada (uma vez, só CSS) */
+/* Entrada (uma vez, só no carregamento, só CSS) */
 @media (prefers-reduced-motion: no-preference) {
   .hero__line {
     animation: rise 700ms var(--ease) both;

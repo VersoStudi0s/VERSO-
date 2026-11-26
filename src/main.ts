@@ -3,14 +3,14 @@ import "@fontsource/anton/latin-400.css";
 import "@fontsource/cormorant-garamond/latin-600.css";
 import "@fontsource/cormorant-garamond/latin-600-italic.css";
 import "@fontsource/ibm-plex-mono/latin-400.css";
+import "@fontsource/ibm-plex-sans/latin-400.css";
+import "@fontsource/ibm-plex-sans/latin-600.css";
 import "./styles/tokens.css";
 import "./styles/base.css";
 import "./styles/utilities.css";
 import App from "./App.vue";
 import { createAppRouter } from "./router";
 import { initAnalytics } from "./lib/analytics";
-
-document.documentElement.classList.add("js");
 
 // Hidrata o HTML pré-renderizado quando ele corresponde à rota atual.
 const path = location.pathname.replace(/\/$/, "") || "/";

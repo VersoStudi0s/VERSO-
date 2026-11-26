@@ -4,10 +4,10 @@ defineProps<{ number: string; label: string; id: string }>();
 
 <template>
   <header class="heading">
+    <h2 :id="id" class="display heading__title"><slot /></h2>
     <p class="label heading__label">
       <span class="heading__number">{{ number }}</span> {{ label }}
     </p>
-    <h2 :id="id" class="display heading__title"><slot /></h2>
     <p v-if="$slots.lead" class="lead heading__lead"><slot name="lead" /></p>
   </header>
 </template>
@@ -15,13 +15,18 @@ defineProps<{ number: string; label: string; id: string }>();
 <style scoped>
 .heading {
   display: grid;
-  gap: 18px;
-  margin-bottom: clamp(36px, 6vw, 64px);
+  gap: var(--s-4);
+  margin-bottom: clamp(var(--s-8), 6vw, var(--s-10));
+}
+.heading__title {
+  font-size: var(--title-lg);
+  max-width: 16ch;
 }
 .heading__label {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--s-3);
+  order: -1;
 }
 .heading__label::after {
   content: "";
@@ -30,10 +35,6 @@ defineProps<{ number: string; label: string; id: string }>();
   background: var(--line-strong);
 }
 .heading__number {
-  color: var(--red-ink);
-}
-.heading__title {
-  font-size: var(--title-lg);
-  max-width: 16ch;
+  color: var(--link);
 }
 </style>

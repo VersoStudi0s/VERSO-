@@ -18,7 +18,7 @@ const kindHelp: Record<ProjectKind, string> = {
 </script>
 
 <template>
-  <section id="projetos" class="section projects" aria-labelledby="projetos-title">
+  <section id="projetos" class="section projects theme-dark" aria-labelledby="projetos-title">
     <div class="container">
       <SectionHeading id="projetos-title" number="03" label="Projetos">
         Trabalho que dá pra <em class="accent-word">abrir</em> e conferir
@@ -44,8 +44,6 @@ const kindHelp: Record<ProjectKind, string> = {
           :key="project.slug"
           class="project"
           :class="{ 'project--lead': index === 0 }"
-          :style="{ '--accent': project.accent }"
-          data-reveal
         >
           <div class="project__media" :class="{ 'project__media--phone': project.cover.width < project.cover.height }">
             <AppImage
@@ -54,9 +52,9 @@ const kindHelp: Record<ProjectKind, string> = {
             />
           </div>
           <div class="project__body">
-            <KindBadge :kind="project.kind" />
             <h3 class="project__name display">{{ project.name }}</h3>
             <p class="label project__meta">{{ project.category }} · {{ project.type }}</p>
+            <KindBadge :kind="project.kind" />
             <p class="project__tagline">{{ project.tagline }}</p>
             <dl v-if="index === 0" class="project__facts">
               <div>
@@ -87,43 +85,45 @@ const kindHelp: Record<ProjectKind, string> = {
 .projects__legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px 24px;
+  gap: var(--s-3) var(--s-6);
   font-size: var(--text-sm);
-  color: var(--paper-dim);
+  color: var(--fg-muted);
 }
 .projects__legend div {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--s-3);
 }
 .projects__honesty {
   max-width: 62ch;
-  margin-top: 18px;
+  margin-top: var(--s-5);
   font-size: var(--text-sm);
-  color: var(--muted);
+  color: var(--fg-muted);
 }
 .projects__list {
   display: grid;
-  gap: 20px;
-  margin-top: 36px;
+  gap: var(--s-5);
+  margin-top: var(--s-8);
 }
 .project {
   display: grid;
   border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  background: var(--graphite);
-  transition: border-color var(--fast) var(--ease);
+  background: var(--surface);
+  transition:
+    box-shadow var(--fast) var(--ease),
+    transform var(--fast) var(--ease);
 }
 .project:hover {
-  border-color: var(--accent);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }
 .project__media {
   position: relative;
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  background: color-mix(in srgb, var(--accent) 18%, var(--graphite-2));
-  border-bottom: 1px solid var(--line);
+  background: var(--surface-2);
 }
 .project__media :deep(img) {
   width: 100%;
@@ -132,13 +132,14 @@ const kindHelp: Record<ProjectKind, string> = {
   object-position: top center;
   transition: transform 500ms var(--ease);
 }
+/* Captura de celular: cantos arredondados por máscara, sem anel nem borda. */
 .project__media--phone :deep(img) {
   width: auto;
   height: 112%;
   margin: 6% auto 0;
-  border-radius: 14px 14px 0 0;
-  box-shadow: 0 0 0 6px rgb(0 0 0 / 0.5);
   object-fit: cover;
+  clip-path: inset(0 round 18px 18px 0 0);
+  filter: drop-shadow(0 12px 24px oklch(0% 0 0 / 0.5));
 }
 .project:hover .project__media:not(.project__media--phone) :deep(img) {
   transform: scale(1.025);
@@ -147,28 +148,27 @@ const kindHelp: Record<ProjectKind, string> = {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 10px;
-  padding: 22px 20px 20px;
+  gap: var(--s-3);
+  padding: var(--s-6) var(--s-5) var(--s-5);
 }
 .project__name {
-  margin-top: 6px;
   font-size: clamp(2rem, 5vw, 2.6rem);
 }
 .project__meta {
-  color: var(--paper-dim);
+  color: var(--fg-muted);
   letter-spacing: 0.06em;
 }
 .project__tagline {
-  color: var(--paper-dim);
+  color: var(--fg-muted);
 }
 .project__facts {
   display: grid;
-  gap: 12px;
-  margin-top: 8px;
+  gap: var(--s-3);
+  margin-top: var(--s-2);
   font-size: var(--text-sm);
 }
 .project__facts dd {
-  margin-top: 2px;
+  margin-top: var(--s-1);
 }
 .project__link {
   margin-top: auto;
@@ -184,19 +184,20 @@ const kindHelp: Record<ProjectKind, string> = {
   .project--lead .project__media {
     aspect-ratio: auto;
     min-height: 100%;
-    border-bottom: 0;
-    border-right: 1px solid var(--line);
   }
   .project--lead .project__body {
-    padding: 32px;
+    padding: var(--s-7);
   }
   .project--lead .project__name {
     font-size: clamp(2.6rem, 5vw, 4rem);
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .project,
+  .project:hover,
   .project__media :deep(img) {
     transition: none;
+    transform: none;
   }
 }
 </style>

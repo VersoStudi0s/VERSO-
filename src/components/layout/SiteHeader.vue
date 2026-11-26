@@ -54,7 +54,7 @@ onBeforeUnmount(() => {
     <div class="container header__bar">
       <RouterLink to="/" class="header__logo" @click="close(false)">
         <BrandLogo />
-        <span class="visually-hidden">— página inicial</span>
+        <span class="visually-hidden">, página inicial</span>
       </RouterLink>
 
       <nav class="header__nav" aria-label="Principal">
@@ -107,20 +107,14 @@ onBeforeUnmount(() => {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgb(11 11 13 / 0.94);
+  background: var(--black);
   border-bottom: 1px solid var(--line);
-}
-@supports (backdrop-filter: blur(1px)) {
-  .header {
-    background: rgb(11 11 13 / 0.82);
-    backdrop-filter: blur(10px);
-  }
 }
 .header__bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--s-4);
   height: var(--header-h);
 }
 .header__logo {
@@ -135,12 +129,13 @@ onBeforeUnmount(() => {
 .header__actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--s-2);
 }
 .header__cta {
-  min-height: 42px;
-  padding: 8px 14px;
+  min-height: 44px;
+  padding: var(--s-2) var(--s-4);
   font-size: var(--text-sm);
+  box-shadow: none;
 }
 .header__cta :deep(svg) {
   display: none;
@@ -154,6 +149,15 @@ onBeforeUnmount(() => {
   border-radius: var(--radius);
   background: none;
   cursor: pointer;
+  transition:
+    border-color var(--fast) var(--ease),
+    transform var(--fast) var(--ease);
+}
+.header__menu-btn:hover {
+  border-color: var(--fg);
+}
+.header__menu-btn:active {
+  transform: scale(0.94);
 }
 .menu {
   position: fixed;
@@ -161,23 +165,27 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 32px;
-  padding: 28px var(--gutter) calc(28px + env(safe-area-inset-bottom));
-  background: var(--ink);
+  gap: var(--s-7);
+  padding: var(--s-7) var(--gutter) calc(var(--s-7) + env(safe-area-inset-bottom));
+  background: var(--black);
   overflow-y: auto;
 }
 .menu__list a {
   display: flex;
   align-items: baseline;
-  gap: 14px;
-  padding: 12px 0;
+  gap: var(--s-4);
+  padding: var(--s-3) 0;
   border-bottom: 1px solid var(--line);
   font: 400 2.4rem / 1.05 var(--font-display);
   text-transform: uppercase;
   text-decoration: none;
+  transition: color var(--fast) var(--ease);
+}
+.menu__list a:active {
+  color: var(--red);
 }
 .menu__list .label {
-  color: var(--red-ink);
+  color: var(--link);
 }
 @media (min-width: 960px) {
   .header__nav {
@@ -185,7 +193,7 @@ onBeforeUnmount(() => {
   }
   .header__nav ul {
     display: flex;
-    gap: clamp(16px, 2.4vw, 32px);
+    gap: clamp(var(--s-4), 2.4vw, var(--s-7));
     font-size: var(--text-sm);
   }
   .header__nav a {
@@ -193,18 +201,19 @@ onBeforeUnmount(() => {
     min-height: 44px;
     align-items: center;
     text-decoration: none;
-    color: var(--paper-dim);
-    transition: color var(--fast) var(--ease);
+    color: var(--fg-muted);
+    background: linear-gradient(var(--red), var(--red)) bottom left / 0 2px no-repeat;
+    transition:
+      color var(--fast) var(--ease),
+      background-size var(--fast) var(--ease);
   }
   .header__nav a:hover {
-    color: var(--paper);
+    color: var(--fg);
+    background-size: 100% 2px;
   }
   .header__menu-btn,
   .menu {
     display: none !important;
-  }
-  .header__cta {
-    padding-inline: 18px;
   }
 }
 </style>

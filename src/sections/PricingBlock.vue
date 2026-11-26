@@ -33,35 +33,36 @@ const formatPrice = (value: number) =>
 
 <style scoped>
 .pricing {
-  padding-block: 32px;
+  padding-block: var(--s-7);
   border-top: 1px solid var(--line);
 }
 .pricing__list {
   display: grid;
-  gap: 14px;
-  margin-top: 16px;
+  gap: var(--s-4);
+  margin-top: var(--s-4);
 }
 .pricing__item {
   display: grid;
-  gap: 10px;
-  padding: 22px 20px;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
+  gap: var(--s-3);
+  padding: var(--s-6) var(--s-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
 }
 .pricing__item h4 {
-  font: 700 1.2rem / 1.2 var(--font-body);
+  font: 600 1.2rem / 1.2 var(--font-body);
 }
 .pricing__price strong {
   font: 400 1.8rem / 1 var(--font-display);
 }
 .pricing__item ul {
   font-size: var(--text-sm);
-  color: var(--paper-dim);
+  color: var(--fg-muted);
 }
 .pricing__note {
-  margin-top: 14px;
+  margin-top: var(--s-4);
   font-size: var(--text-sm);
-  color: var(--muted);
+  color: var(--fg-subtle);
 }
 @media (min-width: 720px) {
   .pricing__list {

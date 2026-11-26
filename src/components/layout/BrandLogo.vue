@@ -8,7 +8,7 @@
   align-items: flex-start;
   font: 600 1.75rem / 1 var(--font-editorial);
   letter-spacing: -0.01em;
-  color: var(--paper);
+  color: var(--fg);
 }
 .logo__star {
   margin-left: 1px;

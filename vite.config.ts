@@ -20,5 +20,8 @@ export default defineConfig({
     },
   ],
   server: { host: "0.0.0.0", port: 4173 },
+  // Vue Router 5 lê __VUE_OPTIONS_API__ em tempo de execução; incluí-lo no bundle SSR
+  // aplica os mesmos defines do cliente na pré-renderização.
+  ssr: { noExternal: ["vue-router"] },
   build: { target: "es2022", cssCodeSplit: true },
 });

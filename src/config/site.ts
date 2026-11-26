@@ -18,7 +18,7 @@ const httpsOrigin = (value: string | undefined) => {
 
 export const site = {
   name: "VERSO*",
-  fullName: "VERSO* — Creative Digital Studio",
+  fullName: "VERSO* Creative Digital Studio",
   tagline: "Design, tecnologia e soluções digitais para negócios.",
   /** Domínio público. Trocar por VITE_SITE_URL quando o domínio próprio estiver ativo. */
   url: httpsOrigin(import.meta.env.VITE_SITE_URL) || "https://verso-e5t.pages.dev",

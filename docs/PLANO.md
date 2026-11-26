@@ -73,6 +73,8 @@ Elementos persistentes: cabeçalho com "Pedir protótipo" sempre visível, botã
 
 ## 4. Direção visual
 
+> Atualizado em 26/11/2026: a paleta passou a 60-30-10 (preto #0B0B0B, bege #F2EEE6, vermelho #FF2E1F), o texto usa IBM Plex Sans e a animação de rolagem saiu. Detalhes e medições em [`REVISAO.md`](REVISAO.md). A tabela abaixo é o registro da primeira versão.
+
 **Ideia:** um caderno editorial. A marca grita nos títulos e nas bordas (papel rasgado, cromo, carimbos, números de seção), mas o miolo é papel limpo: texto escuro sobre fundo grafite, grid previsível, botões grandes.
 
 | Elemento | Onde aparece | Onde não aparece |

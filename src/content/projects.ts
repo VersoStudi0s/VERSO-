@@ -41,7 +41,6 @@ export type Project = {
   gallery: readonly ProjectImage[];
   /** Antes e depois (ex.: perfil do Instagram de um cliente). Opcional. */
   comparison?: { before: ProjectImage; after: ProjectImage };
-  accent: string;
 };
 
 export const kindLabels: Record<ProjectKind, string> = {
@@ -95,7 +94,6 @@ export const projects: readonly Project[] = [
         height: 1200,
       },
     ],
-    accent: "#e54858",
   },
   {
     slug: "gymflow",
@@ -134,7 +132,6 @@ export const projects: readonly Project[] = [
         responsive: false,
       },
     ],
-    accent: "#ac8cff",
   },
   {
     slug: "ritmo-fitness",
@@ -174,7 +171,6 @@ export const projects: readonly Project[] = [
         responsive: false,
       },
     ],
-    accent: "#ed9bb4",
   },
   {
     slug: "cafe-aurora",
@@ -211,7 +207,6 @@ export const projects: readonly Project[] = [
         height: 1100,
       },
     ],
-    accent: "#d5af74",
   },
 ];
 

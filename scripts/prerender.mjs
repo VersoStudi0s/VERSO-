@@ -10,7 +10,7 @@ const template = await readFile(resolve(dist, "index.html"), "utf8");
 // Pré-carrega só as fontes usadas acima da dobra.
 const assets = await readdir(resolve(dist, "assets"));
 const preload = assets
-  .filter((file) => /^(anton-latin-400-normal|cormorant-garamond-latin-600-italic)-.*\.woff2$/.test(file))
+  .filter((file) => /^(anton-latin-400-normal|cormorant-garamond-latin-600-italic|ibm-plex-sans-latin-400-normal)-.*\.woff2$/.test(file))
   .map((file) => `<link rel="preload" href="/assets/${file}" as="font" type="font/woff2" crossorigin>`)
   .join("");
 

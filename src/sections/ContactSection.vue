@@ -11,7 +11,11 @@ import {
   conversationUrl,
   defaultMessage,
   emailUrl,
+  limits,
+  submitCooldownMs,
+  validateDraft,
   type ContactDraft,
+  type DraftErrors,
 } from "../lib/contact";
 import { track } from "../lib/analytics";
 
@@ -20,8 +24,9 @@ const channel = conversationChannel();
 const isWhatsapp = channel.kind === "whatsapp";
 
 const form = reactive<ContactDraft>({ name: "", contact: "", serviceId: "", description: "" });
-const errors = reactive<Partial<Record<keyof ContactDraft, string>>>({});
-const status = ref<"" | "sent" | "copied" | "manual">("");
+const errors = ref<DraftErrors>({});
+const status = ref<"" | "sent" | "copied" | "manual" | "wait">("");
+let lastSubmitAt = 0;
 const fallbackText = ref("");
 const formEl = ref<HTMLFormElement>();
 
@@ -34,19 +39,22 @@ watch(
   { immediate: true },
 );
 watch(form, () => {
-  if (status.value) status.value = "";
+  if (status.value && status.value !== "wait") status.value = "";
 });
 
 const validate = () => {
-  errors.name = form.name.trim().length < 2 ? "Escreva seu nome." : "";
-  errors.contact = form.contact.trim().length < 6 ? "Informe um WhatsApp ou e-mail para resposta." : "";
-  errors.description =
-    form.description.trim().length < 10 ? "Conte em poucas palavras o que você precisa." : "";
-  const firstInvalid = (["name", "contact", "description"] as const).find((key) => errors[key]);
+  errors.value = validateDraft(form);
+  const firstInvalid = (["name", "contact", "description"] as const).find((key) => errors.value[key]);
   if (firstInvalid) {
     nextTick(() => formEl.value?.querySelector<HTMLElement>(`[name="${firstInvalid}"]`)?.focus());
     return false;
   }
+  // Evita abrir o app várias vezes seguidas (duplo clique ou automação).
+  if (Date.now() - lastSubmitAt < submitCooldownMs) {
+    status.value = "wait";
+    return false;
+  }
+  lastSubmitAt = Date.now();
   return true;
 };
 
@@ -84,7 +92,7 @@ const sendByEmail = () => {
 </script>
 
 <template>
-  <section id="contato" class="section contact" aria-labelledby="contato-title">
+  <section id="contato" class="section contact theme-dark" aria-labelledby="contato-title">
     <div class="container contact__grid">
       <div class="contact__intro">
         <SectionHeading id="contato-title" number="06" label="Contato">
@@ -156,6 +164,7 @@ const sendByEmail = () => {
             v-model="form.name"
             name="name"
             autocomplete="name"
+            :maxlength="limits.name"
             :aria-invalid="Boolean(errors.name)"
             :aria-describedby="errors.name ? 'e-name' : undefined"
           />
@@ -168,6 +177,7 @@ const sendByEmail = () => {
             v-model="form.contact"
             name="contact"
             autocomplete="email"
+            :maxlength="limits.contact"
             inputmode="email"
             :aria-invalid="Boolean(errors.contact)"
             :aria-describedby="errors.contact ? 'e-contact' : undefined"
@@ -188,7 +198,7 @@ const sendByEmail = () => {
             v-model="form.description"
             name="description"
             rows="4"
-            maxlength="800"
+            :maxlength="limits.description"
             placeholder="Ex.: tenho uma confeitaria e quero um site simples com cardápio e botão de pedido."
             :aria-invalid="Boolean(errors.description)"
             :aria-describedby="errors.description ? 'e-description' : undefined"
@@ -212,6 +222,7 @@ const sendByEmail = () => {
             >Mensagem copiada. No direct, cole e envie. Se a aba não abriu,
             <a :href="channels.instagram.direct" target="_blank" rel="noopener">abra o direct aqui</a>.</template
           >
+          <template v-else-if="status === 'wait'">A mensagem acabou de ser aberta. Aguarde alguns segundos para enviar de novo.</template>
           <template v-else-if="status === 'manual'">Não deu para copiar sozinho. Selecione o texto abaixo e copie:</template>
         </p>
         <textarea
@@ -228,86 +239,97 @@ const sendByEmail = () => {
 </template>
 
 <style scoped>
-.contact {
-  background: var(--graphite);
-}
 .contact__grid {
   display: grid;
-  gap: 48px;
+  gap: var(--s-9);
 }
 .channels {
+  --r-outer: var(--radius-lg);
   display: grid;
-  gap: 12px;
+  gap: var(--s-3);
 }
 .channel {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 14px;
+  gap: var(--s-4);
   min-height: 72px;
-  padding: 14px 18px;
+  padding: var(--s-4) var(--s-5);
   border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
+  border-radius: var(--r-outer);
   text-decoration: none;
   transition:
     border-color var(--fast) var(--ease),
-    background-color var(--fast) var(--ease);
+    background-color var(--fast) var(--ease),
+    transform var(--fast) var(--ease);
 }
 .channel:hover {
-  border-color: var(--paper);
+  border-color: var(--fg);
+  background: var(--surface);
+}
+.channel:active {
+  transform: scale(0.98);
+}
+.channel svg {
+  stroke-width: 2;
 }
 .channel strong,
 .channel small {
   display: block;
 }
 .channel small {
-  color: var(--paper-dim);
+  color: var(--fg-muted);
   font-size: var(--text-sm);
 }
 .channel__email {
   word-break: break-all;
 }
 .channel--main {
-  border-color: var(--red);
+  border-color: transparent;
   background: var(--red);
-  color: #120607;
+  color: var(--black);
+  box-shadow: var(--shadow-md);
 }
 .channel--main small {
-  color: #1d0a0d;
+  color: var(--black);
 }
 .channel--main:hover {
-  background: var(--red-ink);
-  border-color: var(--red-ink);
+  border-color: transparent;
+  background: var(--red-hover);
 }
 
+/* Formulário: raio externo 14px; campos e botões = 14 - padding, com mínimo de 3px. */
 .form {
+  --r-outer: var(--radius-lg);
+  --pad: clamp(var(--s-5), 4vw, var(--s-8));
   display: grid;
-  gap: 18px;
-  padding: clamp(20px, 4vw, 36px);
+  gap: var(--s-5);
+  padding: var(--pad);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--graphite-2);
+  border-radius: var(--r-outer);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
 }
 .form__title {
   font: 400 1.8rem / 1 var(--font-display);
   text-transform: uppercase;
 }
 .form__help {
-  margin-top: -6px;
+  margin-top: calc(var(--s-2) * -1);
   font-size: var(--text-sm);
-  color: var(--paper-dim);
+  color: var(--fg-muted);
 }
 .field {
   display: grid;
-  gap: 6px;
+  gap: var(--s-2);
 }
 .field label {
-  font-weight: 700;
+  font-weight: 600;
   font-size: var(--text-sm);
 }
 .field label span {
   font-weight: 400;
-  color: var(--muted);
+  color: var(--fg-subtle);
 }
 .field input,
 .field select,
@@ -315,23 +337,30 @@ const sendByEmail = () => {
 .form__fallback {
   width: 100%;
   min-height: 50px;
-  padding: 12px 14px;
+  padding: var(--s-3) var(--s-4);
   border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
-  background: var(--ink);
+  border-radius: max(var(--radius-min), calc(var(--r-outer) - var(--pad)));
+  background: var(--black);
   font-size: 1rem;
+  transition: border-color var(--fast) var(--ease);
+}
+.field input:hover,
+.field select:hover,
+.field textarea:hover {
+  border-color: var(--fg-subtle);
 }
 .field textarea {
   resize: vertical;
   line-height: 1.5;
 }
 .field textarea::placeholder {
-  color: #8d878a;
+  color: var(--fg-subtle);
 }
 .field select {
   appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, var(--paper-dim) 50%),
-    linear-gradient(135deg, var(--paper-dim) 50%, transparent 50%);
+  background-image:
+    linear-gradient(in oklch 45deg, transparent 50%, var(--fg-muted) 50%),
+    linear-gradient(in oklch 135deg, var(--fg-muted) 50%, transparent 50%);
   background-position:
     calc(100% - 20px) 50%,
     calc(100% - 14px) 50%;
@@ -341,33 +370,38 @@ const sendByEmail = () => {
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
-  border-color: var(--pink);
+  border-color: var(--fg);
 }
+/* Erro: indicado por texto e ícone de foco, além do contorno. */
 .field [aria-invalid="true"] {
-  border-color: var(--red-ink);
+  border-color: var(--red);
+  border-width: 2px;
 }
 .field__error {
   font-size: var(--text-sm);
-  color: var(--red-ink);
+  color: var(--link);
 }
 .form__actions {
   display: grid;
-  gap: 10px;
+  gap: var(--s-3);
+}
+.form__actions .btn {
+  border-radius: max(var(--radius-min), calc(var(--r-outer) - var(--pad)));
 }
 .form__status {
   font-size: var(--text-sm);
-  color: var(--paper-dim);
+  color: var(--fg-muted);
 }
 .form__status:empty {
   display: none;
 }
 .form__status a {
-  color: var(--pink);
+  color: var(--link);
 }
 @media (min-width: 1000px) {
   .contact__grid {
     grid-template-columns: 1fr 1fr;
-    gap: 64px;
+    gap: var(--s-10);
     align-items: start;
   }
 }

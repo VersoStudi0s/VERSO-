@@ -8,6 +8,8 @@
 .section {
   position: relative;
   padding-block: var(--section-y);
+  background: var(--bg);
+  color: var(--fg);
 }
 
 /* Tipografia de marca */
@@ -15,7 +17,7 @@
   font: 400 var(--text-xs) / 1.4 var(--font-mono);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--fg-subtle);
 }
 .display {
   font-family: var(--font-display);
@@ -24,22 +26,43 @@
   line-height: 0.92;
   letter-spacing: 0.005em;
 }
+/* Destaque de título: mesma fonte, só a cor muda. */
 .accent-word {
+  font-style: normal;
+  color: var(--accent-text);
+}
+/* Itálico serifado: reservado à assinatura do VERSO* (logo e "visto." do início). */
+.accent-serif {
   font-family: var(--font-editorial);
   font-style: italic;
   font-weight: 600;
   text-transform: none;
   letter-spacing: -0.01em;
-  color: var(--red-ink);
+  color: var(--accent-text);
 }
 .lead {
   font-size: var(--text-lg);
   line-height: 1.55;
-  color: var(--paper-dim);
+  color: var(--fg-muted);
   max-width: 58ch;
 }
 .body-muted {
-  color: var(--paper-dim);
+  color: var(--fg-muted);
+}
+
+/* Raio concêntrico: filho encostado no padding do pai. */
+.inner-radius {
+  border-radius: max(var(--radius-min), calc(var(--r-outer, var(--radius-lg)) - var(--pad, 0px)));
+}
+
+/* Ícones acompanham o peso do texto ao lado. */
+svg[stroke] {
+  stroke-width: 1.75;
+}
+.btn svg,
+.link-arrow svg,
+strong svg {
+  stroke-width: 2.25;
 }
 
 /* Botões */
@@ -47,20 +70,22 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: var(--s-2);
   min-height: 52px;
-  padding: 14px 22px;
+  padding: var(--s-3) var(--s-6);
   border: 1.5px solid transparent;
   border-radius: var(--radius);
   background: transparent;
-  font: 700 var(--text-base) / 1.2 var(--font-body);
+  font: 600 var(--text-base) / 1.2 var(--font-body);
   text-decoration: none;
   cursor: pointer;
   transition:
     background-color var(--fast) var(--ease),
     border-color var(--fast) var(--ease),
     color var(--fast) var(--ease),
+    box-shadow var(--fast) var(--ease),
     transform var(--fast) var(--ease);
+  -webkit-tap-highlight-color: transparent;
 }
 .btn:active {
   transform: scale(0.97);
@@ -72,55 +97,67 @@
 }
 .btn-primary {
   background: var(--red);
-  color: #120607;
+  color: var(--black);
+  box-shadow: var(--shadow-sm);
 }
 .btn-primary:hover {
-  background: var(--red-ink);
+  background: var(--red-hover);
+  box-shadow: var(--shadow-md);
+}
+.btn-primary:active {
+  box-shadow: none;
 }
 .btn-secondary {
   border-color: var(--line-strong);
-  color: var(--paper);
+  color: var(--fg);
 }
 .btn-secondary:hover {
-  border-color: var(--paper);
+  border-color: var(--fg);
+  background: var(--surface);
 }
 .btn-light {
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--invert-bg);
+  color: var(--invert-fg);
 }
 .btn-light:hover {
-  background: #fff;
+  background: color-mix(in oklch, var(--invert-bg), var(--invert-fg) 12%);
 }
 .btn-block {
   width: 100%;
 }
+
+/* Link com seta */
 .link-arrow {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--s-2);
   min-height: 44px;
-  font-weight: 700;
-  color: var(--paper);
+  font-weight: 600;
+  color: var(--fg);
   text-decoration: underline;
-  text-decoration-color: var(--red);
+  text-decoration-color: var(--link);
   text-decoration-thickness: 2px;
   text-underline-offset: 6px;
+  transition:
+    color var(--fast) var(--ease),
+    transform var(--fast) var(--ease);
+}
+.link-arrow svg {
+  transition: transform var(--fast) var(--ease);
 }
 .link-arrow:hover {
-  color: var(--red-ink);
+  color: var(--link);
 }
-
-/* Revelação ao rolar (só com JS e movimento permitido) */
-@media (prefers-reduced-motion: no-preference) {
-  .js [data-reveal] {
-    opacity: 0;
-    transform: translateY(18px);
-    transition:
-      opacity 600ms var(--ease),
-      transform 600ms var(--ease);
-  }
-  .js [data-reveal].is-visible {
-    opacity: 1;
-    transform: none;
+.link-arrow:hover svg {
+  transform: translateX(3px);
+}
+.link-arrow:active {
+  transform: scale(0.97);
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .link-arrow,
+  .link-arrow svg {
+    transition: none;
   }
 }

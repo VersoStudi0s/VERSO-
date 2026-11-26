@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Borda de papel rasgado. Usada só como divisor, nunca atrás de texto.
 withDefaults(defineProps<{ color?: string; flip?: boolean; variant?: 1 | 2 }>(), {
-  color: "var(--graphite)",
+  color: "var(--black)",
   flip: false,
   variant: 1,
 });
@@ -28,8 +28,8 @@ withDefaults(defineProps<{ color?: string; flip?: boolean; variant?: 1 | 2 }>(),
 .torn {
   position: relative;
   z-index: 1;
-  height: clamp(18px, 3vw, 40px);
-  margin-top: calc(clamp(18px, 3vw, 40px) * -1 + 1px);
+  height: clamp(var(--s-5), 3vw, var(--s-8));
+  margin-top: calc(clamp(var(--s-5), 3vw, var(--s-8)) * -1 + 1px);
   pointer-events: none;
 }
 .torn svg {
@@ -39,6 +39,6 @@ withDefaults(defineProps<{ color?: string; flip?: boolean; variant?: 1 | 2 }>(),
 .torn--flip {
   transform: scaleY(-1);
   margin-top: 0;
-  margin-bottom: calc(clamp(18px, 3vw, 40px) * -1 + 1px);
+  margin-bottom: calc(clamp(var(--s-5), 3vw, var(--s-8)) * -1 + 1px);
 }
 </style>

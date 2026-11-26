@@ -19,7 +19,7 @@ export const pageMeta = (path: string): PageMeta => {
 
   if (project)
     return {
-      title: `${project.name} — ${kindLabels[project.kind]} | VERSO*`,
+      title: `${project.name}, ${kindLabels[project.kind].toLowerCase()} | VERSO*`,
       description: `${project.tagline} ${project.category}: ${project.type}. Estudo de caso do Time VERSO*.`,
       path: clean,
       image: ogImage,
@@ -40,7 +40,7 @@ export const pageMeta = (path: string): PageMeta => {
       noindex: true,
     };
   return {
-    title: "VERSO* — Sites, identidade visual e soluções digitais para negócios",
+    title: "VERSO* | Sites, identidade visual e soluções digitais para negócios",
     description:
       "Estúdio criativo digital, 100% remoto. Sites, landing pages, identidade visual e artes para redes sociais para pequenos negócios. Comece com um protótipo grátis.",
     path: "/",
