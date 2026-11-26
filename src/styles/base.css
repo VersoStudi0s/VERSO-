@@ -104,3 +104,17 @@ strong {
 .skip-link:focus {
   transform: none;
 }
+
+/* Cursor personalizado: esconde o do sistema só com mouse e quando o componente está ativo. */
+@media (hover: hover) and (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor * {
+    cursor: none !important;
+  }
+  html.has-custom-cursor :is(input, textarea, [contenteditable="true"]) {
+    cursor: text !important;
+  }
+  html.has-custom-cursor select {
+    cursor: default !important;
+  }
+}
