@@ -4,8 +4,7 @@ dist/
 .env
 .env.*
 !.env.example
-.netlify/
+.wrangler/
 test-results/
 *.log
 *.tsbuildinfo
-.openai/deployment-status.json

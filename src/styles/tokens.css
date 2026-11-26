@@ -1,28 +1,173 @@
+/*
+  Paleta VERSO* em OKLCH, regra 60-30-10:
+  60% preto  #0B0B0B = oklch(15% 0 0)            fundo e áreas grandes
+  30% bege   #F2EEE6 = oklch(95% 0.011 84.6)     blocos, cards e seções claras
+  10% vermelho #FF2E1F = oklch(64.4% 0.242 29.6) CTAs, destaques e links
+
+  Contraste medido (WCAG):
+  bege × preto 17:1 · vermelho × preto 5,3:1 · vermelho × bege 3,2:1 (só texto grande)
+  Por isso, texto vermelho pequeno sobre bege usa --red-on-light (oklch 52%), 5,25:1.
+*/
 :root {
-  --black: #101014;
-  --canvas: #09090b;
-  --surface: #111113;
-  --surface-raised: #19191c;
-  --red: #e54858;
-  --red-light: #ff7886;
-  --wine: #c64c68;
-  --pink: #e6aabd;
-  --white: #f7f0eb;
-  --muted: #b1abaa;
-  --subtle: #969092;
-  --line: #3d373b;
-  --line-soft: #282528;
-  --control-line: #756b72;
-  --display: "Barlow Condensed", Impact, sans-serif;
-  --editorial: "Cormorant Garamond", Georgia, serif;
-  --mono: "IBM Plex Mono", monospace;
-  --body: Arial, Helvetica, sans-serif;
-  --gutter: clamp(18px, 3.4vw, 64px);
-  --gap: clamp(16px, 2vw, 30px);
-  --radius: 9px;
-  --ease: cubic-bezier(0.2, 0.75, 0.25, 1);
-  --fast: 180ms;
-  --slow: 900ms;
-  --section-space: clamp(52px, 7vw, 108px);
+  /* Base */
+  --black: oklch(15% 0 0);
+  --black-2: oklch(19.5% 0.004 84.6);
+  --black-3: oklch(24% 0.005 84.6);
+  --beige: oklch(95% 0.011 84.6);
+  --beige-2: oklch(91.5% 0.013 84.6);
+  --red: oklch(64.4% 0.242 29.6);
+  --red-hover: oklch(69% 0.215 29.6);
+  --red-on-light: oklch(52% 0.2 29.6);
+
+  /* Tipografia */
+  --font-display: "Anton", Impact, "Arial Narrow", sans-serif;
+  --font-editorial: "Cormorant Garamond", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --font-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --title-xl: clamp(3.1rem, 12vw, 7.6rem);
+  --title-lg: clamp(2.4rem, 7.4vw, 4.8rem);
+  --title-md: clamp(1.6rem, 4vw, 2.2rem);
+
+  /* Escala de espaço (base 4px). Use só estes valores. */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-7: 32px;
+  --s-8: 40px;
+  --s-9: 48px;
+  --s-10: 64px;
+  --s-11: 80px;
+  --s-12: 96px;
+
+  --gutter: clamp(var(--s-4), 4.5vw, var(--s-10));
+  --max: 1240px;
+  --section-y: clamp(72px, 11vw, 140px);
+
+  /*
+    Raios concêntricos: o raio interno é o externo menos o padding.
+    Use --r-outer e --pad no contêiner e .inner-radius nos filhos encostados na borda.
+  */
+  --radius: 6px;
+  --radius-lg: 14px;
+  --radius-min: 3px;
+
+  /* Sombras em camadas: contato, meio e ambiente. */
+  --shadow-color: 0 0% 0%;
+  --shadow-sm:
+    0 1px 1px oklch(0% 0 0 / 0.3),
+    0 2px 4px -1px oklch(0% 0 0 / 0.25);
+  --shadow-md:
+    0 1px 1px oklch(0% 0 0 / 0.28),
+    0 4px 8px -2px oklch(0% 0 0 / 0.28),
+    0 12px 24px -6px oklch(0% 0 0 / 0.35);
+  --shadow-lg:
+    0 1px 2px oklch(0% 0 0 / 0.3),
+    0 8px 16px -4px oklch(0% 0 0 / 0.32),
+    0 24px 48px -12px oklch(0% 0 0 / 0.45);
+  /* Em fundo bege a sombra puxa para o marrom do papel, não para o cinza. */
+  --shadow-warm:
+    0 1px 1px oklch(35% 0.03 60 / 0.16),
+    0 6px 12px -4px oklch(35% 0.03 60 / 0.18),
+    0 20px 40px -12px oklch(30% 0.04 50 / 0.24);
+
+  /* Movimento */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --fast: 160ms;
+
+  --header-h: 64px;
   color-scheme: dark;
+}
+
+/* Tema escuro (padrão): preto de fundo, bege no texto. */
+:root,
+.theme-dark {
+  --bg: var(--black);
+  --surface: var(--black-2);
+  --surface-2: var(--black-3);
+  --fg: var(--beige);
+  --fg-muted: oklch(78% 0.011 84.6); /* 9,8:1 sobre o preto */
+  --fg-subtle: oklch(70% 0.011 84.6); /* 7,4:1 */
+  --line: oklch(95% 0.011 84.6 / 0.14);
+  --line-strong: oklch(95% 0.011 84.6 / 0.3);
+  --link: var(--red); /* 5,3:1 */
+  --accent-text: var(--red);
+  --focus: var(--red);
+  --shadow: var(--shadow-md);
+  --invert-bg: var(--beige);
+  --invert-fg: var(--black);
+}
+
+/* Tema claro: bege de fundo, preto no texto. */
+.theme-light {
+  --bg: var(--beige);
+  --surface: var(--beige-2);
+  --surface-2: oklch(88% 0.014 84.6);
+  --fg: var(--black);
+  --fg-muted: oklch(40% 0.01 84.6); /* 8:1 sobre o bege */
+  --fg-subtle: oklch(45% 0.01 84.6); /* 6,4:1 */
+  --line: oklch(15% 0 0 / 0.14);
+  --line-strong: oklch(15% 0 0 / 0.3);
+  --link: var(--red-on-light); /* 5,25:1 */
+  --accent-text: var(--red); /* só em títulos grandes: 3,2:1 atende texto grande */
+  --focus: var(--red-on-light);
+  --shadow: var(--shadow-warm);
+  --invert-bg: var(--black);
+  --invert-fg: var(--beige);
+  color-scheme: light;
+  background: var(--bg);
+  color: var(--fg);
+}
+.theme-dark {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* Variações por tamanho de tela, para manter o 60-30-10 quando o layout muda de proporção. */
+@media (min-width: 1000px) {
+  .theme-light-desktop {
+    --bg: var(--beige);
+    --surface: var(--beige-2);
+    --surface-2: oklch(88% 0.014 84.6);
+    --fg: var(--black);
+    --fg-muted: oklch(40% 0.01 84.6);
+    --fg-subtle: oklch(45% 0.01 84.6);
+    --line: oklch(15% 0 0 / 0.14);
+    --line-strong: oklch(15% 0 0 / 0.3);
+    --link: var(--red-on-light);
+    --accent-text: var(--red);
+    --focus: var(--red-on-light);
+    --shadow: var(--shadow-warm);
+    --invert-bg: var(--black);
+    --invert-fg: var(--beige);
+    background: var(--bg);
+    color: var(--fg);
+  }
+}
+@media (max-width: 999px) {
+  .theme-dark-mobile {
+    --bg: var(--black);
+    --surface: var(--black-2);
+    --surface-2: var(--black-3);
+    --fg: var(--beige);
+    --fg-muted: oklch(78% 0.011 84.6);
+    --fg-subtle: oklch(70% 0.011 84.6);
+    --line: oklch(95% 0.011 84.6 / 0.14);
+    --line-strong: oklch(95% 0.011 84.6 / 0.3);
+    --link: var(--red);
+    --accent-text: var(--red);
+    --focus: var(--red);
+    --shadow: var(--shadow-md);
+    --invert-bg: var(--beige);
+    --invert-fg: var(--black);
+    background: var(--bg);
+    color: var(--fg);
+  }
 }

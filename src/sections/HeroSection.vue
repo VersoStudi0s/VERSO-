@@ -1,469 +1,271 @@
 <script setup lang="ts">
-import { PhArrowUpRight, PhArrowDown } from "@phosphor-icons/vue";
-import AssetImage from "../components/AssetImage.vue";
+import { RouterLink } from "vue-router";
+import ConversationLink from "../components/ui/ConversationLink.vue";
+import TornEdge from "../components/ui/TornEdge.vue";
+import { track } from "../lib/analytics";
+
+const offer = ["Sites", "Landing pages", "Identidade visual", "Redes sociais", "Sistemas"];
 </script>
+
 <template>
-  <section
-    id="inicio"
-    class="hero frame"
-    aria-labelledby="hero-title"
-  >
-    <div class="hero-content">
-      <div class="hero-kicker eyebrow">
-        <span>Creative digital studio</span
-        >
-      </div>
-      <h1 id="hero-title" aria-label="Ideias que ganham realidade">
-        <span class="title-mask" aria-hidden="true"
-          ><span class="ideas">IDEIAS</span></span
-        >
-        <span class="title-mask" aria-hidden="true"
-          ><span class="become">QUE GANHAM</span></span
-        >
-        <span class="title-mask reality-mask" aria-hidden="true"
-          ><em>REALIDADE</em></span
-        >
-      </h1>
-      <div class="hero-description">
-        <p>Sites, apps e sistemas sob medida para o seu negócio</p>
-        <span class="hero-intro"
-          >Você vê um protótipo grátis antes de fechar.<br />Design e código
-          feitos por uma equipe de quatro.</span
-        >
-        <div class="hero-actions">
-          <RouterLink to="/#projetos" class="btn btn-primary"
-            >Explorar projetos <PhArrowUpRight
-          /></RouterLink>
-          <RouterLink to="/#contato" class="text-link"
-            >Pedir orçamento</RouterLink>
+  <section id="inicio" class="hero theme-dark" aria-labelledby="hero-title">
+    <div class="container hero__grid">
+      <div class="hero__copy">
+        <p class="label hero__kicker">Creative Digital Studio <span aria-hidden="true">✦</span> 100% remoto</p>
+        <h1 id="hero-title" class="display hero__title">
+          <span class="hero__line">Seu negócio</span>
+          <span class="hero__line">merece ser</span>
+          <span class="hero__line"><em class="accent-serif">visto.</em></span>
+        </h1>
+        <p class="lead hero__lead">
+          A VERSO* cria sites, identidade visual e conteúdo para redes sociais para pequenos negócios,
+          autônomos e criadores. Design e código feitos pelo mesmo time, do primeiro rascunho à entrega.
+        </p>
+        <div class="hero__ctas">
+          <ConversationLink position="hero" intent="prototipo" />
+          <RouterLink
+            :to="{ path: '/', hash: '#projetos' }"
+            class="btn btn-secondary"
+            @click="track('cta_projetos', { posicao: 'hero' })"
+          >
+            Ver projetos
+          </RouterLink>
         </div>
+        <p class="hero__promise">
+          <strong>Você vê antes de pagar.</strong> O primeiro protótipo é por nossa conta.
+          <RouterLink :to="{ path: '/', hash: '#como-funciona' }">Como funciona</RouterLink>
+        </p>
+      </div>
+
+      <div class="hero__art" aria-hidden="true">
+        <div class="hero__paper">
+          <img
+            src="/images/textura-editorial-640.webp"
+            srcset="/images/textura-editorial-400.webp 400w, /images/textura-editorial-640.webp 640w, /images/textura-editorial-960.webp 960w"
+            sizes="(min-width: 960px) 40vw, min(360px, 86vw)"
+            width="960"
+            height="960"
+            alt=""
+            decoding="async"
+          />
+        </div>
+        <img
+          class="hero__chrome"
+          src="/images/escultura-cromada-480.webp"
+          srcset="/images/escultura-cromada-400.webp 400w, /images/escultura-cromada-480.webp 480w, /images/escultura-cromada-960.webp 960w"
+          sizes="(min-width: 960px) 30vw, min(300px, 72vw)"
+          width="960"
+          height="960"
+          alt=""
+          decoding="async"
+        />
+        <span class="hero__stamp">Protótipo<br />grátis</span>
+        <span class="hero__note label">[ design + código ]</span>
       </div>
     </div>
-    <div class="hero-art" aria-label="Seleção de estudos visuais">
-      <span class="art-index micro">Portfólio selecionado</span>
-      <RouterLink
-        to="/projetos/versary"
-        class="hero-work hero-work-main"
-        aria-label="VERSARY / INTERFACE REAL — conhecer o estudo de caso"
-      >
-        <AssetImage
-          name="github-versary"
-          alt="Interface real do VERSARY executada com dados de demonstração."
-          :eager="true"
-        />
-        <span class="work-caption"
-          ><span>VERSARY, interface real</span></span>
-      </RouterLink>
-      <RouterLink
-        to="/projetos/cafe-aurora"
-        class="hero-work hero-work-brand"
-        aria-label="AURORA / BRAND STUDY — conhecer o projeto conceitual Café Aurora"
-      >
-        <AssetImage
-          name="study-cafe-aurora"
-          alt="Aplicações conceituais Café Aurora em embalagem, copo e cardápio."
-          :eager="true"
-        />
-        <span class="work-caption"
-          ><span>Café Aurora, estudo de marca</span></span>
-      </RouterLink>
-      <span class="art-note micro"
-        >Da ideia à aplicação<br />Conceitos com contexto</span
-      >
-    </div>
-    <div class="hero-bottom">
-      <RouterLink to="/#projetos" class="scroll-cue"
-        ><span class="micro">Explore a seleção</span
-        ><PhArrowDown :size="22" aria-hidden="true" /></RouterLink
-      ><span class="construction-line" aria-hidden="true"></span
-      ><span class="micro">Design e código por Renata, João Gustavo, David e Isaque</span>
+
+    <TornEdge color="var(--beige)" />
+    <div class="hero__strip theme-light">
+      <div class="container">
+        <ul class="hero__offer" role="list" aria-label="O que fazemos">
+          <li v-for="item in offer" :key="item">{{ item }}</li>
+        </ul>
+      </div>
     </div>
   </section>
 </template>
+
 <style scoped>
 .hero {
   position: relative;
-  isolation: isolate;
-  min-height: 850px;
   overflow: hidden;
-  background: #111113;
+  padding-top: clamp(var(--s-7), 6vw, var(--s-11));
+  background:
+    radial-gradient(in oklch ellipse 60% 50% at 85% 30%, oklch(64.4% 0.242 29.6 / 0.16), oklch(15% 0 29.6 / 0) 70%),
+    var(--bg);
 }
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(
-    90deg,
-    transparent 66%,
-    #40353b44 66%,
-    #40353b44 calc(66% + 1px),
-    transparent calc(66% + 1px)
-  );
+.hero__grid {
+  display: grid;
+  gap: var(--s-8);
+  align-items: center;
+  padding-bottom: clamp(var(--s-9), 7vw, var(--s-12));
 }
-.hero-content {
+.hero__kicker span {
+  color: var(--red);
+}
+.hero__title {
+  margin-top: var(--s-4);
+  /* Limita pela altura para o CTA caber na primeira tela de notebooks baixos. */
+  font-size: clamp(3.1rem, min(12vw, 12.5svh), 7.6rem);
+}
+.hero__line {
+  display: block;
+}
+.hero__line:last-child {
+  margin-top: -0.04em;
+}
+.hero__title .accent-serif {
+  font-size: 1.12em;
+  line-height: 0.8;
+  color: var(--red);
+}
+.hero__lead {
+  margin-top: var(--s-6);
+}
+.hero__ctas {
+  display: grid;
+  gap: var(--s-3);
+  margin-top: var(--s-7);
+}
+.hero__promise {
+  margin-top: var(--s-4);
+  font-size: var(--text-sm);
+  color: var(--fg-muted);
+}
+.hero__promise strong {
+  color: var(--fg);
+}
+.hero__promise a {
+  margin-left: var(--s-1);
+  color: var(--link);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+.hero__promise a:hover {
+  color: var(--red-hover);
+}
+
+/* Arte: textura recortada como papel rasgado + escultura cromada */
+.hero__art {
   position: relative;
-  width: 61%;
-  z-index: 2;
-  padding: 150px 0 110px var(--gutter);
-  pointer-events: none;
+  width: min(100%, 420px);
+  aspect-ratio: 1 / 0.82;
+  margin-inline: auto;
 }
-.hero-content a {
-  pointer-events: auto;
-}
-.hero-kicker {
-  display: flex;
-  gap: 35px;
-  align-items: center;
-  color: var(--muted);
-  margin-bottom: 50px;
-  font-size: 11px;
-}
-.hero-kicker svg {
-  color: var(--red);
-}
-h1 {
+.hero__paper {
+  position: absolute;
+  inset: 6% 4% 4% 10%;
+  clip-path: polygon(
+    3% 6%, 18% 0, 31% 5%, 47% 1%, 63% 6%, 80% 0, 97% 4%, 100% 22%, 96% 41%, 100% 60%,
+    97% 81%, 100% 97%, 79% 100%, 61% 95%, 43% 100%, 24% 96%, 6% 100%, 0 82%, 4% 61%, 0 40%, 3% 21%
+  );
   transform: rotate(-3deg);
-  transform-origin: left center;
-  letter-spacing: -0.025em;
 }
-.title-mask {
-  display: block;
-  overflow: hidden;
-  padding-bottom: 8px;
-  margin-bottom: -8px;
+.hero__paper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
-.title-mask > * {
-  display: block;
-  animation: title-reveal 0.95s var(--ease) both;
+.hero__chrome {
+  position: absolute;
+  left: -2%;
+  bottom: -10%;
+  width: 72%;
+  filter: drop-shadow(0 2px 2px oklch(0% 0 0 / 0.4)) drop-shadow(0 18px 24px oklch(0% 0 0 / 0.5));
 }
-.ideas {
-  font: 600 clamp(105px, 10vw, 190px)/0.9 var(--display);
+.hero__stamp {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: var(--s-3) var(--s-4);
+  background: var(--beige);
+  color: var(--black);
+  font: 400 1.05rem / 1 var(--font-display);
+  text-transform: uppercase;
+  transform: rotate(6deg);
+  box-shadow: var(--shadow-md);
 }
-.become {
-  font: 300 clamp(58px, 5.8vw, 110px)/1.05 var(--display);
-  animation-delay: 0.12s;
-}
-.reality-mask {
-  padding-right: 20px;
-  overflow: visible;
-}
-.reality-mask em {
-  width: max-content;
-  max-width: 100%;
-  font: 600 italic clamp(100px, 9.7vw, 184px)/0.95 var(--editorial);
-  letter-spacing: -0.065em;
-  color: var(--red);
-  animation-delay: 0.24s;
-}
-.hero-description {
-  margin-top: 44px;
-  max-width: 430px;
-  animation: copy-reveal 0.8s 0.35s both;
-}
-.hero-description > p {
-  font-size: 17px;
-  line-height: 1.5;
-  max-width: 30ch;
-}
-.hero-intro {
-  display: block;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.7;
-  margin-top: 15px;
-}
-.hero-actions {
-  display: flex;
-  gap: 25px;
-  align-items: center;
-  margin-top: 29px;
-}
-.hero-actions .btn {
-  font-size: 11px;
-  min-height: 54px;
-  gap: 28px;
-}
-.hero-actions .text-link {
-  font-size: 11px;
-  white-space: nowrap;
-}
-.hero-art {
+.hero__note {
   position: absolute;
   right: 4%;
-  top: 173px;
-  width: 46%;
-  height: 555px;
-  transform: translate3d(var(--depth-x, 0px), var(--depth-y, 0px), 0);
-  transition: transform 0.7s var(--ease);
+  bottom: 2%;
+  color: var(--fg);
 }
-.art-index {
-  display: block;
-  color: var(--muted);
-  font-size: 11px;
-  text-align: right;
-  margin-bottom: 25px;
-  letter-spacing: 0.02em;
+
+/* Tira bege com os serviços */
+.hero__strip {
+  position: relative;
+  padding-block: var(--s-4);
 }
-.hero-work {
-  display: block;
-  position: absolute;
-  box-shadow: 0 25px 60px #0007;
-  animation: work-entry 1.1s 0.2s var(--ease) both;
-  border: 1px solid #716a63;
-  transition: box-shadow 0.3s;
-}
-.hero-work:hover {
-  box-shadow: 0 30px 60px #000b;
-}
-.hero-work :deep(img) {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-.hero-work-main {
-  width: 100%;
-  top: 60px;
-  right: 0;
-  transform: rotate(-4deg);
-  background: #e5e5e0;
-}
-.hero-work-brand {
-  width: 59%;
-  right: 2%;
-  top: 335px;
-  transform: rotate(6deg);
-  background: #dfd3bf;
-  animation-delay: 0.4s;
-}
-.work-caption {
+.hero__offer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 13px 17px;
-  font: 11px var(--mono);
-  letter-spacing: 0.02em;
-  background: #e5e5e0;
-  color: #303033;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-4);
+  font: 400 var(--text-xs) / 1.4 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg);
 }
-.hero-work-brand .work-caption {
-  background: #dfd3bf;
-  color: #502b29;
-  font-size: 11px;
+.hero__offer li + li::before {
+  content: "✦";
+  margin-right: var(--s-4);
+  color: var(--red-on-light);
 }
-.art-note {
-  position: absolute;
-  bottom: -70px;
-  left: 5%;
-  font-size: 11px;
-  line-height: 1.8;
-  color: var(--muted);
-}
-.hero-bottom {
-  position: absolute;
-  bottom: 30px;
-  left: var(--gutter);
-  right: var(--gutter);
-  display: flex;
-  gap: 30px;
-  align-items: center;
-  color: var(--muted);
-}
-.hero-bottom .micro {
-  font-size: 11px;
-}
-.scroll-cue {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  min-height: 44px;
-}
-.construction-line {
-  height: 1px;
-  flex: 1;
-  background: var(--line);
-}
-@keyframes title-reveal {
-  from {
-    transform: translateY(110%);
-  }
-  to {
-    transform: translateY(0);
+
+@media (min-width: 560px) {
+  .hero__ctas {
+    grid-template-columns: auto auto;
+    justify-content: start;
   }
 }
-@keyframes copy-reveal {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
+@media (min-width: 960px) {
+  .hero__grid {
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: var(--s-6);
+    min-height: min(640px, calc(100svh - var(--header-h) - 140px));
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes work-entry {
-  from {
-    opacity: 0;
-    clip-path: inset(0 0 100% 0);
-  }
-  to {
-    opacity: 1;
-    clip-path: inset(0);
-  }
-}
-@media (min-width: 1600px) {
-  .hero {
-    min-height: 1020px;
-  }
-  .hero-content {
-    padding-top: 180px;
-  }
-  .hero-art {
-    top: 220px;
-    height: 650px;
-  }
-  .hero-work-brand {
-    top: 420px;
-  }
-  .hero-description {
-    margin-top: 55px;
-  }
-}
-@media (min-width: 768px) and (max-width: 1100px) {
-  .hero {
-    min-height: 1000px;
-  }
-  .hero-content {
-    width: 85%;
-    padding-top: 140px;
-  }
-  .hero-art {
-    top: 540px;
-    width: 52%;
-    right: 6%;
-    height: 330px;
-  }
-  .hero-work-brand {
-    top: 185px;
-    width: 60%;
-  }
-  .art-index {
-    font-size: 11px;
-  }
-  .art-note {
-    left: -58%;
-    bottom: 20px;
-  }
-  .hero-description {
-    max-width: 40%;
-    margin-top: 30px;
-  }
-  .hero-actions {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-  }
-  .reality-mask em {
-    font-size: 135px;
-  }
-  .ideas {
-    font-size: 115px;
-  }
-  .become {
-    font-size: 73px;
-  }
-}
-@media (max-width: 767px) {
-  .hero {
-    min-height: 0;
-  }
-  .hero-content {
+  .hero__art {
     width: 100%;
-    padding: 125px 20px 0;
+    max-width: 520px;
   }
-  .hero-kicker {
-    font-size: 11px;
-    margin-bottom: 32px;
-    gap: 20px;
-  }
-  .ideas {
-    font-size: 25vw;
-  }
-  .become {
-    font-size: 14vw;
-  }
-  .reality-mask em {
-    font-size: 17.4vw;
-  }
-  .hero-description {
-    margin-top: 30px;
-    max-width: 100%;
-  }
-  .hero-description > p {
-    font-size: 15px;
-    max-width: 29ch;
-  }
-  .hero-intro {
-    font-size: 12px;
-  }
-  .hero-actions {
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  .hero-actions .btn {
-    font-size: 11px;
-    gap: 20px;
-  }
-  .hero-actions .text-link {
-    font-size: 11px;
-    min-height: 44px;
-  }
-  .hero-art {
-    position: relative;
-    top: auto;
-    right: auto;
-    width: calc(100% - 50px);
-    margin: 55px 25px 100px;
-    height: 83vw;
-    transform: none;
-  }
-  .art-index {
-    font-size: 11px;
-    text-align: left;
-  }
-  .hero-work-main {
-    top: 37px;
-  }
-  .hero-work-brand {
-    top: 46vw;
-    width: 62%;
-  }
-  .work-caption {
-    font-size: 11px;
-    padding: 10px;
-  }
-  .hero-work-brand .work-caption {
-    font-size: 11px;
-  }
-  .art-note {
-    font-size: 11px;
-    left: 0;
-    bottom: -28px;
-  }
-  .hero-bottom {
-    bottom: 17px;
-    gap: 15px;
-  }
-  .hero-bottom > .micro {
-    display: none;
-  }
-  .hero-bottom .micro {
-    font-size: 11px;
+  .hero__offer {
+    justify-content: space-between;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .hero-art {
-    transform: none;
+
+/* Entrada (uma vez, só no carregamento, só CSS) */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__line {
+    animation: rise 700ms var(--ease) both;
+  }
+  .hero__line:nth-child(2) {
+    animation-delay: 70ms;
+  }
+  .hero__line:nth-child(3) {
+    animation-delay: 140ms;
+  }
+  .hero__paper {
+    animation: paper-in 900ms var(--ease) 120ms both;
+  }
+  .hero__chrome {
+    animation: chrome-in 1000ms var(--ease) 220ms both;
+  }
+  .hero__stamp {
+    animation: stamp-in 500ms var(--ease) 700ms both;
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.35em);
+  }
+}
+@keyframes paper-in {
+  from {
+    opacity: 0;
+    transform: rotate(-7deg) scale(0.96);
+  }
+}
+@keyframes chrome-in {
+  from {
+    opacity: 0;
+    transform: translate(-6%, 8%) rotate(-10deg);
+  }
+}
+@keyframes stamp-in {
+  from {
+    opacity: 0;
+    transform: rotate(14deg) scale(1.2);
   }
 }
 </style>

@@ -1,27 +1,25 @@
 <script setup lang="ts">
-import { nextTick, watch } from "vue";
-import { useRoute } from "vue-router";
-import SiteHeader from "./components/SiteHeader.vue";
-import SiteFooter from "./components/SiteFooter.vue";
+import { computed } from "vue";
+import { RouterView, useRoute } from "vue-router";
+import SiteHeader from "./components/layout/SiteHeader.vue";
+import SiteFooter from "./components/layout/SiteFooter.vue";
+import FloatingContact from "./components/layout/FloatingContact.vue";
+import ConsentBanner from "./components/layout/ConsentBanner.vue";
+import TornEdge from "./components/ui/TornEdge.vue";
+
+// Rodapé vermelho só na página inicial (longa). Em páginas curtas ele passaria de 10% da tela.
 const route = useRoute();
-watch(
-  () => route.fullPath,
-  async (_to, from) => {
-    if (from === undefined) return;
-    await nextTick();
-    const target =
-      document.getElementById(route.hash.slice(1)) ||
-      document.getElementById("main-content");
-    target?.setAttribute("tabindex", "-1");
-    target?.focus({ preventScroll: true });
-  },
-);
+const impactFooter = computed(() => route.path === "/");
 </script>
+
 <template>
-  <a class="skip-link" href="#main-content">Pular para o conteúdo</a>
-  <div class="site-shell">
-    <SiteHeader />
-    <main id="main-content" tabindex="-1"><RouterView /></main>
-    <SiteFooter />
-  </div>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <SiteHeader />
+  <main id="conteudo" tabindex="-1">
+    <RouterView />
+  </main>
+  <TornEdge v-if="impactFooter" color="var(--red)" />
+  <SiteFooter :impact="impactFooter" />
+  <FloatingContact />
+  <ConsentBanner />
 </template>

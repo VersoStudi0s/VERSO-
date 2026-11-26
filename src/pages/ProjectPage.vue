@@ -1,431 +1,313 @@
 <script setup lang="ts">
-import { useGithub } from "../composables/useGithub";
 import { computed } from "vue";
-import { useRoute } from "vue-router";
-import { PhArrowLeft, PhArrowUpRight } from "@phosphor-icons/vue";
-import { projects, selectedProjects } from "../data/projects";
-import type { Project } from "../types/project";
-import AssetImage from "../components/AssetImage.vue";
+import { RouterLink, useRoute } from "vue-router";
+import KindBadge from "../components/ui/KindBadge.vue";
+import AppImage from "../components/ui/AppImage.vue";
+import AppIcon from "../components/ui/AppIcon.vue";
+import ConversationLink from "../components/ui/ConversationLink.vue";
 import NotFoundPage from "./NotFoundPage.vue";
+import { findProject, orderedProjects } from "../content/projects";
+
 const route = useRoute();
-const { snapshot } = useGithub();
-const repository = computed(() =>
-  snapshot.value?.repositories.find(
-    (r) => r.fullName === project.value?.repository,
-  ),
-);
-const project = computed(() =>
-  projects.find((item) => item.slug === route.params.slug),
-);
-const sectionOrder: (keyof Project)[] = [
-  "context",
-  "problem",
-  "objectives",
-  "participation",
-  "process",
-  "solution",
-  "results",
-  "learning",
-];
-const visibleSections = computed(() =>
-  sectionOrder.filter((key) => {
-    const content = project.value?.[key];
-    return Array.isArray(content) ? content.length > 0 : Boolean(content);
-  }),
-);
-const sectionNumber = (key: keyof Project) =>
-  String(visibleSections.value.indexOf(key) + 1).padStart(2, "0");
-const nextProject = computed(
-  () =>
-    selectedProjects[
-      (selectedProjects.findIndex((item) => item.slug === route.params.slug) +
-        1) %
-        selectedProjects.length
-    ]!,
+const project = computed(() => findProject(String(route.params.slug)));
+const nextProject = computed(() => {
+  const index = orderedProjects.findIndex((item) => item.slug === project.value?.slug);
+  return orderedProjects[(index + 1) % orderedProjects.length];
+});
+const facts = computed(() =>
+  project.value
+    ? [
+        { label: "Objetivo", value: project.value.objective },
+        { label: "Problema", value: project.value.problem },
+        { label: "Solução", value: project.value.solution },
+        { label: "Resultado", value: project.value.result },
+        ...(project.value.next ? [{ label: "Próximo passo", value: project.value.next }] : []),
+      ]
+    : [],
 );
 </script>
+
 <template>
-  <article
-    v-if="project"
-    :key="project.slug"
-    class="project-page route-page frame section-pad"
-  >
-    <div class="section-topline">
-      <RouterLink to="/#projetos" class="text-link"
-        ><PhArrowLeft /> Voltar aos projetos</RouterLink
-      ><span class="micro"
-        >{{ project.number }} /
-        {{ String(selectedProjects.length).padStart(2, "0") }}</span
-      >
+  <NotFoundPage v-if="!project" />
+  <article v-else class="case theme-dark" aria-labelledby="case-title">
+    <div class="case__top theme-light-desktop">
+    <header class="container case__header">
+      <RouterLink :to="{ path: '/', hash: '#projetos' }" class="case__back">
+        <AppIcon name="arrow-right" :size="18" class="case__back-icon" /> Todos os projetos
+      </RouterLink>
+      <h1 id="case-title" class="display case__title">{{ project.name }}</h1>
+      <KindBadge :kind="project.kind" />
+      <p class="lead">{{ project.tagline }}</p>
+    </header>
     </div>
-    <div class="case-heading">
-      <span class="eyebrow red">{{ project.status }}</span>
-      <h1>{{ project.name }}</h1>
-      <p>{{ project.subtitle }}</p>
-      <div class="case-tags">
-        <span v-for="tag in project.tags" :key="tag" class="tag">{{
-          tag
-        }}</span>
+
+    <figure class="container case__cover" :class="{ 'case__cover--phone': project.cover.width < project.cover.height }">
+      <div class="case__frame">
+        <AppImage :image="project.cover" eager sizes="(min-width: 1240px) 1240px, 100vw" />
       </div>
-      <div v-if="project.repository" class="case-code">
-        <a
-          :href="`https://github.com/${project.repository}`"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn btn-outline"
-          >Ver código ↗<span class="sr-only"> (GitHub, nova aba)</span></a
-        >
-        <p v-if="repository" class="micro">
-          {{ repository.language }} · {{ repository.stars }} estrelas ·
-          metadados do GitHub
-        </p>
-      </div>
-    </div>
-    <figure class="case-cover">
-      <AssetImage :name="project.image" :alt="project.alt" :eager="true" />
-      <figcaption class="micro">
-        {{ project.imageCaption }}
-      </figcaption>
+      <figcaption>{{ project.cover.caption }}</figcaption>
     </figure>
-    <div v-if="project.gallery?.length" class="case-gallery">
-      <figure v-for="visual in project.gallery" :key="visual.image">
-        <AssetImage :name="visual.image" :alt="visual.alt" />
-        <figcaption>
-          {{ visual.caption }}
-          <a
-            :href="
-              visual.image.startsWith('study-')
-                ? `/images/studies/${visual.image.slice(6)}.svg`
-                : `/images/${visual.image}.webp`
-            "
-            target="_blank"
-            rel="noopener"
-            class="text-link visual-source"
-            >Ver prancha em tamanho original ↗<span class="sr-only">
-              (abre em outra aba)</span
-            ></a
-          >
-        </figcaption>
+
+    <div class="case__paper theme-light">
+    <div class="container">
+      <dl class="case__meta">
+        <div>
+          <dt class="label">Categoria</dt>
+          <dd>{{ project.category }}</dd>
+        </div>
+        <div>
+          <dt class="label">Tipo</dt>
+          <dd>{{ project.type }}</dd>
+        </div>
+        <div>
+          <dt class="label">Status</dt>
+          <dd>{{ project.status }}</dd>
+        </div>
+        <div>
+          <dt class="label">Participação</dt>
+          <dd>{{ project.participation }}</dd>
+        </div>
+      </dl>
+    </div>
+    <div class="container case__body">
+      <dl class="case__facts">
+        <div v-for="fact in facts" :key="fact.label" class="case__fact">
+          <dt class="label">{{ fact.label }}</dt>
+          <dd>{{ fact.value }}</dd>
+        </div>
+      </dl>
+      <aside class="case__side theme-dark-mobile">
+        <h2 class="label">Ferramentas e tecnologias</h2>
+        <ul role="list" class="case__tech">
+          <li v-for="tech in project.technologies" :key="tech">{{ tech }}</li>
+        </ul>
+        <p v-if="project.note" class="case__note">{{ project.note }}</p>
+      </aside>
+    </div>
+    </div>
+
+    <div v-if="project.comparison" class="container case__comparison">
+      <h2 class="label">Antes e depois</h2>
+      <div class="case__pair">
+        <figure>
+          <AppImage :image="project.comparison.before" />
+          <figcaption><strong>Antes.</strong> {{ project.comparison.before.caption }}</figcaption>
+        </figure>
+        <figure>
+          <AppImage :image="project.comparison.after" />
+          <figcaption><strong>Depois.</strong> {{ project.comparison.after.caption }}</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div v-if="project.gallery.length" class="container case__gallery">
+      <figure
+        v-for="image in project.gallery"
+        :key="image.src"
+        :class="{ 'case__cover--phone': image.width < image.height }"
+      >
+        <div class="case__frame">
+          <AppImage :image="image" sizes="(min-width: 1240px) 1240px, 100vw" />
+        </div>
+        <figcaption>{{ image.caption }}</figcaption>
       </figure>
     </div>
-    <div class="case-layout">
-      <aside class="case-aside">
-        <span class="eyebrow">Um olhar sobre<br />o processo.</span>
-        <p>{{ project.description }}</p>
-        <span class="micro">Estado do projeto</span>
-        <p>{{ project.status }}</p>
-        <template v-if="project.technologies">
-          <span class="micro">Tecnologias</span>
-          <p>{{ project.technologies }}</p>
-        </template>
-        <p v-if="project.documentationNote">{{ project.documentationNote }}</p>
-      </aside>
-      <div class="case-body prose">
-        <section>
-          <span class="micro red"
-            >{{ sectionNumber("context") }} / Contexto</span
-          >
-          <h2>O ponto de partida</h2>
-          <p>{{ project.context }}</p>
-        </section>
-        <section v-if="project.problem">
-          <span class="micro red"
-            >{{ sectionNumber("problem") }} / Problema</span
-          >
-          <h2>Uma pergunta para explorar</h2>
-          <p>{{ project.problem }}</p>
-        </section>
-        <section v-if="project.objectives?.length">
-          <span class="micro red"
-            >{{ sectionNumber("objectives") }} / Objetivos</span
-          >
-          <h2>O que buscamos construir</h2>
-          <ul>
-            <li v-for="goal in project.objectives" :key="goal">{{ goal }}</li>
-          </ul>
-        </section>
-        <section v-if="project.participation">
-          <span class="micro red"
-            >{{ sectionNumber("participation") }} / Participação</span
-          >
-          <h2>Papel no projeto</h2>
-          <p>{{ project.participation }}</p>
-        </section>
-        <section v-if="project.process?.length">
-          <span class="micro red"
-            >{{ sectionNumber("process") }} / Processo</span
-          >
-          <h2>Processo de desenvolvimento</h2>
-          <ol>
-            <li v-for="step in project.process" :key="step">{{ step }}</li>
-          </ol>
-        </section>
-        <section v-if="project.solution">
-          <span class="micro red"
-            >{{ sectionNumber("solution") }} / Solução</span
-          >
-          <h2>A solução</h2>
-          <p>{{ project.solution }}</p>
-        </section>
-        <section>
-          <span class="micro red"
-            >{{ sectionNumber("results") }} / Resultados</span
-          >
-          <h2>O que está documentado</h2>
-          <p>{{ project.results }}</p>
-          <RouterLink
-            v-if="['lab-movimento', 'pulse-lab'].includes(project.slug)"
-            to="/#lab"
-            class="btn btn-outline case-lab"
-            >Experimentar no LAB</RouterLink>
-        </section>
-        <section v-if="project.learning">
-          <span class="micro red"
-            >{{ sectionNumber("learning") }} / Aprendizados</span
-          >
-          <h2>O próximo movimento</h2>
-          <p>{{ project.learning }}</p>
-        </section>
-      </div>
-    </div>
-    <RouterLink :to="`/projetos/${nextProject.slug}`" class="next-project"
-      ><div>
-        <span class="micro">Próximo projeto</span
-        ><span class="next-title">{{ nextProject.name }}</span>
-      </div>
-      <PhArrowUpRight weight="thin" :size="60"
-    /></RouterLink>
-  </article>
-  <NotFoundPage v-else />
-</template>
-<style scoped>
-.case-code {
-  margin-top: 24px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
-  align-items: center;
-}
-.project-page > .section-topline .micro {
-  font-size: 11px;
-}
-.case-heading {
-  margin: 65px 0 40px;
-  position: relative;
-}
-.case-heading > .eyebrow {
-  color: var(--red-light);
-}
-.case-heading h1 {
-  font: 600 clamp(65px, 12vw, 180px) / 0.92 var(--display);
-  letter-spacing: -0.025em;
-  margin: 20px 0;
-}
-.case-heading > p {
-  font-size: 19px;
-  color: var(--muted);
-}
-.case-tags {
-  display: flex;
-  gap: 8px;
-  margin-top: 25px;
-}
-.case-plus {
-  position: absolute;
-  right: 8%;
-  top: 35%;
-}
-.case-cover {
-  margin: 0;
-}
-.case-cover :deep(img) {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 15 / 11;
-  object-fit: contain;
-  object-position: center 52%;
-  border: 1px solid var(--line);
-  border-radius: 7px;
-}
-.case-cover figcaption {
-  font-size: 11px;
-  margin-top: 13px;
-  text-transform: none;
-}
-.case-layout {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 10%;
-  margin: 80px 0;
-}
-.case-aside {
-  position: sticky;
-  top: 110px;
-  align-self: start;
-}
-.case-aside > p {
-  font-size: 13px;
-  color: var(--muted);
-  margin-top: 20px;
-  line-height: 1.7;
-  max-width: 240px;
-}
-.case-aside > .micro {
-  display: block;
-  margin-top: 35px;
-  color: var(--red-light);
-}
-.case-body section {
-  margin-bottom: 55px;
-}
-.case-body section > .micro {
-  font-size: 11px;
-  color: var(--red-light);
-}
-.case-body h2 {
-  margin-top: 12px;
-  font-size: 39px;
-}
-.case-body p,
-.case-body li {
-  font-size: 15px;
-  line-height: 1.8;
-}
-.case-body ol {
-  padding-left: 20px;
-  color: var(--muted);
-}
-.case-body li {
-  margin-bottom: 12px;
-}
-.case-lab {
-  margin-top: 20px;
-}
-.next-project {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top: 1px solid var(--line);
-  padding: 35px 0 10px;
-  gap: 20px;
-}
-.next-project .micro {
-  color: var(--red-light);
-}
-.next-title {
-  display: block;
-  font: 600 clamp(40px, 5vw, 75px) var(--display);
-  margin-top: 12px;
-}
-.next-project > svg {
-  transition: transform 0.3s;
-  color: var(--red);
-}
-.next-project:hover > svg {
-  transform: translate(5px, -5px);
-}
-@media (max-width: 767px) {
-  .project-page > .section-topline {
-    align-items: flex-start;
-  }
-  .project-page > .section-topline > .micro {
-    font-size: 11px;
-    text-align: right;
-    max-width: 90px;
-  }
-  .project-page > .section-topline > .text-link {
-    font-size: 11px;
-    gap: 7px;
-  }
-  .case-heading {
-    margin: 45px 0 28px;
-  }
-  .case-heading h1 {
-    font-size: clamp(46px, 14vw, 90px);
-    overflow-wrap: anywhere;
-  }
-  .case-heading > p {
-    font-size: 15px;
-  }
-  .case-plus {
-    display: none;
-  }
-  .case-cover :deep(img) {
-    aspect-ratio: 15 / 11;
-  }
-  .case-cover figcaption {
-    font-size: 11px;
-  }
-  .case-layout {
-    grid-template-columns: 1fr;
-    margin: 40px 0;
-    gap: 40px;
-  }
-  .case-aside {
-    position: static;
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 35px;
-  }
-  .case-aside > p {
-    max-width: none;
-    font-size: 12px;
-  }
-  .case-aside > .micro {
-    margin-top: 22px;
-  }
-  .case-body h2 {
-    font-size: 34px;
-  }
-  .case-body p,
-  .case-body li {
-    font-size: 14px;
-  }
-  .next-project > svg {
-    width: 40px;
-  }
-  .case-body section {
-    margin-bottom: 40px;
-  }
-}
 
-.case-gallery {
-  margin-top: 50px;
+    <div class="container">
+    <section class="case__cta" aria-labelledby="case-cta-title">
+      <h2 id="case-cta-title" class="display">Quer algo nesse caminho para o seu negócio?</h2>
+      <p>A primeira conversa e o protótipo são por nossa conta.</p>
+      <div class="case__cta-actions">
+        <ConversationLink :position="`case-${project.slug}`" intent="prototipo" class="case__cta-btn" />
+        <RouterLink v-if="nextProject" :to="`/projetos/${nextProject.slug}`" class="link-arrow">
+          Próximo: {{ nextProject.name }} <AppIcon name="arrow-right" :size="18" />
+        </RouterLink>
+      </div>
+    </section>
+    </div>
+  </article>
+</template>
+
+<style scoped>
+.case {
+  padding-bottom: var(--section-y);
 }
-.case-gallery figure {
-  margin: 0;
+.case__header {
+  display: grid;
+  justify-items: start;
+  gap: var(--s-4);
+  padding-top: clamp(var(--s-7), 5vw, var(--s-10));
 }
-.case-gallery :deep(img) {
-  width: 100%;
-  height: auto;
-  display: block;
+@media (min-width: 1000px) {
+  .case__top {
+    padding-bottom: var(--s-10);
+  }
 }
-.visual-source {
-  margin-top: 12px;
+.case__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
   min-height: 44px;
-  color: var(--pink);
+  margin-bottom: var(--s-2);
+  color: var(--fg-muted);
+  text-decoration: none;
+  transition: color var(--fast) var(--ease);
 }
-.case-gallery :deep(img[src*="github-gymflow-detail"]),
-.case-gallery :deep(img[src*="github-ritmo-fitness"]) {
-  width: auto;
-  max-width: 100%;
-  max-height: 820px;
-  margin: auto;
+.case__back:hover,
+.case__back:active {
+  color: var(--link);
 }
-.case-cover :deep(img[src*="github-ritmo-fitness"]) {
-  height: min(700px, 140vw);
-  aspect-ratio: auto;
-  background: #20171f;
+.case__back-icon {
+  transform: rotate(180deg);
 }
-.case-gallery figcaption {
-  font: 11px/1.6 var(--mono);
-  color: var(--muted);
-  margin-top: 16px;
+.case__title {
+  font-size: var(--title-xl);
 }
-.case-cover figcaption {
-  font-size: 11px;
-  line-height: 1.7;
+.case__meta {
+  display: grid;
+  gap: var(--s-4);
+  width: 100%;
+  margin-bottom: var(--s-9);
+  padding-bottom: var(--s-6);
+  border-bottom: 1px solid var(--line);
+  font-size: var(--text-sm);
 }
-.case-tags {
+.case__meta dd {
+  margin-top: var(--s-1);
+}
+.case__cover,
+.case__gallery figure {
+  margin-top: clamp(var(--s-7), 6vw, var(--s-10));
+}
+/* Imagem sem borda: cantos recortados por máscara. */
+.case__frame {
+  overflow: hidden;
+  clip-path: inset(0 round var(--radius-lg));
+  background: var(--surface-2);
+}
+.case__frame :deep(img) {
+  width: 100%;
+}
+.case__cover--phone .case__frame {
+  display: grid;
+  place-items: center;
+  padding: clamp(var(--s-5), 5vw, var(--s-9));
+}
+.case__cover--phone .case__frame :deep(img) {
+  width: min(320px, 80%);
+  clip-path: inset(0 round 22px);
+}
+figcaption {
+  margin-top: var(--s-3);
+  font-size: var(--text-sm);
+  color: var(--fg-muted);
+}
+.case__paper {
+  margin-top: clamp(var(--s-8), 7vw, var(--s-11));
+  padding-block: clamp(var(--s-9), 7vw, var(--s-11));
+}
+.case__body {
+  display: grid;
+  gap: var(--s-8);
+}
+.case__facts {
+  display: grid;
+  gap: var(--s-7);
+}
+.case__fact dd {
+  margin-top: var(--s-2);
+  font-size: var(--text-lg);
+  color: var(--fg-muted);
+  max-width: 62ch;
+}
+.case__side {
+  align-self: start;
+  padding: var(--s-6);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.case__tech {
+  display: flex;
   flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-top: var(--s-3);
+}
+.case__tech li {
+  padding: var(--s-1) var(--s-3);
+  border-radius: var(--radius-min);
+  background: var(--bg);
+  font: 400 var(--text-xs) / 1.6 var(--font-mono);
+}
+.case__note {
+  margin-top: var(--s-5);
+  font-size: var(--text-sm);
+  color: var(--fg-muted);
+}
+.case__comparison {
+  margin-top: var(--s-10);
+}
+.case__pair {
+  display: grid;
+  gap: var(--s-5);
+  margin-top: var(--s-4);
+}
+.case__pair :deep(img) {
+  clip-path: inset(0 round var(--radius-lg));
+}
+/* Painel de impacto: vermelho, texto preto (5,3:1). */
+.case__cta {
+  --fg: var(--black);
+  --fg-muted: var(--black);
+  --link: var(--black);
+  --focus: var(--black);
+  display: grid;
+  gap: var(--s-4);
+  margin-top: clamp(var(--s-9), 8vw, var(--s-11));
+  padding: clamp(var(--s-6), 5vw, var(--s-10));
+  border-radius: var(--radius-lg);
+  background: var(--red);
+  color: var(--black);
+  box-shadow: var(--shadow-lg);
+}
+.case__cta :deep(.case__cta-btn) {
+  background: var(--black);
+  color: var(--beige);
+}
+.case__cta :deep(.case__cta-btn:hover) {
+  background: var(--black-3);
+}
+.case__cta h2 {
+  font-size: var(--title-md);
+  max-width: 22ch;
+}
+.case__cta p {
+  color: var(--fg-muted);
+}
+.case__cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-4) var(--s-7);
+  margin-top: var(--s-2);
+}
+@media (min-width: 720px) {
+  .case__meta {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s-6);
+  }
+  .case__pair {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (min-width: 1000px) {
+  .case__body {
+    grid-template-columns: 1fr 340px;
+    gap: var(--s-10);
+  }
+  .case__side {
+    position: sticky;
+    top: calc(var(--header-h) + var(--s-6));
+  }
 }
 </style>

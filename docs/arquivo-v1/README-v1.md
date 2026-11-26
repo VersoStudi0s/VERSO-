@@ -1,0 +1,57 @@
+# VERSO* — Creative Digital Studio
+
+Portfólio de Renata em Vue 3, TypeScript e Vite, reconstruído a partir de `references/verso-aprovado.png` e do kit de imagens fornecido. A publicação de uma prévia privada foi solicitada em 18/10/2026; os dados de hospedagem ficam em `.openai/hosting.json`.
+
+A seleção principal reúne VERSARY, GymFlow e Ritmo Fitness com fontes reais do GitHub, Syntax Studio como projeto autoral em desenvolvimento e Café Aurora como conceito de branding. Metadados públicos atualizam por cache de três horas, sem token no navegador. Veja o [relatório da integração](docs/GITHUB-INTEGRACAO.md) e a [revisão visual e testes](design-qa.md).
+
+As três aplicações usam screenshots da execução local, com limitações explicitadas nas legendas. Syntax e Café usam mockups conceituais SVG. A curadoria anterior permanece como [histórico](docs/CURADORIA-VISUAL.md). Esta atualização está local e não foi publicada.
+
+## Executar
+
+Testado com Node 24.19 e npm 11.9.
+
+```bash
+npm ci
+npm run dev -- --host 0.0.0.0 --port 4173
+```
+
+```bash
+npm run build
+npm run preview -- --port 4180
+```
+
+O build valida TypeScript, gera os bundles e pré-renderiza as páginas com o renderizador SSR do Vue. A saída é estática em `dist/`, com hidratação no cliente. Não requer Chromium para compilar. Os estudos são gerados automaticamente a partir de `src/data/projects.ts`.
+
+## Verificação
+
+Com o servidor local aberto:
+
+```bash
+TEST_BASE_URL=http://127.0.0.1:4180 npm run test:github
+TEST_BASE_URL=http://127.0.0.1:4180 npm run test:e2e
+npm run test:contact
+npm run test:production
+node scripts/test-navigation.mjs
+node scripts/test-commercial-mobile.mjs
+node scripts/test-lab-motion.mjs
+node scripts/test-editorial-motion.mjs
+node scripts/test-curation.mjs
+npm audit
+```
+
+Os testes de navegador usam Chromium em `/usr/bin/chromium`; configure `CHROMIUM_PATH` se necessário. Para testar a produção: `TEST_BASE_URL=http://127.0.0.1:4180 npm run test:e2e`. Os testes do formulário interceptam as requisições: nenhum e-mail real é enviado.
+
+## Conteúdo e configuração
+
+- Serviços, entregáveis e relação com exemplos: `src/data/services.ts`.
+- Projetos e estudos: `src/data/projects.ts`.
+- Canais profissionais: variáveis opcionais em `.env.example`, validadas em `src/data/site.ts`.
+- Habilidades: `src/sections/SkillsSection.vue`; classificação inicial conservadora, a confirmar pela autora.
+- Cores, fontes e espaços: `src/styles/tokens.css`.
+- Formulário: `src/services/contact.ts` e adaptador opcional em `netlify/functions/contact.ts`.
+- Referência e originais: `references/` e `assets/originais/`.
+- Guia original do kit: `assets/README-kit.md`.
+
+Sem endpoint, o contato gera uma mensagem de orçamento para copiar, com feedback explícito de que nada foi enviado. O envio real permanece desativado até a configuração do endpoint e do provedor. Nenhum contato, cliente, resultado comercial ou experiência profissional foi inventado. Informações confirmadas por Renata: VERSARY concluído para o Desafios de Ideias; Café Aurora fictício, criado em conversa com o ChatGPT; Syntax em desenvolvimento em dupla. As imagens de apresentação são ilustrativas; o retrato do kit é apenas referência visual.
+
+Consulte [configuração](docs/SETUP.md), [recursos e licenças](docs/ASSETS.md), [auditoria](docs/AUDIT.md), [revisão visual](design-qa.md) e [relatório de entrega](docs/ENTREGA.md).

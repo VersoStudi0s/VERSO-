@@ -1,581 +1,408 @@
 <script setup lang="ts">
-import { ref, reactive, watch, nextTick } from "vue";
+import { computed, nextTick, reactive, ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import SectionHeading from "../components/ui/SectionHeading.vue";
+import AppIcon from "../components/ui/AppIcon.vue";
+import { channels } from "../config/site";
+import { findService, services } from "../content/services";
 import {
-  PhArrowUpRight,
-  PhCheck,
-  PhCircleNotch,
-  PhWhatsappLogo,
-  PhCopy,
-} from "@phosphor-icons/vue";
-import {
-  sendContact,
-  ContactError,
-  type ContactPayload,
-} from "../services/contact";
-import { site } from "../data/site";
-import { contactTypes as types } from "../data/services";
+  buildMessage,
+  conversationChannel,
+  conversationUrl,
+  defaultMessage,
+  emailUrl,
+  limits,
+  submitCooldownMs,
+  validateDraft,
+  type ContactDraft,
+  type DraftErrors,
+} from "../lib/contact";
+import { track } from "../lib/analytics";
+
 const route = useRoute();
-const contactEnabled = Boolean(import.meta.env.VITE_CONTACT_ENDPOINT);
-const form = ref<HTMLFormElement>();
-const generated = ref("");
-const draftTextarea = ref<HTMLTextAreaElement>();
-const values = reactive<ContactPayload>({
-  name: "",
-  email: "",
-  projectType: "",
-  message: "",
-  website: "",
-});
-const errors = reactive<Record<string, string>>({});
-const state = ref<"idle" | "loading" | "success" | "error" | "draft">("idle"),
-  feedback = ref("");
+const channel = conversationChannel();
+const isWhatsapp = channel.kind === "whatsapp";
+
+const form = reactive<ContactDraft>({ name: "", contact: "", serviceId: "", description: "" });
+const errors = ref<DraftErrors>({});
+const status = ref<"" | "sent" | "copied" | "manual" | "wait">("");
+let lastSubmitAt = 0;
+const fallbackText = ref("");
+const formEl = ref<HTMLFormElement>();
+
+// Serviço escolhido em "Pedir orçamento" chega pela URL (?servico=site).
 watch(
   () => route.query.servico,
   (value) => {
-    if (types.some((type) => type.value === value))
-      values.projectType = String(value);
+    if (findService(value)) form.serviceId = value as string;
   },
   { immediate: true },
 );
-watch(values, () => {
-  generated.value = "";
-  if (state.value === "draft") {
-    state.value = "idle";
-    feedback.value = "";
-  }
+watch(form, () => {
+  if (status.value && status.value !== "wait") status.value = "";
 });
-async function copyMessage() {
-  try {
-    await navigator.clipboard.writeText(generated.value);
-    feedback.value =
-      "Mensagem copiada. Você escolhe onde compartilhar; nada foi enviado pelo site.";
-  } catch {
-    draftTextarea.value?.focus();
-    draftTextarea.value?.select();
-    feedback.value =
-      "O texto está selecionado. Use a opção Copiar do seu dispositivo; a cópia automática não ficou disponível.";
+
+const validate = () => {
+  errors.value = validateDraft(form);
+  const firstInvalid = (["name", "contact", "description"] as const).find((key) => errors.value[key]);
+  if (firstInvalid) {
+    nextTick(() => formEl.value?.querySelector<HTMLElement>(`[name="${firstInvalid}"]`)?.focus());
+    return false;
   }
-}
-function validate() {
-  Object.keys(errors).forEach((key) => delete errors[key]);
-  if (values.name.trim().length < 2)
-    errors.name = "Informe seu nome (mínimo de 2 caracteres).";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim()))
-    errors.email = "Informe um e-mail válido.";
-  if (!types.some((type) => type.value === values.projectType))
-    errors.projectType = "Selecione o tipo de projeto.";
-  if (values.message.trim().length < 20)
-    errors.message = "Conte um pouco mais (mínimo de 20 caracteres).";
-  return !Object.keys(errors).length;
-}
-async function submit() {
-  if (state.value === "loading") return;
-  feedback.value = "";
-  state.value = "idle";
-  if (!validate()) {
-    await nextTick();
-    form.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
+  // Evita abrir o app várias vezes seguidas (duplo clique ou automação).
+  if (Date.now() - lastSubmitAt < submitCooldownMs) {
+    status.value = "wait";
+    return false;
+  }
+  lastSubmitAt = Date.now();
+  return true;
+};
+
+const message = computed(() => buildMessage(form));
+
+const submit = () => {
+  if (!validate()) return;
+  track("formulario_enviado", { servico: form.serviceId || "indefinido", canal: channel.kind });
+  if (isWhatsapp) {
+    window.open(conversationUrl(message.value), "_blank", "noopener");
+    status.value = "sent";
     return;
   }
-  if (!contactEnabled) {
-    const service = types.find(
-      (type) => type.value === values.projectType,
-    )?.label;
-    generated.value = `Olá, equipe VERSO*! Gostaria de conversar sobre um projeto.\n\nNome ou negócio: ${values.name.trim()}\nE-mail para retorno: ${values.email.trim()}\nServiço de interesse: ${service}\n\nMinha ideia:\n${values.message.trim()}`;
-    state.value = "draft";
-    feedback.value =
-      "Mensagem preparada para copiar. Nenhuma mensagem foi enviada.";
-    await nextTick();
-    draftTextarea.value?.focus({ preventScroll: true });
+  // Direct do Instagram não aceita texto pronto: copiamos a mensagem antes de abrir.
+  const copy = navigator.clipboard?.writeText(message.value);
+  window.open(channels.instagram.direct, "_blank", "noopener");
+  if (!copy) {
+    fallbackText.value = message.value;
+    status.value = "manual";
     return;
   }
-  state.value = "loading";
-  try {
-    await sendContact({
-      ...values,
-      name: values.name.trim(),
-      email: values.email.trim(),
-      message: values.message.trim(),
+  copy
+    .then(() => (status.value = "copied"))
+    .catch(() => {
+      fallbackText.value = message.value;
+      status.value = "manual";
     });
-    state.value = "success";
-    feedback.value =
-      "Mensagem enviada ao serviço de e-mail. Obrigada pelo contato!";
-    Object.assign(values, {
-      name: "",
-      email: "",
-      projectType: "",
-      message: "",
-      website: "",
-    });
-  } catch (error) {
-    state.value = "error";
-    feedback.value =
-      error instanceof ContactError
-        ? error.message
-        : "Falha de conexão. Não foi possível confirmar o envio. Tente novamente.";
-  }
-}
+};
+
+const sendByEmail = () => {
+  if (!validate()) return;
+  track("click_email", { posicao: "formulario", servico: form.serviceId || "indefinido" });
+  window.location.href = emailUrl(message.value);
+};
 </script>
+
 <template>
-  <section
-    id="contato"
-    class="contact frame section-pad reveal"
-    aria-labelledby="contact-title"
-  >
-    <div class="section-topline">
-      <span class="eyebrow"
-        >Contato <span class="section-number">[07]</span></span
-      ><span class="contact-label micro">Vamos conversar?</span>
-    </div>
-    <div class="contact-layout">
-      <div class="contact-copy" data-reveal>
-        <h2 id="contact-title">
-          Transforme<br />sua ideia em<br /><em>realidade.</em>
-        </h2>
-        <p class="contact-intro">
-          Conte o que você precisa criar. Objetivo, escopo e próximos passos
-          começam por uma boa conversa.
-        </p>
-        <p v-if="!contactEnabled" class="contact-availability">
-          Prepare e copie sua mensagem de orçamento. Nada será enviado
-          automaticamente; você decide onde compartilhar.
-        </p>
+  <section id="contato" class="section contact theme-dark" aria-labelledby="contato-title">
+    <div class="container contact__grid">
+      <div class="contact__intro">
+        <SectionHeading id="contato-title" number="06" label="Contato">
+          Conta pra gente o que o seu negócio <em class="accent-word">precisa</em>
+          <template #lead>
+            Resposta de gente, sem robô. A primeira conversa e o protótipo não custam nada e não te comprometem
+            com nada.
+          </template>
+        </SectionHeading>
+
+        <ul role="list" class="channels">
+          <li>
+            <a
+              class="channel channel--main"
+              :href="conversationUrl(defaultMessage())"
+              target="_blank"
+              rel="noopener"
+              :data-channel="channel.kind"
+              @click="track(isWhatsapp ? 'click_whatsapp' : 'click_instagram', { posicao: 'contato' })"
+            >
+              <AppIcon :name="isWhatsapp ? 'whatsapp' : 'chat'" :size="26" />
+              <span>
+                <strong>{{ isWhatsapp ? "WhatsApp" : "Direct do Instagram" }}</strong>
+                <small>{{ isWhatsapp ? "O jeito mais rápido de falar com a gente" : 'Manda um "oi" que a gente responde' }}</small>
+              </span>
+              <AppIcon name="arrow-up-right" />
+            </a>
+          </li>
+          <li>
+            <a
+              class="channel"
+              :href="channels.instagram.url"
+              target="_blank"
+              rel="noopener"
+              @click="track('click_instagram', { posicao: 'contato-perfil' })"
+            >
+              <AppIcon name="instagram" :size="26" />
+              <span>
+                <strong>@{{ channels.instagram.handle }}</strong>
+                <small>Processo, dicas e projetos toda semana</small>
+              </span>
+              <AppIcon name="arrow-up-right" />
+            </a>
+          </li>
+          <li>
+            <a class="channel" :href="emailUrl()" @click="track('click_email', { posicao: 'contato' })">
+              <AppIcon name="mail" :size="26" />
+              <span>
+                <strong>E-mail</strong>
+                <small class="channel__email">{{ channels.email }}</small>
+              </span>
+              <AppIcon name="arrow-up-right" />
+            </a>
+          </li>
+        </ul>
       </div>
-      <form
-        ref="form"
-        novalidate
-        data-reveal
-        :aria-busy="state === 'loading'"
-        @submit.prevent="submit"
-      >
-        <div class="contact-fields">
-          <div class="field">
-            <label for="contact-name"
-              >Nome ou negócio <span aria-hidden="true">*</span></label
-            ><input
-              id="contact-name"
-              v-model="values.name"
-              name="name"
-              autocomplete="name"
-              maxlength="100"
-              placeholder="Como posso te chamar?"
-              required
-              :aria-invalid="!!errors.name"
-              :aria-describedby="errors.name ? 'name-error' : undefined"
-            />
-            <p v-if="errors.name" id="name-error" class="field-error">
-              {{ errors.name }}
-            </p>
-          </div>
-          <div class="field">
-            <label for="contact-email"
-              >E-mail para retorno <span aria-hidden="true">*</span></label
-            ><input
-              id="contact-email"
-              v-model="values.email"
-              name="email"
-              type="email"
-              autocomplete="email"
-              maxlength="254"
-              placeholder="seu@email.com"
-              required
-              :aria-invalid="!!errors.email"
-              :aria-describedby="errors.email ? 'email-error' : undefined"
-            />
-            <p v-if="errors.email" id="email-error" class="field-error">
-              {{ errors.email }}
-            </p>
-          </div>
+
+      <form ref="formEl" class="form" novalidate aria-labelledby="form-title" @submit.prevent="submit">
+        <h3 id="form-title" class="form__title">Prefere deixar tudo escrito?</h3>
+        <p class="form__help">
+          Quatro campos. A mensagem fica pronta para você enviar {{ isWhatsapp ? "no seu WhatsApp" : "no direct" }}
+          ou por e-mail. Nada é guardado neste site.
+        </p>
+
+        <div class="field">
+          <label for="f-name">Seu nome</label>
+          <input
+            id="f-name"
+            v-model="form.name"
+            name="name"
+            autocomplete="name"
+            :maxlength="limits.name"
+            :aria-invalid="Boolean(errors.name)"
+            :aria-describedby="errors.name ? 'e-name' : undefined"
+          />
+          <p v-if="errors.name" id="e-name" class="field__error">{{ errors.name }}</p>
         </div>
         <div class="field">
-          <label for="contact-type"
-            >Serviço de interesse <span aria-hidden="true">*</span></label
-          ><select
-            id="contact-type"
-            v-model="values.projectType"
-            name="projectType"
-            required
-            :aria-invalid="!!errors.projectType"
-            :aria-describedby="errors.projectType ? 'type-error' : undefined"
-          >
-            <option value="" disabled>Selecione uma possibilidade</option>
-            <option v-for="type in types" :key="type.value" :value="type.value">
-              {{ type.label }}
-            </option>
+          <label for="f-contact">WhatsApp ou e-mail para resposta</label>
+          <input
+            id="f-contact"
+            v-model="form.contact"
+            name="contact"
+            autocomplete="email"
+            :maxlength="limits.contact"
+            inputmode="email"
+            :aria-invalid="Boolean(errors.contact)"
+            :aria-describedby="errors.contact ? 'e-contact' : undefined"
+          />
+          <p v-if="errors.contact" id="e-contact" class="field__error">{{ errors.contact }}</p>
+        </div>
+        <div class="field">
+          <label for="f-service">Serviço <span>(opcional)</span></label>
+          <select id="f-service" v-model="form.serviceId" name="serviceId">
+            <option value="">Ainda não sei</option>
+            <option v-for="service in services" :key="service.id" :value="service.id">{{ service.name }}</option>
           </select>
-          <p v-if="errors.projectType" id="type-error" class="field-error">
-            {{ errors.projectType }}
-          </p>
         </div>
         <div class="field">
-          <label for="contact-message"
-            >Sua ideia <span aria-hidden="true">*</span></label
-          ><textarea
-            id="contact-message"
-            v-model="values.message"
-            name="message"
-            rows="4"
-            maxlength="5000"
-            placeholder="Conte um pouco sobre sua ideia..."
-            required
-            :aria-invalid="!!errors.message"
-            :aria-describedby="
-              errors.message ? 'message-error' : 'contact-data'
-            "
-          />
-          <p v-if="errors.message" id="message-error" class="field-error">
-            {{ errors.message }}
-          </p>
-        </div>
-        <div class="honeypot" aria-hidden="true">
-          <label for="contact-website">Deixe este campo vazio</label
-          ><input
-            id="contact-website"
-            v-model="values.website"
-            name="website"
-            tabindex="-1"
-            autocomplete="off"
-          />
-        </div>
-        <p id="contact-data" class="privacy-note">
-          {{
-            contactEnabled
-              ? "Dados usados apenas para responder ao seu contato."
-              : "Os dados ficam nesta página e compõem o texto que você pode copiar. Não são armazenados pelo site."
-          }}
-          <RouterLink to="/privacidade"
-            >Leia a política de privacidade.</RouterLink
-          >
-        </p>
-        <button
-          class="btn btn-primary submit-contact"
-          type="submit"
-          :disabled="state === 'loading'"
-        >
-          <template v-if="state === 'loading'"
-            >Enviando <PhCircleNotch class="spinner" /></template
-          ><template v-else-if="state === 'success'"
-            >Enviar outra mensagem <PhCheck /></template
-          ><template v-else
-            >{{
-              contactEnabled ? "Enviar mensagem" : "Gerar mensagem de orçamento"
-            }}
-            <PhArrowUpRight
-          /></template>
-        </button>
-        <p
-          v-if="feedback"
-          class="form-feedback"
-          :class="state"
-          :role="state === 'error' ? 'alert' : 'status'"
-        >
-          {{ feedback }}
-        </p>
-        <div v-if="generated" class="budget-draft">
-          <label for="budget-message">Sua mensagem de orçamento</label>
+          <label for="f-description">O que você precisa?</label>
           <textarea
-            id="budget-message"
-            ref="draftTextarea"
-            :value="generated"
-            readonly
-            rows="9"
-            aria-describedby="budget-help"
-          />
-          <p id="budget-help">
-            Revise o texto antes de compartilhar. Gerar ou copiar não envia a
-            mensagem para o VERSO*.
-          </p>
-          <button type="button" class="btn btn-outline" @click="copyMessage">
-            Copiar mensagem <PhCopy />
+            id="f-description"
+            v-model="form.description"
+            name="description"
+            rows="4"
+            :maxlength="limits.description"
+            placeholder="Ex.: tenho uma confeitaria e quero um site simples com cardápio e botão de pedido."
+            :aria-invalid="Boolean(errors.description)"
+            :aria-describedby="errors.description ? 'e-description' : undefined"
+          ></textarea>
+          <p v-if="errors.description" id="e-description" class="field__error">{{ errors.description }}</p>
+        </div>
+
+        <div class="form__actions">
+          <button type="submit" class="btn btn-primary btn-block">
+            <AppIcon :name="isWhatsapp ? 'whatsapp' : 'copy'" />
+            {{ isWhatsapp ? "Enviar pelo WhatsApp" : "Copiar mensagem e abrir o direct" }}
+          </button>
+          <button type="button" class="btn btn-secondary btn-block" @click="sendByEmail">
+            <AppIcon name="mail" /> Enviar por e-mail
           </button>
         </div>
+
+        <p class="form__status" role="status" aria-live="polite">
+          <template v-if="status === 'sent'">Abrimos o WhatsApp com a sua mensagem. É só tocar em enviar.</template>
+          <template v-else-if="status === 'copied'"
+            >Mensagem copiada. No direct, cole e envie. Se a aba não abriu,
+            <a :href="channels.instagram.direct" target="_blank" rel="noopener">abra o direct aqui</a>.</template
+          >
+          <template v-else-if="status === 'wait'">A mensagem acabou de ser aberta. Aguarde alguns segundos para enviar de novo.</template>
+          <template v-else-if="status === 'manual'">Não deu para copiar sozinho. Selecione o texto abaixo e copie:</template>
+        </p>
+        <textarea
+          v-if="status === 'manual'"
+          class="form__fallback"
+          readonly
+          rows="6"
+          aria-label="Mensagem pronta para copiar"
+          :value="fallbackText"
+        ></textarea>
       </form>
-    </div>
-    <div v-if="site.email || site.whatsapp" class="direct-contact">
-      <a v-if="site.email" :href="`mailto:${site.email}`" class="text-link"
-        >{{ site.email }} <PhArrowUpRight /></a
-      ><a
-        v-if="site.whatsapp"
-        :href="`https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Olá, equipe VERSO*! Conheci o portfólio de vocês e gostaria de conversar sobre um projeto.')}`"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-link"
-        >Conversar no WhatsApp <PhWhatsappLogo
-      /></a>
-    </div>
-    <div class="contact-baseline" aria-hidden="true">
-      <PhArrowUpRight :size="20" /><span></span
-      ><span class="micro">O próximo verso é seu</span>
     </div>
   </section>
 </template>
+
 <style scoped>
-.contact {
-  isolation: isolate;
-  overflow: hidden;
-}
-.contact::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: none;
-  pointer-events: none;
-  z-index: -1;
-}
-.contact .section-topline {
-  margin-bottom: 36px;
-}
-.contact .section-number {
-  margin-left: 14px;
-  font-size: 11px;
-}
-.contact-label {
-  border: 1px solid #63242f;
-  border-radius: 20px;
-  padding: 8px 10px;
-  font-size: 11px;
-  color: var(--red-light);
-  white-space: nowrap;
-}
-.contact-layout {
+.contact__grid {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 7%;
-  align-items: start;
+  gap: var(--s-9);
 }
-.contact h2 {
-  font: 600 clamp(64px, 6.7vw, 112px) / 0.9 var(--display);
-  letter-spacing: -0.02em;
-}
-.contact h2 em {
-  font: 600 italic 1.12em/0.9 var(--editorial);
-  color: var(--red);
-  text-transform: none;
-}
-.contact-intro {
-  font-size: 15px;
-  max-width: 37ch;
-  color: var(--muted);
-  margin: 30px 0 25px;
-}
-.contact-availability {
-  color: var(--pink);
-  border-left: 1px solid var(--red);
-  padding-left: 10px;
-  font-size: 12px;
-  max-width: 42ch;
-  line-height: 1.75;
-  margin-bottom: 18px;
-}
-.contact form {
-  counter-reset: contact-field;
-  padding-top: 12px;
-}
-.field label::before {
-  content: "0" counter(contact-field) " / ";
-  color: var(--red-light);
-  margin-right: 6px;
-}
-.contact-fields {
+.channels {
+  --r-outer: var(--radius-lg);
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 9px;
+  gap: var(--s-3);
+}
+.channel {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--s-4);
+  min-height: 72px;
+  padding: var(--s-4) var(--s-5);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-outer);
+  text-decoration: none;
+  transition:
+    border-color var(--fast) var(--ease),
+    background-color var(--fast) var(--ease),
+    transform var(--fast) var(--ease);
+}
+.channel:hover {
+  border-color: var(--fg);
+  background: var(--surface);
+}
+.channel:active {
+  transform: scale(0.98);
+}
+.channel svg {
+  stroke-width: 2;
+}
+.channel strong,
+.channel small {
+  display: block;
+}
+.channel small {
+  color: var(--fg-muted);
+  font-size: var(--text-sm);
+}
+.channel__email {
+  word-break: break-all;
+}
+.channel--main {
+  border-color: transparent;
+  background: var(--red);
+  color: var(--black);
+  box-shadow: var(--shadow-md);
+}
+.channel--main small {
+  color: var(--black);
+}
+.channel--main:hover {
+  border-color: transparent;
+  background: var(--red-hover);
+}
+
+/* Formulário: raio externo 14px; campos e botões = 14 - padding, com mínimo de 3px. */
+.form {
+  --r-outer: var(--radius-lg);
+  --pad: clamp(var(--s-5), 4vw, var(--s-8));
+  display: grid;
+  gap: var(--s-5);
+  padding: var(--pad);
+  border: 1px solid var(--line);
+  border-radius: var(--r-outer);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+}
+.form__title {
+  font: 400 1.8rem / 1 var(--font-display);
+  text-transform: uppercase;
+}
+.form__help {
+  margin-top: calc(var(--s-2) * -1);
+  font-size: var(--text-sm);
+  color: var(--fg-muted);
 }
 .field {
-  counter-increment: contact-field;
-  margin-top: 12px;
-  min-width: 0;
+  display: grid;
+  gap: var(--s-2);
 }
 .field label {
-  display: block;
-  font: 11px var(--mono);
-  color: var(--muted);
-  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: var(--text-sm);
 }
-.field label > span {
-  color: var(--red-light);
+.field label span {
+  font-weight: 400;
+  color: var(--fg-subtle);
 }
 .field input,
 .field select,
-.field textarea {
+.field textarea,
+.form__fallback {
   width: 100%;
-  border: 0;
-  border-bottom: 1px solid var(--control-line);
-  border-radius: 0;
-  background: #181117dd;
-  color: var(--white);
-  padding: 13px;
-  font-size: 16px;
-  transition: border-color 0.2s;
   min-height: 50px;
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--line-strong);
+  border-radius: max(var(--radius-min), calc(var(--r-outer) - var(--pad)));
+  background: var(--black);
+  font-size: 1rem;
+  transition: border-color var(--fast) var(--ease);
 }
-.field input::placeholder,
+.field input:hover,
+.field select:hover,
+.field textarea:hover {
+  border-color: var(--fg-subtle);
+}
+.field textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
 .field textarea::placeholder {
-  color: #a09a9f;
-  font-size: 13px;
+  color: var(--fg-subtle);
 }
 .field select {
-  appearance: auto;
+  appearance: none;
+  background-image:
+    linear-gradient(in oklch 45deg, transparent 50%, var(--fg-muted) 50%),
+    linear-gradient(in oklch 135deg, var(--fg-muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 20px) 50%,
+    calc(100% - 14px) 50%;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
 }
-.field textarea {
-  resize: vertical;
-  min-height: 130px;
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--fg);
 }
+/* Erro: indicado por texto e ícone de foco, além do contorno. */
 .field [aria-invalid="true"] {
-  border-color: var(--red-light);
+  border-color: var(--red);
+  border-width: 2px;
 }
-.field-error {
-  font-size: 11px;
-  line-height: 1.5;
-  color: var(--red-light);
-  margin-top: 6px;
+.field__error {
+  font-size: var(--text-sm);
+  color: var(--link);
 }
-.privacy-note {
-  font-size: 11px;
-  color: var(--muted);
-  margin: 14px 0;
-  line-height: 1.6;
+.form__actions {
+  display: grid;
+  gap: var(--s-3);
 }
-.privacy-note a {
-  text-decoration: underline;
-  text-underline-offset: 2px;
+.form__actions .btn {
+  border-radius: max(var(--radius-min), calc(var(--r-outer) - var(--pad)));
 }
-.submit-contact {
-  width: 100%;
-  min-height: 60px;
-  border-radius: 2px;
-  font-size: 11px;
-  padding: 14px;
+.form__status {
+  font-size: var(--text-sm);
+  color: var(--fg-muted);
 }
-.form-feedback {
-  font-size: 12px;
-  margin-top: 15px;
-  line-height: 1.6;
+.form__status:empty {
+  display: none;
 }
-.form-feedback.error {
-  color: var(--red-light);
+.form__status a {
+  color: var(--link);
 }
-.form-feedback.success,
-.form-feedback.draft {
-  color: var(--pink);
-}
-.budget-draft {
-  margin-top: 24px;
-  border-top: 1px solid var(--line);
-  padding-top: 23px;
-}
-.budget-draft label {
-  display: block;
-  color: var(--pink);
-  font: 12px var(--mono);
-  margin-bottom: 12px;
-}
-.budget-draft textarea {
-  width: 100%;
-  padding: 15px;
-  background: var(--surface);
-  color: var(--white);
-  border: 1px solid var(--control-line);
-  border-radius: 0;
-  font-size: 14px;
-  line-height: 1.6;
-  resize: vertical;
-}
-.budget-draft p {
-  font-size: 12px;
-  color: var(--muted);
-  margin: 12px 0 18px;
-}
-.contact-baseline {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-top: 26px;
-  color: var(--red);
-}
-.contact-baseline > span:nth-child(2) {
-  height: 1px;
-  background: #6a2e37;
-  flex: 1;
-}
-.contact-baseline .micro {
-  font-size: 11px;
-  color: var(--muted);
-}
-.honeypot {
-  position: absolute;
-  left: -9999px;
-  opacity: 0;
-}
-.spinner {
-  animation: spin 1s linear infinite;
-}
-.direct-contact {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 20px;
-}
-.direct-contact .text-link {
-  font-size: 12px;
-  min-height: 44px;
-}
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-@media (max-width: 1100px) {
-  .contact-fields {
-    grid-template-columns: 1fr;
-  }
-}
-@media (max-width: 767px) {
-  .contact::before {
-    background: none;
-  }
-  .contact-layout {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-  .contact h2 {
-    font-size: clamp(53px, 14vw, 80px);
-  }
-  .contact .section-topline {
-    margin-bottom: 30px;
-    gap: 10px;
-  }
-  .contact-label {
-    font-size: 11px;
-  }
-  .contact-intro {
-    font-size: 14px;
-    margin-top: 23px;
-  }
-  .field {
-    counter-increment: contact-field;
-    margin-top: 17px;
-  }
-  .field input,
-  .field select,
-  .field textarea {
-    padding: 14px 12px;
-  }
-  .field textarea {
-    min-height: 135px;
-  }
-  .privacy-note {
-    margin: 18px 0;
-  }
-  .budget-draft textarea {
-    font-size: 16px;
-  }
-  .contact-baseline {
-    margin-top: 30px;
-  }
-  .contact-baseline .micro {
-    font-size: 11px;
+@media (min-width: 1000px) {
+  .contact__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s-10);
+    align-items: start;
   }
 }
 </style>
