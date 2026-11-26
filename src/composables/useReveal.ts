@@ -1,43 +1,26 @@
-import { onMounted, onBeforeUnmount } from "vue";
-export function useReveal() {
+import { onBeforeUnmount, onMounted } from "vue";
+
+/** Revela elementos [data-reveal] quando entram na tela. Sem JS, tudo já aparece. */
+export const useReveal = () => {
   let observer: IntersectionObserver | undefined;
-  let mutations: MutationObserver | undefined;
-  const observed = new WeakSet<Element>();
-  function observe() {
-    document
-      .querySelectorAll<HTMLElement>(".reveal, [data-reveal]")
-      .forEach((element) => {
-        if (observed.has(element)) return;
-        observed.add(element);
-        observer?.observe(element);
-      });
-  }
+
   onMounted(() => {
-    if (
-      matchMedia("(prefers-reduced-motion: reduce)").matches ||
-      !("IntersectionObserver" in window)
-    )
+    const elements = document.querySelectorAll<HTMLElement>("[data-reveal]:not(.is-visible)");
+    if (!("IntersectionObserver" in window)) {
+      elements.forEach((element) => element.classList.add("is-visible"));
       return;
-    document.documentElement.classList.add("motion-ready");
+    }
     observer = new IntersectionObserver(
-      (entries) => {
+      (entries) =>
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          // Vue owns class bindings; a separate attribute survives reactive updates.
-          entry.target.setAttribute("data-visible", "");
+          entry.target.classList.add("is-visible");
           observer?.unobserve(entry.target);
-        });
-      },
-      { threshold: 0.08 },
+        }),
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
     );
-    observe();
-    mutations = new MutationObserver(observe);
-    const main = document.getElementById("main-content");
-    if (main) mutations.observe(main, { childList: true, subtree: true });
+    elements.forEach((element) => observer?.observe(element));
   });
-  onBeforeUnmount(() => {
-    observer?.disconnect();
-    mutations?.disconnect();
-    document.documentElement.classList.remove("motion-ready");
-  });
-}
+
+  onBeforeUnmount(() => observer?.disconnect());
+};

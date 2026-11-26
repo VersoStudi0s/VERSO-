@@ -1,35 +1,25 @@
 <script setup lang="ts">
-import { PhArrowUpRight } from "@phosphor-icons/vue";
+import { RouterLink } from "vue-router";
 </script>
+
 <template>
-  <section class="not-found frame section-pad route-page">
-    <span class="eyebrow red">[404] Fora de quadro</span>
-    <h1>Esta ideia ainda<br />não está <em>por aqui.</em></h1>
-    <p>A página que você procura não foi encontrada.</p>
-    <RouterLink to="/#projetos" class="btn btn-primary"
-      >Explorar projetos <PhArrowUpRight
-    /></RouterLink>
+  <section class="section container notfound" aria-labelledby="nf-title">
+    <p class="label">Erro 404</p>
+    <h1 id="nf-title" class="display">Essa página <em class="accent-word">não existe</em></h1>
+    <p class="lead">O link pode ter mudado. Os projetos e o contato continuam no mesmo lugar.</p>
+    <RouterLink to="/" class="btn btn-primary">Voltar para o início</RouterLink>
   </section>
 </template>
+
 <style scoped>
-.not-found {
-  min-height: 550px;
-  padding-top: 70px;
+.notfound {
+  display: grid;
+  gap: 20px;
+  justify-items: start;
+  min-height: 60vh;
+  align-content: center;
 }
-.not-found > .eyebrow {
-  color: var(--red-light);
-}
-h1 {
-  font: 600 clamp(44px, 7vw, 100px)/1 var(--display);
-  margin: 35px 0;
-}
-h1 em {
-  font: 500 italic 1.1em var(--editorial);
-  color: var(--red);
-}
-p {
-  font-size: 14px;
-  color: var(--muted);
-  margin-bottom: 30px;
+.notfound h1 {
+  font-size: var(--title-lg);
 }
 </style>

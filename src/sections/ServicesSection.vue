@@ -1,299 +1,193 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { PhAsterisk } from "@phosphor-icons/vue";
-import { services } from "../data/services";
-const active = ref<string>(services[0].id);
+import { RouterLink } from "vue-router";
+import SectionHeading from "../components/ui/SectionHeading.vue";
+import AppIcon from "../components/ui/AppIcon.vue";
+import ConversationLink from "../components/ui/ConversationLink.vue";
+import PricingBlock from "./PricingBlock.vue";
+import { serviceCategories, services, type ServiceCategory } from "../content/services";
+import { pricingPackages } from "../content/pricing";
+import { track } from "../lib/analytics";
+
+const categories = Object.keys(serviceCategories) as ServiceCategory[];
+const byCategory = (category: ServiceCategory) =>
+  services.filter((service) => service.category === category);
+const formatPrice = (value: number) =>
+  value.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
 </script>
+
 <template>
-  <section
-    id="servicos"
-    class="services frame section-pad reveal"
-    aria-labelledby="services-title"
-  >
-    <div class="section-topline">
-      <span class="eyebrow">O que criamos</span
-      ><span class="micro">Da ideia à experiência</span>
-    </div>
-    <div class="services-heading" data-reveal>
-      <h2 id="services-title">Serviços<br /><em>criativos.</em></h2>
-      <p>
-        Design e código para dar forma à sua próxima ideia.<br /><span
-          >Quatro caminhos. Uma identidade própria.</span
-        >
-      </p>
-      <PhAsterisk weight="thin" aria-hidden="true" />
-    </div>
-    <div class="service-list">
-      <article
-        v-for="service in services"
-        :key="service.id"
-        class="service-row"
-        :class="{ 'service-active': active === service.id }"
-        :aria-labelledby="`service-${service.id}`"
-        @pointerenter="active = service.id"
-        @focusin="active = service.id"
-        data-reveal
-      >
-        <span class="service-number" aria-hidden="true"
-          >{{ service.number }}<span>/</span></span
-        >
-        <div class="service-name">
-          <h3 :id="`service-${service.id}`">{{ service.title }}</h3>
-          <p>{{ service.description }}</p>
+  <section id="servicos" class="section services" aria-labelledby="servicos-title">
+    <div class="container">
+      <SectionHeading id="servicos-title" number="02" label="Serviços">
+        O que a gente <em class="accent-word">faz</em> pelo seu negócio
+        <template #lead>
+          Seis serviços, todos entregues pela equipe. Se o seu caso não estiver aqui, conta pra gente: se não for
+          algo que façamos bem, a gente fala na hora.
+        </template>
+      </SectionHeading>
+
+      <div v-for="category in categories" :key="category" class="services__group" data-reveal>
+        <div class="services__group-head">
+          <h3 class="label services__group-title">{{ serviceCategories[category].label }}</h3>
+          <p class="services__group-lead">{{ serviceCategories[category].lead }}</p>
         </div>
-        <div class="service-details">
-          <ul>
-            <li v-for="item in service.deliverables" :key="item">{{ item }}</li>
-          </ul>
-          <p>{{ service.detail }}</p>
-        </div>
-        <div class="service-actions">
-          <RouterLink
-            :to="{
-              path: '/',
-              hash: '#projetos',
-              query: { exemplos: service.id },
-            }"
-            class="text-link"
-            :aria-label="`Ver exemplos de ${service.title}`"
-            >Ver exemplos</RouterLink
-          ><RouterLink
-            :to="{
-              path: '/',
-              hash: '#contato',
-              query: { servico: service.id },
-            }"
-            class="service-budget text-link"
-            :aria-label="`Pedir orçamento de ${service.title}`"
-            >Pedir orçamento</RouterLink>
-        </div>
-      </article>
+        <ul role="list" class="services__list">
+          <li v-for="service in byCategory(category)" :key="service.id" class="card">
+            <h4 class="card__title">{{ service.name }}</h4>
+            <p class="card__summary">{{ service.summary }}</p>
+            <p class="card__problem"><span class="label">Resolve</span>{{ service.problem }}</p>
+            <div class="card__includes">
+              <p class="label">Inclui</p>
+              <ul role="list">
+                <li v-for="item in service.includes" :key="item">
+                  <AppIcon name="check" :size="16" />{{ item }}
+                </li>
+              </ul>
+            </div>
+            <p v-if="service.note" class="card__note">{{ service.note }}</p>
+            <div class="card__footer">
+              <p v-if="service.priceFrom" class="card__price">
+                a partir de <strong>{{ formatPrice(service.priceFrom) }}</strong>
+              </p>
+              <RouterLink
+                :to="{ path: '/', query: { servico: service.id }, hash: '#contato' }"
+                class="link-arrow"
+                @click="track('pedido_orcamento', { servico: service.id, posicao: 'servicos' })"
+              >
+                Pedir orçamento <AppIcon name="arrow-right" :size="18" />
+                <span class="visually-hidden">de {{ service.name }}</span>
+              </RouterLink>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <PricingBlock v-if="pricingPackages.length" :packages="pricingPackages" />
+
+      <aside class="services__cta" data-reveal>
+        <p>
+          <strong>Não sabe por onde começar?</strong> Normal. Manda uma mensagem contando o que você faz e a gente
+          sugere o primeiro passo.
+        </p>
+        <ConversationLink position="servicos" variant="light" />
+      </aside>
     </div>
-    <p class="services-note micro">
-      Projetos com escopo, intenção e personalidade.
-      <RouterLink to="/#processo"
-        >Conheça o processo</RouterLink>
-    </p>
   </section>
 </template>
+
 <style scoped>
 .services {
-  overflow: hidden;
-  background: #100c0f;
+  background: var(--graphite);
 }
-.services-heading {
+.services__group {
   display: grid;
-  grid-template-columns: 1.3fr 1fr auto;
-  gap: 45px;
-  align-items: end;
-  margin: 50px 0 60px;
-}
-.services-heading h2 {
-  font: 600 clamp(65px, 7.7vw, 130px) / 0.8 var(--display);
-  letter-spacing: -0.035em;
-}
-.services-heading h2 em {
-  display: block;
-  font: 500 italic 1.15em/0.9 var(--editorial);
-  text-transform: none;
-  color: var(--red);
-}
-.services-heading > p {
-  color: var(--white);
-  font-size: 16px;
-  max-width: 31ch;
-  padding-bottom: 10px;
-}
-.services-heading > p span {
-  color: var(--muted);
-  display: block;
-  margin-top: 15px;
-  font-size: 12px;
-}
-.services-heading > svg {
-  width: 70px;
-  height: 70px;
-  color: var(--red);
-  margin-bottom: 14px;
-}
-.service-list {
-  border-top: 1px solid var(--control-line);
-}
-.service-row {
-  position: relative;
-  isolation: isolate;
-  display: grid;
-  grid-template-columns: 65px 1.4fr 1fr;
-  gap: 25px 35px;
-  align-items: start;
-  padding: 36px 22px;
-  border-bottom: 1px solid var(--line);
-  transition: color 0.35s;
-}
-.service-row::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: #35151d;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.55s var(--ease);
-}
-.service-row::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: var(--red);
-  transform: scaleY(0);
-  transition: transform 0.4s;
-}
-.service-active::before {
-  transform: scaleX(1);
-}
-.service-active::after {
-  transform: scaleY(1);
-}
-.service-number {
-  font: 500 40px/1 var(--editorial);
-  color: var(--pink);
-}
-.service-number > span {
-  color: var(--red);
-  font-size: 26px;
-  margin-left: 9px;
-}
-.service-name h3 {
-  font: 600 clamp(30px, 3.2vw, 52px) / 1.05 var(--display);
-  letter-spacing: -0.015em;
-  transition:
-    transform 0.4s var(--ease),
-    color 0.3s;
-}
-.service-active h3 {
-  transform: translateX(8px);
-  color: var(--white);
-}
-.service-name p {
-  color: var(--muted);
-  font-size: 13px;
-  margin-top: 15px;
-  max-width: 48ch;
-}
-.service-details {
-  padding-top: 4px;
-}
-.service-details ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  font: 11px/1.8 var(--mono);
-}
-.service-details li::before {
-  content: "/";
-  color: var(--red-light);
-  margin-right: 10px;
-}
-.service-details p {
-  color: var(--muted);
-  font-size: 11px;
-  margin-top: 14px;
-}
-.service-actions {
-  grid-column: 2/-1;
-  display: flex;
-  justify-content: space-between;
   gap: 18px;
+  padding-block: 32px;
+  border-top: 1px solid var(--line);
 }
-.service-actions .text-link {
-  min-height: 44px;
-  font-size: 11px;
+.services__group-title {
+  color: var(--red-ink);
 }
-.service-budget {
-  color: var(--pink);
+.services__group-lead {
+  margin-top: 6px;
+  font: 400 var(--title-md) / 1.05 var(--font-display);
+  text-transform: uppercase;
 }
-.service-budget svg {
-  font-size: 24px;
+.services__list {
+  display: grid;
+  gap: 14px;
 }
-.services-note {
-  margin-top: 30px;
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--graphite-2);
+  transition: border-color var(--fast) var(--ease);
+}
+.card:hover {
+  border-color: var(--line-strong);
+}
+.card__title {
+  font: 700 1.25rem / 1.25 var(--font-body);
+}
+.card__summary {
+  color: var(--paper-dim);
+}
+.card__problem {
+  display: grid;
+  gap: 4px;
+  padding-left: 12px;
+  border-left: 2px solid var(--red);
+  font-size: var(--text-sm);
+}
+.card__includes ul {
+  display: grid;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: var(--text-sm);
+}
+.card__includes li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.card__includes svg {
+  margin-top: 3px;
+  color: var(--red-ink);
+}
+.card__note {
+  font-size: var(--text-sm);
+  font-style: italic;
+  color: var(--muted);
+}
+.card__footer {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 15px;
-  font-size: 11px;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 8px;
 }
-.services-note a {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  min-height: 44px;
-  color: var(--pink);
+.card__price {
+  font-size: var(--text-sm);
+  color: var(--paper-dim);
 }
-@media (max-width: 1023px) {
-  .services-heading {
-    grid-template-columns: 1.1fr 1fr;
-    gap: 25px;
+.services__cta {
+  display: grid;
+  gap: 18px;
+  margin-top: 32px;
+  padding: 24px 20px;
+  border-radius: var(--radius);
+  background: var(--red-deep);
+}
+.services__cta strong {
+  display: block;
+  font: 400 1.6rem / 1.05 var(--font-display);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+@media (min-width: 720px) {
+  .services__list {
+    grid-template-columns: repeat(2, 1fr);
   }
-  .services-heading > svg {
-    display: none;
-  }
-  .service-row {
-    grid-template-columns: 50px 1.1fr 1fr;
-    gap: 22px;
-    padding-inline: 15px;
+  .services__cta {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 28px 32px;
   }
 }
-@media (max-width: 767px) {
-  .services-heading {
-    grid-template-columns: 1fr;
-    gap: 25px;
-    margin: 35px 0;
+@media (min-width: 1100px) {
+  .services__group {
+    grid-template-columns: 260px 1fr;
+    gap: 40px;
+    padding-block: 40px;
   }
-  .services-heading h2 {
-    font-size: clamp(66px, 18vw, 105px);
-  }
-  .services-heading > p {
-    font-size: 14px;
-    max-width: none;
-  }
-  .service-row {
-    grid-template-columns: 35px 1fr;
-    gap: 18px 14px;
-    padding: 25px 10px;
-  }
-  .service-number {
-    font-size: 29px;
-  }
-  .service-number > span {
-    display: none;
-  }
-  .service-name h3 {
-    font-size: 34px;
-  }
-  .service-name p {
-    font-size: 13px;
-  }
-  .service-details {
-    grid-column: 2;
-  }
-  .service-details ul {
-    font-size: 11px;
-  }
-  .service-actions {
-    grid-column: 1/-1;
-    flex-wrap: wrap;
-  }
-  .service-actions .text-link {
-    font-size: 11px;
-    gap: 8px;
-  }
-  .service-active h3 {
-    transform: translateX(3px);
+  .services__list {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   }
 }
 </style>

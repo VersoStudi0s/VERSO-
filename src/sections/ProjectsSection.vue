@@ -1,544 +1,202 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
-import { PhArrowRight } from "@phosphor-icons/vue";
-import { useRoute, useRouter } from "vue-router";
-import { findService } from "../data/services";
-import { selectedProjects as projects, categories } from "../data/projects";
-import type { Category } from "../types/project";
-import AssetImage from "../components/AssetImage.vue";
-const route = useRoute();
-const router = useRouter();
-const selected = ref<Category>("Todos");
-const technology = ref("Todas");
-const technologies = [
-  ...new Set(projects.flatMap((p) => p.techStack || [])),
-].sort();
-const selectedService = computed(() => findService(route.query.exemplos));
-watch(
-  () => route.query.exemplos,
-  (value) => {
-    if (findService(value)) selected.value = "Todos";
-  },
-);
-function chooseCategory(category: Category) {
-  selected.value = category;
-  technology.value = "Todas";
-  if (route.query.exemplos) {
-    const { exemplos: _examples, ...query } = route.query;
-    router.replace({ path: "/", query, hash: "#projetos" });
-  }
-}
+import { RouterLink } from "vue-router";
+import SectionHeading from "../components/ui/SectionHeading.vue";
+import KindBadge from "../components/ui/KindBadge.vue";
+import AppImage from "../components/ui/AppImage.vue";
+import AppIcon from "../components/ui/AppIcon.vue";
+import { kindLabels, orderedProjects, type ProjectKind } from "../content/projects";
+import { track } from "../lib/analytics";
 
-const filtered = computed(() =>
-  projects.filter(
-    (project) =>
-      (technology.value === "Todas" ||
-        project.techStack?.includes(technology.value)) &&
-      (selectedService.value
-        ? (selectedService.value.projectSlugs as readonly string[]).includes(
-            project.slug,
-          )
-        : selected.value === "Todos" ||
-          project.categories.includes(selected.value)),
-  ),
-);
+const hasClientWork = orderedProjects.some((project) => project.kind === "comercial");
+const kindsInUse = [...new Set(orderedProjects.map((project) => project.kind))] as ProjectKind[];
+const kindHelp: Record<ProjectKind, string> = {
+  comercial: "feito para um cliente real",
+  autoral: "ideia e iniciativa da própria equipe",
+  academico: "desenvolvido em curso ou desafio",
+  conceitual: "marca ou cenário fictício, para estudo",
+};
 </script>
+
 <template>
-  <section
-    id="projetos"
-    class="projects frame section-pad reveal"
-    aria-labelledby="projects-title"
-  >
-    <div class="section-topline">
-      <span class="eyebrow">Projetos em destaque</span>
-      <span class="section-number">[03 / SELEÇÃO]</span>
-    </div>
-    <h2 id="projects-title" class="section-heading projects-heading">
-      Trabalhos<br /><em>em evidência.</em>
-    </h2>
-    <p class="projects-intro">
-      Sistemas reais, código aberto e identidade aplicada. Três projetos do
-      GitHub, uma loja autoral em desenvolvimento e um estudo conceitual de
-      branding.
-    </p>
-    <div class="project-toolbar">
-      <span class="gallery-wordmark" aria-hidden="true"
-        >VERSO<span>*</span></span
-      >
-      <div
-        class="filters"
-        role="group"
-        aria-label="Filtrar projetos por categoria"
-      >
-        <button
-          v-for="category in categories"
-          :key="category"
-          :aria-pressed="!selectedService && selected === category"
-          :class="{ selected: !selectedService && selected === category }"
-          @click="chooseCategory(category)"
-        >
-          {{ category }}
-        </button>
-      </div>
-    </div>
-    <label class="technology-filter"
-      >Tecnologia dos destaques
-      <select v-model="technology">
-        <option>Todas</option>
-        <option v-for="tech in technologies" :key="tech">{{ tech }}</option>
-      </select></label
-    >
-    <div v-if="selectedService" class="service-filter">
-      <p>
-        Exemplos: <strong>{{ selectedService.title }}</strong>
+  <section id="projetos" class="section projects" aria-labelledby="projetos-title">
+    <div class="container">
+      <SectionHeading id="projetos-title" number="03" label="Projetos">
+        Trabalho que dá pra <em class="accent-word">abrir</em> e conferir
+        <template #lead>
+          Poucos projetos, bem explicados: o problema, o que foi feito, com quais ferramentas e onde ele está hoje.
+        </template>
+      </SectionHeading>
+
+      <dl class="projects__legend" aria-label="Tipos de projeto">
+        <div v-for="kind in kindsInUse" :key="kind">
+          <dt><KindBadge :kind="kind" /></dt>
+          <dd>{{ kindHelp[kind] }}</dd>
+        </div>
+      </dl>
+      <p v-if="!hasClientWork" class="projects__honesty">
+        Ainda não publicamos projetos de clientes. Quando o primeiro estiver pronto e autorizado, ele entra aqui em
+        destaque, com tudo o que foi feito.
       </p>
-      <button class="text-link" @click="chooseCategory('Todos')">
-        Limpar filtro
-      </button>
-    </div>
-    <p class="sr-only" aria-live="polite">
-      {{ filtered.length }} projetos em
-      {{ selectedService?.title || selected }}.
-    </p>
-    <div v-if="!filtered.length" class="project-empty" role="status">
-      <h3>Exemplos ainda não disponíveis.</h3>
-      <p>Veja os projetos atuais ou conte o que você precisa criar.</p>
-      <button class="btn btn-outline" @click="chooseCategory('Todos')">
-        Ver todos os projetos
-      </button>
-    </div>
-    <div
-      v-else
-      class="project-grid"
-      :class="{
-        filtered:
-          selected !== 'Todos' || selectedService || technology !== 'Todas',
-      }"
-    >
-      <RouterLink
-        v-for="project in filtered"
-        :key="project.slug"
-        :data-project="project.slug"
-        :to="`/projetos/${project.slug}`"
-        class="project-card"
-        data-reveal
-        :class="{ 'project-featured': project.slug === 'versary' }"
-      >
-        <div class="project-visual media-reveal">
-          <AssetImage :name="project.image" :alt="project.alt" />
-          <div class="project-card-top">
-            <span>{{ project.number }} /</span>
+
+      <ul role="list" class="projects__list">
+        <li
+          v-for="(project, index) in orderedProjects"
+          :key="project.slug"
+          class="project"
+          :class="{ 'project--lead': index === 0 }"
+          :style="{ '--accent': project.accent }"
+          data-reveal
+        >
+          <div class="project__media" :class="{ 'project__media--phone': project.cover.width < project.cover.height }">
+            <AppImage
+              :image="project.cover"
+              :sizes="index === 0 ? '(min-width: 960px) 60vw, 100vw' : '(min-width: 960px) 30vw, 100vw'"
+            />
           </div>
-        </div>
-        <div class="project-info">
-          <span class="micro project-status">{{ project.status }}</span>
-          <h3>{{ project.name }}</h3>
-          <p class="project-subtitle">{{ project.subtitle }}</p>
-          <p class="project-description">{{ project.description }}</p>
-          <p v-if="project.summaryRole" class="project-role">
-            <span>Papel /</span> {{ project.summaryRole }}
-          </p>
-          <span class="project-open">Abrir estudo</span>
-          <div class="project-tags">
-            <span
-              v-for="tag in project.tags.slice(0, 2)"
-              :key="tag"
-              class="tag"
-              >{{ tag }}</span
-            ><PhArrowRight :size="21" weight="light" />
+          <div class="project__body">
+            <KindBadge :kind="project.kind" />
+            <h3 class="project__name display">{{ project.name }}</h3>
+            <p class="label project__meta">{{ project.category }} · {{ project.type }}</p>
+            <p class="project__tagline">{{ project.tagline }}</p>
+            <dl v-if="index === 0" class="project__facts">
+              <div>
+                <dt class="label">Objetivo</dt>
+                <dd>{{ project.objective }}</dd>
+              </div>
+              <div>
+                <dt class="label">Tecnologias</dt>
+                <dd>{{ project.technologies.join(" · ") }}</dd>
+              </div>
+            </dl>
+            <RouterLink
+              :to="`/projetos/${project.slug}`"
+              class="link-arrow project__link"
+              @click="track('abrir_projeto', { projeto: project.slug })"
+            >
+              Ver estudo de caso <AppIcon name="arrow-right" :size="18" />
+              <span class="visually-hidden">: {{ project.name }} ({{ kindLabels[project.kind] }})</span>
+            </RouterLink>
           </div>
-        </div>
-      </RouterLink>
+        </li>
+      </ul>
     </div>
   </section>
 </template>
+
 <style scoped>
-.technology-filter {
+.projects__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  font-size: var(--text-sm);
+  color: var(--paper-dim);
+}
+.projects__legend div {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 16px;
-  font: 11px var(--mono);
-  margin-bottom: 30px;
+  gap: 10px;
+}
+.projects__honesty {
+  max-width: 62ch;
+  margin-top: 18px;
+  font-size: var(--text-sm);
   color: var(--muted);
 }
-.technology-filter select {
-  min-height: 44px;
-  background: #19191e;
-  color: var(--white);
-  border: 1px solid var(--line);
-  padding: 10px;
-  max-width: 100%;
-}
-.project-card[data-project="ritmo-fitness"] .project-visual {
-  background: #20171f;
-  aspect-ratio: 1 / 1;
-}
-.project-card[data-project="gymflow"] .project-visual {
-  background: #171320;
-  aspect-ratio: 4 / 3;
-}
-.projects {
-  overflow: hidden;
-}
-.projects-heading {
-  font: 600 clamp(65px, 8vw, 135px) / 0.8 var(--display);
-  letter-spacing: -0.04em;
-  margin: 45px 0 25px;
-}
-.projects-heading em {
-  display: inline-block;
-  font: 500 italic 1.1em/0.95 var(--editorial);
-  color: var(--red);
-  text-transform: none;
-  padding-left: 15%;
-}
-.projects-intro {
-  max-width: 45ch;
-  font-size: 14px;
-  color: var(--muted);
-  margin: 30px 0 35px auto;
-}
-.project-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 20px;
-  padding: 15px 0;
-  margin-bottom: 25px;
-  border-top: 1px solid var(--line);
-}
-.gallery-wordmark {
-  font: 500 34px/1 var(--editorial);
-  letter-spacing: -2px;
-}
-.gallery-wordmark > span {
-  color: var(--red);
-}
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 24px;
-}
-.filters button {
-  font: 11px var(--mono);
-  color: var(--muted);
-  border: 0;
-  border-bottom: 1px solid transparent;
-  min-height: 44px;
-  padding: 10px 0;
-  transition:
-    color 0.3s,
-    border-color 0.3s;
-}
-.filters button.selected {
-  color: var(--red-light);
-  border-color: var(--red);
-}
-.filters button:hover {
-  color: var(--white);
-}
-.project-grid {
+.projects__list {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 65px 45px;
-  align-items: start;
+  gap: 20px;
+  margin-top: 36px;
 }
-.project-card {
-  display: block;
-  position: relative;
-  min-width: 0;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 22px;
-}
-.project-card:nth-child(2) {
-  margin-top: 150px;
-}
-.project-card:nth-child(3) {
-  margin-top: -45px;
-}
-.project-card:nth-child(4) {
-  margin-top: 55px;
-}
-.project-visual {
-  aspect-ratio: 15 / 11;
-  height: auto;
-  position: relative;
+.project {
+  display: grid;
   border: 1px solid var(--line);
+  border-radius: var(--radius);
   overflow: hidden;
-  background: #191116;
+  background: var(--graphite);
+  transition: border-color var(--fast) var(--ease);
 }
-.project-card:nth-child(2) .project-visual {
-  aspect-ratio: 15 / 11;
-  height: auto;
+.project:hover {
+  border-color: var(--accent);
 }
-.project-card:nth-child(3) .project-visual {
-  aspect-ratio: 15 / 11;
-  height: auto;
+.project__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--accent) 18%, var(--graphite-2));
+  border-bottom: 1px solid var(--line);
 }
-.project-card:nth-child(4) .project-visual {
-  aspect-ratio: 15 / 11;
-  height: auto;
-}
-.project-visual :deep(picture),
-.project-visual :deep(img) {
+.project__media :deep(img) {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 500ms var(--ease);
 }
-.project-visual :deep(img) {
-  transition:
-    transform 0.8s var(--ease),
-    filter 0.7s;
-  filter: none;
+.project__media--phone :deep(img) {
+  width: auto;
+  height: 112%;
+  margin: 6% auto 0;
+  border-radius: 14px 14px 0 0;
+  box-shadow: 0 0 0 6px rgb(0 0 0 / 0.5);
+  object-fit: cover;
 }
-.project-card:hover :deep(img),
-.project-card:focus-visible :deep(img) {
-  filter: brightness(1.06);
+.project:hover .project__media:not(.project__media--phone) :deep(img) {
+  transform: scale(1.025);
 }
-.project-card-top {
-  position: absolute;
-  inset: 18px 20px auto;
+.project__body {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 22px 20px 20px;
 }
-.project-card-top > span {
-  font: 500 35px/1 var(--editorial);
-  text-shadow: 0 2px 6px #000;
+.project__name {
+  margin-top: 6px;
+  font-size: clamp(2rem, 5vw, 2.6rem);
 }
-.project-card-top svg {
-  background: #0a090bd9;
-  box-sizing: content-box;
-  padding: 11px;
-  width: 20px;
-  height: 20px;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  transition:
-    transform 0.35s,
-    background 0.35s;
+.project__meta {
+  color: var(--paper-dim);
+  letter-spacing: 0.06em;
 }
-.project-card:hover .project-card-top svg {
-  transform: rotate(45deg);
-  background: var(--red);
-  color: var(--black);
+.project__tagline {
+  color: var(--paper-dim);
 }
-.project-info {
-  padding-top: 22px;
-  position: relative;
-}
-.project-status {
-  font: 11px/1.6 var(--mono);
-  color: var(--pink);
-  letter-spacing: 0.02em;
-}
-.project-info h3 {
-  font: 600 clamp(43px, 4.8vw, 80px) / 1 var(--display);
-  letter-spacing: -0.025em;
-  margin: 10px 0 13px;
-  transition:
-    color 0.3s,
-    transform 0.35s;
-}
-.project-card:hover h3 {
-  color: var(--red-light);
-  transform: translateX(5px);
-}
-.project-subtitle {
-  font-size: 14px;
-}
-.project-description {
-  color: var(--muted);
-  font-size: 13px;
-  max-width: 43ch;
-  margin-top: 9px;
-}
-.project-role {
-  color: var(--muted);
-  font-size: 11px;
-  margin-top: 10px;
-}
-.project-role > span {
-  color: var(--pink);
-}
-.project-open {
-  display: flex;
-  align-items: center;
+.project__facts {
+  display: grid;
   gap: 12px;
-  font: 11px var(--mono);
-  margin-top: 20px;
-  color: var(--red-light);
-  transform: translateY(4px);
-  transition:
-    transform 0.35s,
-    color 0.35s;
+  margin-top: 8px;
+  font-size: var(--text-sm);
 }
-.project-card:hover .project-open,
-.project-card:focus-visible .project-open {
-  transform: translateY(0);
-  color: var(--white);
+.project__facts dd {
+  margin-top: 2px;
 }
-.project-open svg {
-  font-size: 18px;
+.project__link {
+  margin-top: auto;
 }
-.project-tags {
-  display: flex;
-  gap: 7px;
-  align-items: center;
-  margin-top: 18px;
-}
-.project-tags .tag {
-  font-size: 11px;
-  border: 0;
-  padding: 0 8px 0 0;
-  border-radius: 0;
-}
-.project-tags .tag + .tag {
-  border-left: 1px solid var(--line);
-  padding-left: 8px;
-}
-.project-tags > svg {
-  margin-left: auto;
-  color: var(--red-light);
-}
-.filtered .project-card {
-  margin-top: 0;
-}
-.filtered .project-visual {
-  height: auto;
-}
-.service-filter {
-  border-block: 1px solid var(--line);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  padding: 10px 0;
-  margin-bottom: 24px;
-  font-size: 13px;
-  color: var(--muted);
-}
-.service-filter strong {
-  font-weight: 400;
-  color: var(--pink);
-}
-.service-filter button {
-  border: 0;
-  padding: 10px 0;
-  min-height: 44px;
-}
-.project-empty {
-  border: 1px solid var(--line);
-  padding: 36px;
-}
-.project-empty h3 {
-  font: 600 34px var(--display);
-}
-.project-empty p {
-  color: var(--muted);
-  font-size: 14px;
-  margin: 12px 0 24px;
-}
-@media (max-width: 1023px) {
-  .project-grid {
-    gap: 45px 25px;
+@media (min-width: 720px) {
+  .projects__list {
+    grid-template-columns: repeat(3, 1fr);
   }
-  .project-card:nth-child(2) {
-    margin-top: 90px;
+  .project--lead {
+    grid-column: 1 / -1;
+    grid-template-columns: 1.4fr 1fr;
   }
-  .project-card:nth-child(3) {
-    margin-top: 0;
+  .project--lead .project__media {
+    aspect-ratio: auto;
+    min-height: 100%;
+    border-bottom: 0;
+    border-right: 1px solid var(--line);
   }
-  .filtered .project-card {
-    margin: 0;
+  .project--lead .project__body {
+    padding: 32px;
   }
-  .project-info h3 {
-    font-size: 43px;
+  .project--lead .project__name {
+    font-size: clamp(2.6rem, 5vw, 4rem);
   }
 }
-@media (max-width: 767px) {
-  .projects-heading {
-    font-size: clamp(61px, 16vw, 100px);
-    margin-top: 30px;
-  }
-  .projects-heading em {
-    padding-left: 0;
-    font-size: 1em;
-  }
-  .projects-intro {
-    margin: 25px 0;
-    font-size: 13px;
-  }
-  .filters {
-    gap: 0 18px;
-  }
-  .filters button {
-    font-size: 11px;
-  }
-  .project-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-  .project-grid .project-card {
-    margin: 0;
-  }
-  .project-grid .project-visual {
-    height: auto;
-  }
-  .project-grid .project-card:nth-child(2) .project-visual {
-    height: auto;
-  }
-  .project-grid .project-card:nth-child(3) .project-visual {
-    height: auto;
-  }
-  .project-grid .project-card:nth-child(4) .project-visual {
-    height: auto;
-  }
-  .project-info h3 {
-    font-size: 49px;
-  }
-  .project-info {
-    padding-top: 18px;
-  }
-  .service-filter {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .project-empty {
-    padding: 25px 18px;
-  }
-  .project-empty h3 {
-    font-size: 30px;
-  }
-}
-
-.project-card:nth-child(5) {
-  grid-column: 1 / -1;
-  width: 78%;
-  margin: 15px auto 0;
-}
-.project-card-top {
-  inset: 12px 12px auto auto;
-}
-.project-card-top > span {
-  display: none;
-}
-.project-card-top svg {
-  padding: 8px;
-  width: 16px;
-  height: 16px;
-}
-@media (max-width: 767px) {
-  .project-card:nth-child(n) {
-    width: 100%;
-    margin: 0;
-  }
-  .project-card:nth-child(n) .project-visual {
-    height: auto;
-    aspect-ratio: 15/11;
+@media (prefers-reduced-motion: reduce) {
+  .project__media :deep(img) {
+    transition: none;
   }
 }
 </style>

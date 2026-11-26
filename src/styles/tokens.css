@@ -1,28 +1,43 @@
 :root {
-  --black: #101014;
-  --canvas: #09090b;
-  --surface: #111113;
-  --surface-raised: #19191c;
+  /* Cor */
+  --ink: #0b0b0d;
+  --graphite: #16161a;
+  --graphite-2: #1f1e23;
+  --graphite-3: #2a282e;
+  --paper: #f7f0eb;
+  --paper-dim: #c9c2be;
+  --muted: #a9a2a4;
+  --line: #34313a;
+  --line-strong: #4b4650;
   --red: #e54858;
-  --red-light: #ff7886;
-  --wine: #c64c68;
+  --red-deep: #b8303f;
+  --red-ink: #ff7d8a;
   --pink: #e6aabd;
-  --white: #f7f0eb;
-  --muted: #b1abaa;
-  --subtle: #969092;
-  --line: #3d373b;
-  --line-soft: #282528;
-  --control-line: #756b72;
-  --display: "Barlow Condensed", Impact, sans-serif;
-  --editorial: "Cormorant Garamond", Georgia, serif;
-  --mono: "IBM Plex Mono", monospace;
-  --body: Arial, Helvetica, sans-serif;
-  --gutter: clamp(18px, 3.4vw, 64px);
-  --gap: clamp(16px, 2vw, 30px);
-  --radius: 9px;
-  --ease: cubic-bezier(0.2, 0.75, 0.25, 1);
-  --fast: 180ms;
-  --slow: 900ms;
-  --section-space: clamp(52px, 7vw, 108px);
+
+  /* Tipografia */
+  --font-display: "Anton", Impact, "Arial Narrow", sans-serif;
+  --font-editorial: "Cormorant Garamond", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --title-xl: clamp(3.1rem, 12vw, 7.6rem);
+  --title-lg: clamp(2.4rem, 7.4vw, 4.8rem);
+  --title-md: clamp(1.6rem, 4vw, 2.2rem);
+
+  /* Espaço */
+  --gutter: clamp(16px, 4.5vw, 64px);
+  --max: 1240px;
+  --section-y: clamp(72px, 11vw, 140px);
+  --radius: 6px;
+
+  /* Movimento */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --fast: 160ms;
+
+  --header-h: 64px;
   color-scheme: dark;
 }
