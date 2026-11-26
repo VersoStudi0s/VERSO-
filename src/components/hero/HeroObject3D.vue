@@ -19,8 +19,6 @@ let disposed = false;
  */
 const SOFTWARE_RENDERER = /swiftshader|llvmpipe|softpipe|software|basic render/i;
 const canUseHardware3D = () => {
-  // ?forcar-3d pula a checagem de GPU (usado nos testes automatizados, que rodam sem GPU).
-  if (new URLSearchParams(location.search).has("forcar-3d")) return true;
   const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
   if (connection?.saveData) return false;
   try {
